@@ -41,3 +41,21 @@ All commands are run from the root of the project, from a terminal:
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+
+## Auto-deploy to GitHub Pages (GitHub Actions)
+
+This repo includes `.github/workflows/deploy-pages.yml`.
+
+Trigger:
+- Push to `main` and `master`
+- Manual run via `workflow_dispatch`
+
+Requirements:
+- In GitHub repo settings, enable Pages source as `GitHub Actions`.
+- No SSH or Hostinger secrets are required.
+
+What the workflow does:
+- `npm ci`
+- `npm run build` (Astro)
+- Uploads `dist/` artifact
+- Publishes to GitHub Pages
