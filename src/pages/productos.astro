@@ -1,0 +1,641 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const categories = [
+  {
+    id: 'papeleria',
+    icon: '🎁',
+    title: 'Papelería Creativa',
+    description: 'Invitaciones, cajitas, etiquetas y packaging personalizado para tus eventos especiales.',
+    color: 'pink',
+    products: [
+      { name: 'Cajitas personalizadas', desc: 'Para regalos, dulces y eventos' },
+      { name: 'Invitaciones', desc: 'Bodas, cumpleaños, bautizos y comuniones' },
+      { name: 'Etiquetas y stickers', desc: 'Personalizados para cualquier uso' },
+      { name: 'Tarjetas personalizadas', desc: 'Agradecimiento, felicitación, etc.' },
+      { name: 'Sobres creativos', desc: 'Diseños únicos para cada ocasión' },
+      { name: 'Packaging creativo', desc: 'Folders, cajas y envoltorios especiales' }
+    ]
+  },
+  {
+    id: 'decoracion',
+    icon: '🎂',
+    title: 'Decoración de Eventos',
+    description: 'Cake toppers, decoración para mesas dulces y elementos decorativos únicos.',
+    color: 'blue',
+    products: [
+      { name: 'Cake toppers personalizados', desc: 'En madera, acrílico o cartulina' },
+      { name: 'Toppers temáticos', desc: 'Infantiles, culturales, musicales, religiosos' },
+      { name: 'Decoración mesa dulce', desc: 'Elementos coordinados para tu evento' },
+      { name: 'Números decorativos', desc: 'Para cumpleaños y celebraciones' },
+      { name: 'Nombres personalizados', desc: 'En diferentes materiales' },
+      { name: 'Figuras decorativas', desc: 'Diseños a medida' }
+    ]
+  },
+  {
+    id: 'personalizacion',
+    icon: '👕',
+    title: 'Personalización de Productos',
+    description: 'Camisetas, tazas, bolsas y regalos personalizados con tu diseño.',
+    color: 'lavender',
+    products: [
+      { name: 'Camisetas personalizadas', desc: 'Sublimación y vinilo textil' },
+      { name: 'Tazas y termos', desc: 'Personalizados con fotos y diseños' },
+      { name: 'Bolsas y tote bags', desc: 'Ecológicas y personalizables' },
+      { name: 'Textiles varios', desc: 'Gorras, delantales, cojines...' },
+      { name: 'Regalos corporativos', desc: 'Merchandising para empresas' },
+      { name: 'Artículos promocionales', desc: 'Personalizados con tu marca' }
+    ]
+  },
+  {
+    id: 'encuadernacion',
+    icon: '📚',
+    title: 'Encuadernación y Proyectos',
+    description: 'Agendas, cuadernos artesanales, álbumes y proyectos a medida.',
+    color: 'mint',
+    products: [
+      { name: 'Agendas personalizadas', desc: 'Diseño y contenido a tu gusto' },
+      { name: 'Cuadernos artesanales', desc: 'Encuadernación manual de calidad' },
+      { name: 'Libretas personalizadas', desc: 'Para regalos o uso personal' },
+      { name: 'Álbumes de recuerdos', desc: 'Para fotos y memorias especiales' },
+      { name: 'Proyectos a medida', desc: 'Para empresas y marcas' },
+      { name: 'Scrapbooking', desc: 'Materiales y proyectos completos' }
+    ]
+  }
+];
+---
+
+<Layout title="Productos | Valu Kraft" description="Explora nuestro catálogo de productos: papelería creativa, decoración de eventos, personalización y encuadernación artesanal.">
+  <!-- Hero Section -->
+  <section class="products-hero section--lg">
+    <div class="products-hero__bg">
+      <div class="blob blob--primary products-hero__blob products-hero__blob--1"></div>
+      <div class="blob blob--secondary products-hero__blob products-hero__blob--2"></div>
+    </div>
+    
+    <div class="container">
+      <div class="products-hero__content">
+        <span class="section__badge">Catálogo</span>
+        <h1>Creatividad para cada <span class="gradient-text">ocasión</span></h1>
+        <p class="products-hero__description">
+          Desde papelería creativa hasta productos personalizados, tenemos todo 
+          lo que necesitas para hacer de tus momentos algo especial.
+        </p>
+        
+        <div class="products-hero__nav">
+          {categories.map((cat) => (
+            <a href={`#${cat.id}`} class="products-hero__nav-item">
+              <span class="products-hero__nav-icon">{cat.icon}</span>
+              <span>{cat.title}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  {categories.map((category, index) => (
+    <section class={`category section ${index % 2 === 1 ? 'category--alt' : ''}`} id={category.id}>
+      <div class="container">
+        <div class={`category__wrapper ${index % 2 === 1 ? 'category__wrapper--reverse' : ''}`}>
+          <div class="category__content">
+            <div class={`category__icon category__icon--${category.color}`}>
+              {category.icon}
+            </div>
+            <h2>{category.title}</h2>
+            <p class="category__description">{category.description}</p>
+            
+            <div class="category__products">
+              {category.products.map((product) => (
+                <div class="product-item">
+                  <div class="product-item__dot"></div>
+                  <div class="product-item__content">
+                    <h4>{product.name}</h4>
+                    <p>{product.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            
+            <a href="/encargos" class="btn btn--primary">
+              Solicitar presupuesto
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+          
+          <div class="category__visual">
+            <div class={`category__decoration category__decoration--${category.color}`}></div>
+            <div class="category__cards">
+              {category.products.slice(0, 3).map((product, i) => (
+                <div class={`category__card category__card--${i + 1}`}>
+                  <span class="category__card-emoji">{category.icon}</span>
+                  <span>{product.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <!-- Custom Projects -->
+  <section class="custom-projects section">
+    <div class="container">
+      <div class="custom-projects__wrapper">
+        <div class="custom-projects__content">
+          <span class="section__badge">Proyectos especiales</span>
+          <h2>¿No encuentras lo que buscas?</h2>
+          <p>
+            Nos encanta los retos creativos. Si tienes una idea que no ves en nuestro catálogo, 
+            cuéntanos y la hacemos realidad. Trabajamos proyectos a medida para:
+          </p>
+          
+          <ul class="custom-projects__list">
+            <li>
+              <span class="custom-projects__check">✓</span>
+              <span>Empresas y marcas que buscan merchandising único</span>
+            </li>
+            <li>
+              <span class="custom-projects__check">✓</span>
+              <span>Eventos especiales con temáticas específicas</span>
+            </li>
+            <li>
+              <span class="custom-projects__check">✓</span>
+              <span>Regalos personalizados para ocasiones especiales</span>
+            </li>
+            <li>
+              <span class="custom-projects__check">✓</span>
+              <span>Proyectos creativos que requieren técnicas mixtas</span>
+            </li>
+          </ul>
+          
+          <a href="/contacto" class="btn btn--primary btn--lg">
+            Cuéntanos tu idea
+          </a>
+        </div>
+        
+        <div class="custom-projects__visual">
+          <div class="custom-projects__illustration">
+            <div class="custom-projects__shape custom-projects__shape--1">💡</div>
+            <div class="custom-projects__shape custom-projects__shape--2">✨</div>
+            <div class="custom-projects__shape custom-projects__shape--3">🎨</div>
+            <div class="custom-projects__shape custom-projects__shape--4">🎁</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="products-cta section">
+    <div class="container">
+      <div class="products-cta__wrapper">
+        <h2>¿Listo para crear algo único?</h2>
+        <p>Empieza tu encargo personalizado hoy mismo.</p>
+        <div class="products-cta__buttons">
+          <a href="/encargos" class="btn btn--primary btn--lg">Ver proceso de encargo</a>
+          <a href="https://wa.me/34600000000" class="btn btn--secondary btn--lg" target="_blank">
+            WhatsApp directo
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* Products Hero */
+  .products-hero {
+    position: relative;
+    padding-top: calc(var(--space-24) + 60px);
+    text-align: center;
+    overflow: hidden;
+  }
+  
+  .products-hero__bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+  }
+  
+  .products-hero__blob {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+  }
+  
+  .products-hero__blob--1 {
+    top: -200px;
+    left: -100px;
+    background: var(--color-primary-light);
+    animation: float 8s ease-in-out infinite;
+  }
+  
+  .products-hero__blob--2 {
+    bottom: -200px;
+    right: -200px;
+    background: var(--color-mint);
+    animation: float 10s ease-in-out infinite reverse;
+  }
+  
+  .products-hero__content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .products-hero__content h1 {
+    margin-bottom: var(--space-6);
+  }
+  
+  .products-hero__description {
+    font-size: var(--text-xl);
+    color: var(--color-gray-600);
+    margin-bottom: var(--space-10);
+  }
+  
+  .products-hero__nav {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-4);
+  }
+  
+  .products-hero__nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-4);
+    background: var(--color-white);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    text-decoration: none;
+    color: var(--color-dark);
+    font-weight: var(--font-medium);
+    font-size: var(--text-sm);
+    transition: all var(--transition-base);
+  }
+  
+  .products-hero__nav-item:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    color: var(--color-primary-dark);
+  }
+  
+  .products-hero__nav-icon {
+    font-size: var(--text-2xl);
+  }
+  
+  /* Category Section */
+  .category--alt {
+    background: var(--color-gray-100);
+  }
+  
+  .category__wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-16);
+    align-items: center;
+  }
+  
+  .category__wrapper--reverse {
+    direction: rtl;
+  }
+  
+  .category__wrapper--reverse > * {
+    direction: ltr;
+  }
+  
+  .category__icon {
+    width: 80px;
+    height: 80px;
+    border-radius: var(--radius-xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-3xl);
+    margin-bottom: var(--space-6);
+  }
+  
+  .category__icon--pink {
+    background: linear-gradient(135deg, var(--color-primary-light), var(--color-peach));
+  }
+  
+  .category__icon--blue {
+    background: linear-gradient(135deg, var(--color-secondary-light), var(--color-mint));
+  }
+  
+  .category__icon--lavender {
+    background: linear-gradient(135deg, var(--color-lavender), var(--color-primary-light));
+  }
+  
+  .category__icon--mint {
+    background: linear-gradient(135deg, var(--color-mint), var(--color-sage));
+  }
+  
+  .category__content h2 {
+    margin-bottom: var(--space-4);
+  }
+  
+  .category__description {
+    font-size: var(--text-lg);
+    color: var(--color-gray-600);
+    margin-bottom: var(--space-6);
+  }
+  
+  .category__products {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+  }
+  
+  .product-item {
+    display: flex;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-fast);
+  }
+  
+  .category--alt .product-item {
+    background: var(--color-cream);
+  }
+  
+  .product-item:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateX(4px);
+  }
+  
+  .product-item__dot {
+    width: 8px;
+    height: 8px;
+    background: var(--color-primary);
+    border-radius: var(--radius-full);
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  
+  .product-item__content h4 {
+    font-family: var(--font-primary);
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    margin-bottom: var(--space-1);
+  }
+  
+  .product-item__content p {
+    font-size: var(--text-xs);
+    color: var(--color-gray-500);
+    margin: 0;
+  }
+  
+  .category__visual {
+    position: relative;
+    height: 400px;
+  }
+  
+  .category__decoration {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: var(--radius-2xl);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .category__decoration--pink {
+    background: linear-gradient(135deg, var(--color-primary-light), var(--color-peach));
+  }
+  
+  .category__decoration--blue {
+    background: linear-gradient(135deg, var(--color-secondary-light), var(--color-mint));
+  }
+  
+  .category__decoration--lavender {
+    background: linear-gradient(135deg, var(--color-lavender), var(--color-primary-light));
+  }
+  
+  .category__decoration--mint {
+    background: linear-gradient(135deg, var(--color-mint), var(--color-sage));
+  }
+  
+  .category__cards {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+  }
+  
+  .category__card {
+    position: absolute;
+    background: var(--color-white);
+    padding: var(--space-3) var(--space-5);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .category__card--1 {
+    top: 15%;
+    left: 10%;
+  }
+  
+  .category__card--2 {
+    top: 45%;
+    right: 5%;
+    animation-delay: 1s;
+  }
+  
+  .category__card--3 {
+    bottom: 15%;
+    left: 20%;
+    animation-delay: 2s;
+  }
+  
+  .category__card-emoji {
+    font-size: var(--text-lg);
+  }
+  
+  /* Custom Projects */
+  .custom-projects {
+    background: linear-gradient(180deg, var(--color-white) 0%, var(--color-cream) 100%);
+  }
+  
+  .custom-projects__wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-16);
+    align-items: center;
+  }
+  
+  .custom-projects__content h2 {
+    margin-bottom: var(--space-4);
+  }
+  
+  .custom-projects__content > p {
+    font-size: var(--text-lg);
+    color: var(--color-gray-600);
+    margin-bottom: var(--space-6);
+  }
+  
+  .custom-projects__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-bottom: var(--space-8);
+  }
+  
+  .custom-projects__list li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-size: var(--text-base);
+    color: var(--color-gray-600);
+  }
+  
+  .custom-projects__check {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: var(--color-primary-light);
+    border-radius: var(--radius-full);
+    color: var(--color-primary-dark);
+    font-size: var(--text-sm);
+    flex-shrink: 0;
+  }
+  
+  .custom-projects__visual {
+    position: relative;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .custom-projects__illustration {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    background: linear-gradient(135deg, var(--color-primary-light), var(--color-lavender));
+    border-radius: var(--radius-2xl);
+  }
+  
+  .custom-projects__shape {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: var(--color-white);
+    border-radius: var(--radius-xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-2xl);
+    box-shadow: var(--shadow-lg);
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .custom-projects__shape--1 {
+    top: -20px;
+    left: -20px;
+  }
+  
+  .custom-projects__shape--2 {
+    top: 20px;
+    right: -30px;
+    animation-delay: 0.5s;
+  }
+  
+  .custom-projects__shape--3 {
+    bottom: 20px;
+    left: -30px;
+    animation-delay: 1s;
+  }
+  
+  .custom-projects__shape--4 {
+    bottom: -20px;
+    right: -20px;
+    animation-delay: 1.5s;
+  }
+  
+  /* Products CTA */
+  .products-cta__wrapper {
+    text-align: center;
+    background: linear-gradient(135deg, var(--color-secondary-light), var(--color-mint));
+    padding: var(--space-16);
+    border-radius: var(--radius-2xl);
+  }
+  
+  .products-cta__wrapper h2 {
+    margin-bottom: var(--space-4);
+  }
+  
+  .products-cta__wrapper p {
+    font-size: var(--text-lg);
+    color: var(--color-gray-600);
+    margin-bottom: var(--space-8);
+  }
+  
+  .products-cta__buttons {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+  
+  /* Responsive */
+  @media (max-width: 992px) {
+    .products-hero__nav {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .category__wrapper {
+      grid-template-columns: 1fr;
+    }
+    
+    .category__wrapper--reverse {
+      direction: ltr;
+    }
+    
+    .category__visual {
+      display: none;
+    }
+    
+    .custom-projects__wrapper {
+      grid-template-columns: 1fr;
+    }
+    
+    .custom-projects__visual {
+      display: none;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .products-hero__description {
+      font-size: var(--text-lg);
+    }
+    
+    .products-hero__nav {
+      grid-template-columns: 1fr 1fr;
+    }
+    
+    .category__products {
+      grid-template-columns: 1fr;
+    }
+    
+    .products-cta__wrapper {
+      padding: var(--space-10) var(--space-6);
+    }
+  }
+</style>
