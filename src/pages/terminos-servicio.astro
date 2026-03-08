@@ -1,0 +1,123 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Términos de Servicio | Valu Kraft" description="Términos de Servicio de Valu Kraft para la contratación de productos personalizados y uso del sitio web.">
+  <section class="legal section">
+    <div class="container legal__container">
+      <span class="section__badge">Legal</span>
+      <h1>Términos de Servicio</h1>
+      <p class="legal__updated"><strong>Última actualización:</strong> 8 de marzo de 2026</p>
+
+      <p>
+        Bienvenido/a a Valu Kraft. Estos Términos de Servicio regulan el acceso, navegación y contratación de productos y servicios ofrecidos a través de este sitio web.
+        Al utilizar esta web o realizar un encargo, aceptas estos términos.
+      </p>
+
+      <h2>1. Identificación del titular</h2>
+      <p>
+        Titular: <strong>Valu Kraft</strong><br />
+        Contacto: <a href="mailto:hola@valukraft.com">hola@valukraft.com</a> · <a href="tel:+34600000000">+34 600 000 000</a><br />
+        Actividad: diseño, personalización y venta de productos de papelería creativa y artículos personalizados.
+      </p>
+
+      <h2>2. Objeto del servicio</h2>
+      <p>
+        Valu Kraft ofrece información comercial y la posibilidad de solicitar encargos personalizados. Cada pedido puede requerir validación previa de diseño, materiales, tiempos de producción y condiciones específicas.
+      </p>
+
+      <h2>3. Proceso de encargo y aceptación</h2>
+      <ul>
+        <li>El cliente facilita detalles del encargo (diseño, cantidades, fecha, personalización).</li>
+        <li>Valu Kraft puede remitir propuesta, presupuesto y plazo estimado.</li>
+        <li>El pedido se considera confirmado cuando exista aceptación expresa por ambas partes.</li>
+        <li>Para trabajos personalizados, pueden solicitarse validaciones previas y/o anticipo.</li>
+      </ul>
+
+      <h2>4. Precios, pagos y facturación</h2>
+      <ul>
+        <li>Los precios se comunicarán antes de confirmar el pedido.</li>
+        <li>El pago podrá requerirse total o parcialmente por adelantado según el tipo de encargo.</li>
+        <li>Los posibles gastos de envío se indicarán de forma separada cuando corresponda.</li>
+      </ul>
+
+      <h2>5. Plazos de producción y entrega</h2>
+      <p>
+        Los plazos son estimados y pueden variar según volumen, complejidad del diseño, disponibilidad de materiales y fechas de alta demanda.
+        Valu Kraft informará al cliente de cualquier incidencia relevante.
+      </p>
+
+      <h2>6. Cancelaciones, cambios y devoluciones</h2>
+      <ul>
+        <li>Al tratarse de productos personalizados, una vez iniciada la producción no se admitirán cancelaciones sin coste.</li>
+        <li>No se aceptan devoluciones por cambios de criterio del cliente en productos personalizados ya aprobados.</li>
+        <li>Si existiera defecto de fabricación imputable a Valu Kraft, se valorará reposición, ajuste o solución equivalente.</li>
+      </ul>
+
+      <h2>7. Propiedad intelectual</h2>
+      <p>
+        Los contenidos de esta web (textos, diseños, imágenes, marca y elementos gráficos) son titularidad de Valu Kraft o de terceros autorizados.
+        Queda prohibida su reproducción o uso no autorizado.
+      </p>
+
+      <h2>8. Uso permitido del sitio web</h2>
+      <p>
+        Te comprometes a realizar un uso lícito del sitio y a no emplearlo para actividades fraudulentas, ilícitas o que puedan dañar los sistemas, la marca o derechos de terceros.
+      </p>
+
+      <h2>9. Protección de datos</h2>
+      <p>
+        El tratamiento de datos personales se rige por nuestra <a href="/politica-privacidad">Política de Privacidad</a>.
+      </p>
+
+      <h2>10. Responsabilidad</h2>
+      <p>
+        Valu Kraft no será responsable de interrupciones temporales del sitio por causas técnicas, mantenimiento o causas de fuerza mayor, sin perjuicio de actuar con diligencia para restablecer el servicio.
+      </p>
+
+      <h2>11. Modificaciones</h2>
+      <p>
+        Valu Kraft podrá actualizar estos términos para adaptarlos a cambios legales o de funcionamiento. La versión vigente será siempre la publicada en esta página.
+      </p>
+
+      <h2>12. Legislación aplicable y jurisdicción</h2>
+      <p>
+        Estos términos se interpretan conforme a la normativa española y europea aplicable. Para cualquier controversia, las partes se someten a los juzgados y tribunales que correspondan conforme a la legislación de consumo vigente.
+      </p>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .legal__container {
+    max-width: 860px;
+  }
+
+  .legal__updated {
+    color: var(--color-gray-500);
+    margin-bottom: var(--space-8);
+  }
+
+  .legal h1 {
+    margin-bottom: var(--space-3);
+  }
+
+  .legal h2 {
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-3);
+    font-size: var(--text-2xl);
+  }
+
+  .legal p,
+  .legal li {
+    color: var(--color-gray-700);
+    line-height: 1.7;
+  }
+
+  .legal ul {
+    margin: 0;
+    padding-left: 1.25rem;
+    display: grid;
+    gap: var(--space-2);
+  }
+</style>

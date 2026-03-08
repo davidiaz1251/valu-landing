@@ -134,6 +134,11 @@ const {
         
         <div class="footer__bottom">
           <p>&copy; 2025 Valu Kraft. Todos los derechos reservados.</p>
+          <p class="footer__legal-links">
+            <a href="/terminos-servicio">Términos de Servicio</a>
+            <span>·</span>
+            <a href="/politica-privacidad">Política de Privacidad</a>
+          </p>
           <p class="footer__made">Hecho con 💕 y creatividad</p>
         </div>
       </div>
@@ -415,6 +420,21 @@ const {
         margin: 0;
       }
       
+      .footer__legal-links {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+        margin: 0;
+      }
+
+      .footer__legal-links a {
+        color: var(--color-gray-500);
+      }
+
+      .footer__legal-links a:hover {
+        color: var(--color-primary-dark);
+      }
+
       .footer__made {
         color: var(--color-primary-dark) !important;
       }
