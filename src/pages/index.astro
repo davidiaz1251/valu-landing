@@ -16,13 +16,8 @@ import Layout from '../layouts/Layout.astro';
         <div class="hero__text">
           <span class="hero__badge">✨ Creatividad sin límites</span>
           <h1 class="hero__title">
-            Transformamos <span
-              class="gradient-text hero__rotating-word"
-              data-words='["ideas", "sueños", "momentos", "emociones"]'
-            >ideas</span> en <span
-              class="gradient-text hero__rotating-word"
-              data-words='["recuerdos", "detalles", "regalos", "historias"]'
-            >recuerdos</span> únicos
+            Transformamos <span class="gradient-text">ideas</span> en 
+            <span class="gradient-text">recuerdos</span> únicos
           </h1>
           <p class="hero__description">
             En Valu Kraft creamos papelería creativa y productos personalizados 
@@ -381,29 +376,6 @@ import Layout from '../layouts/Layout.astro';
   </section>
 
 
-<script>
-  const rotatingWords = document.querySelectorAll('.hero__rotating-word');
-
-  rotatingWords.forEach((el) => {
-    const words = JSON.parse(el.getAttribute('data-words') || '[]');
-    if (words.length < 2) return;
-
-    let currentIndex = 0;
-    const maxWordLength = words.reduce((max, w) => Math.max(max, w.length), 0);
-    el.style.minWidth = `${Math.max(maxWordLength + 0.5, 6)}ch`;
-
-    setInterval(() => {
-      currentIndex = (currentIndex + 1) % words.length;
-      el.classList.add('is-swapping');
-
-      setTimeout(() => {
-        el.textContent = words[currentIndex];
-        el.classList.remove('is-swapping');
-      }, 240);
-    }, 2500);
-  });
-</script>
-
 </Layout>
 
 <style>
@@ -481,22 +453,6 @@ import Layout from '../layouts/Layout.astro';
     margin-bottom: var(--space-6);
     animation: fadeInUp 0.6s ease-out 0.1s forwards;
     opacity: 0;
-  }
-  
-
-  .hero__rotating-word {
-    display: inline-block;
-    white-space: nowrap;
-    vertical-align: baseline;
-    text-align: left;
-    will-change: transform, opacity, filter;
-    transition: opacity 0.24s ease, transform 0.24s ease, filter 0.24s ease;
-  }
-
-  .hero__rotating-word.is-swapping {
-    opacity: 0;
-    transform: translateY(0.28em);
-    filter: blur(0.8px);
   }
 
   .hero__description {
