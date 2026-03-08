@@ -384,34 +384,20 @@ import Layout from '../layouts/Layout.astro';
 <script>
   const rotatingWords = document.querySelectorAll('.hero__rotating-word');
 
-  const measureWordWidth = (el, word) => {
-    const probe = document.createElement('span');
-    probe.textContent = word;
-    probe.style.position = 'absolute';
-    probe.style.visibility = 'hidden';
-    probe.style.whiteSpace = 'nowrap';
-    probe.style.font = getComputedStyle(el).font;
-    document.body.appendChild(probe);
-    const width = probe.getBoundingClientRect().width;
-    probe.remove();
-    return width;
-  };
-
   rotatingWords.forEach((el) => {
     const words = JSON.parse(el.getAttribute('data-words') || '[]');
     if (words.length < 2) return;
 
     let currentIndex = 0;
-    el.style.width = measureWordWidth(el, words[currentIndex]).toFixed(2) + 'px';
+    const maxWordLength = words.reduce((max, w) => Math.max(max, w.length), 0);
+    el.style.minWidth = `${Math.max(maxWordLength + 0.5, 6)}ch`;
 
     setInterval(() => {
       currentIndex = (currentIndex + 1) % words.length;
       el.classList.add('is-swapping');
 
       setTimeout(() => {
-        const nextWord = words[currentIndex];
-        el.textContent = nextWord;
-        el.style.width = measureWordWidth(el, nextWord).toFixed(2) + 'px';
+        el.textContent = words[currentIndex];
         el.classList.remove('is-swapping');
       }, 240);
     }, 2500);
@@ -503,8 +489,8 @@ import Layout from '../layouts/Layout.astro';
     white-space: nowrap;
     vertical-align: baseline;
     text-align: left;
-    will-change: transform, opacity, filter, width;
-    transition: opacity 0.24s ease, transform 0.24s ease, filter 0.24s ease, width 0.24s ease;
+    will-change: transform, opacity, filter;
+    transition: opacity 0.24s ease, transform 0.24s ease, filter 0.24s ease;
   }
 
   .hero__rotating-word.is-swapping {
