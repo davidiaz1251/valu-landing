@@ -34,9 +34,9 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? '';
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     
     <title>{title}</title>
-    <script is:inline>
-      window.__SUPABASE_URL = {JSON.stringify(supabaseUrl)};
-      window.__SUPABASE_ANON_KEY = {JSON.stringify(supabaseAnonKey)};
+    <script define:vars={{ supabaseUrl, supabaseAnonKey }}>
+      window.__SUPABASE_URL = supabaseUrl || '';
+      window.__SUPABASE_ANON_KEY = supabaseAnonKey || '';
     </script>
   </head>
   <body>
