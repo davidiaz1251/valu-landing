@@ -10,6 +10,9 @@ const {
   title, 
   description = "Valu Kraft - Papelería creativa y personalización artesanal. Transformamos tus ideas en productos únicos hechos con amor." 
 } = Astro.props;
+
+const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL ?? '';
+const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? '';
 ---
 
 <!doctype html>
@@ -31,6 +34,10 @@ const {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     
     <title>{title}</title>
+    <script is:inline>
+      window.__SUPABASE_URL = {JSON.stringify(supabaseUrl)};
+      window.__SUPABASE_ANON_KEY = {JSON.stringify(supabaseAnonKey)};
+    </script>
   </head>
   <body>
     <header class="header" id="header">
