@@ -66,8 +66,6 @@ async function loadFiles() {
       modalTitle.value = row.dataset.title || '';
       modalDescription.value = row.dataset.description || '';
       modalOrder.value = row.dataset.order || 100;
-      const imageInput = document.getElementById('modalImagePath');
-      if (imageInput) imageInput.value = row.dataset.image || '';
       if (modalImageFile) modalImageFile.value = '';
 
 
@@ -100,7 +98,7 @@ editForm?.addEventListener('submit', async (e) => {
   const title = modalTitle.value.trim();
   const description = modalDescription.value.trim();
   const sort_order = Number(modalOrder.value || 100);
-  let image_path = (document.getElementById('modalImagePath')?.value || '').trim();
+  let image_path = undefined;
   if (modalImageFile?.files?.[0]) {
     const img = modalImageFile.files[0];
     const ext = (img.name.split('.').pop() || 'jpg').toLowerCase();
@@ -110,7 +108,9 @@ editForm?.addEventListener('submit', async (e) => {
     image_path = imgPath;
   }
 
-  const { error } = await supabase.from('templates_catalog').update({ title, description, sort_order, image_path }).eq('id', id);
+  const payload = { title, description, sort_order };
+  if (typeof image_path === 'string') payload.image_path = image_path;
+  const { error } = await supabase.from('templates_catalog').update(payload).eq('id', id);
   if (error) { showToast('No se pudo guardar','err'); return; }
 
   closeModal();
