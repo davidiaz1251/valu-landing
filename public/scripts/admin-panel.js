@@ -28,15 +28,35 @@ async function loadFiles() {
   if (!data?.length) return (filesList.textContent = 'No hay plantillas aún.');
 
   filesList.innerHTML = data.map((f) => `
+    
     <div class="admin-file" data-id="${escapeHtml(f.id)}" data-path="${escapeHtml(f.storage_path)}">
-      <div style="display:grid; gap:8px;">
-        <input data-title value="${escapeHtml(f.title || '')}" placeholder="Título" class="user-role" style="min-width:unset;" />
-        <input data-description value="${escapeHtml(f.description || '')}" placeholder="Descripción" class="user-role" style="min-width:unset;" />
-        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-          <span class="admin-file__path">storagePath: ${escapeHtml(f.storage_path)}</span>
-          <input data-order type="number" value="${Number(f.sort_order || 100)}" class="user-role" style="width:110px; min-width:110px;" title="Orden" />
+      <div class="admin-file__form">
+        <label class="admin-field">
+          <span class="admin-field__label">Título visible</span>
+          <input data-title value="${escapeHtml(f.title || "")}" placeholder="Ej: Pack cumpleaños Stitch" class="user-role" style="min-width:unset;" />
+        </label>
+
+        <label class="admin-field">
+          <span class="admin-field__label">Descripción corta</span>
+          <input data-description value="${escapeHtml(f.description || "")}" placeholder="Ej: Plantilla editable para topper" class="user-role" style="min-width:unset;" />
+        </label>
+
+        <div class="admin-file__meta-row">
+          <span class="admin-file__path" title="Ruta interna en Supabase Storage">storagePath: ${escapeHtml(f.storage_path)}</span>
+
+          <label class="admin-field admin-field--order">
+            <span class="admin-field__label">Orden</span>
+            <input data-order type="number" value="${Number(f.sort_order || 100)}" class="user-role" style="width:110px; min-width:110px;" />
+          </label>
         </div>
       </div>
+
+      <div class="admin-actions">
+        <button class="btn-mini" data-copy="${escapeHtml(f.storage_path)}">Copiar ruta</button>
+        <button class="btn-mini" data-save="${escapeHtml(f.id)}">Guardar cambios</button>
+        <button class="btn-mini danger" data-delete-id="${escapeHtml(f.id)}" data-delete-path="${escapeHtml(f.storage_path)}">Eliminar</button>
+      </div>
+    </div>
       <div class="admin-actions">
         <button class="btn-mini" data-copy="${escapeHtml(f.storage_path)}">Copiar ruta</button>
         <button class="btn-mini" data-save="${escapeHtml(f.id)}">Guardar</button>
