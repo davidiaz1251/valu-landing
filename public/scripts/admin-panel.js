@@ -44,7 +44,7 @@ async function loadFiles() {
   filesList.innerHTML = data.map((f) => `
     <div class="admin-file" data-id="${escapeHtml(f.id)}" data-path="${escapeHtml(f.storage_path)}" data-image="${escapeHtml(f.image_path || '')}" data-title="${escapeHtml(f.title || '')}" data-description="${escapeHtml(f.description || '')}" data-order="${Number(f.sort_order || 100)}">
       <div style="display:flex; gap:10px; align-items:center;">
-        <img src="${f.image_path ? `https://wshszoghxaserycscvka.supabase.co/storage/v1/object/public/templates/${f.image_path}` : ""}" class="admin-file__thumb" ${f.image_path ? "" : "style="display:none""} alt="preview" />
+        <img src="${f.image_path ? `https://wshszoghxaserycscvka.supabase.co/storage/v1/object/public/templates/${f.image_path}` : ""}" class="admin-file__thumb" ${f.image_path ? "" : "style=\"display:none\""} alt="preview" />
         <div>
           <div class="admin-file__name">${escapeHtml(f.title || f.storage_path)}</div>
           <span class="admin-file__path">storagePath: ${escapeHtml(f.storage_path)}</span>
