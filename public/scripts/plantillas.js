@@ -14,19 +14,32 @@ function lockCards() {
   });
 }
 
-function enableCardsForRole(role, userId) {
-  cards.forEach((card) => {
+async function enableCardsForRole(role, userId) {
+  let visibleCount = 0;
+
+  for (const card of cards) {
     const button = card.querySelector('[data-download-btn]');
     const templateId = card.dataset.templateId;
     const storagePath = card.dataset.storagePath;
     const requiredRoles = (card.dataset.requiredRoles || '').split(',').filter(Boolean);
     const allowed = roleAllowed(requiredRoles, role);
 
+    // Verifica si el archivo existe realmente en Storage
+    const { data: probe, error: probeError } = await supabase.storage.from('templates').createSignedUrl(storagePath, 30);
+    const exists = !probeError && !!probe?.signedUrl;
+
+    if (!exists) {
+      card.style.display = 'none';
+      continue;
+    }
+
+    visibleCount += 1;
+
     if (!allowed) {
       button.textContent = 'No disponible';
       button.setAttribute('disabled', 'true');
       button.classList.add('is-disabled');
-      return;
+      continue;
     }
 
     button.removeAttribute('disabled');
@@ -42,7 +55,14 @@ function enableCardsForRole(role, userId) {
       link.click();
       await supabase.from('downloads').insert({ user_id: userId, template_id: templateId });
     });
-  });
+  }
+
+  if (visibleCount === 0) {
+    const grid = document.querySelector('.templates__grid');
+    if (grid) {
+      grid.innerHTML = '<div class="templates-empty"><h2>Ahora mismo no hay plantillas disponibles</h2><p>Estamos preparando nuevas descargas.</p></div>';
+    }
+  }
 }
 
 async function init() {
