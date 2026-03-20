@@ -11,11 +11,12 @@ const categories = Array.from(new Set(templates.map((item) => item.category))).s
 >
   <section class="templates-hero section section--sm">
     <div class="container">
-      <span class="section__badge">Recursos gratis</span>
+      <span class="section__badge">Recursos</span>
       <h1 class="templates-hero__title">Plantillas descargables</h1>
       <p class="templates-hero__description">
-        Aquí encontrarás plantillas de Valu Kraft para que puedas descargar, imprimir o personalizar de forma sencilla.
+        Accede con tu cuenta para descargar plantillas según tu tipo de usuario.
       </p>
+      <div id="templatesSession" class="templates-session">Comprobando sesión...</div>
     </div>
   </section>
 
@@ -36,28 +37,26 @@ const categories = Array.from(new Set(templates.map((item) => item.category))).s
             Muy pronto verás aquí descargas listas para tus celebraciones. Mientras tanto, puedes pedir una plantilla
             personalizada por encargo.
           </p>
-          <a
-            class="btn btn--primary"
-            href="https://wa.me/34600000000?text=Hola%20Valu%20Kraft%2C%20quiero%20una%20plantilla%20personalizada"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Pedir plantilla personalizada
-          </a>
         </div>
       ) : (
-        <div class="templates__grid">
+        <div class="templates__grid" id="templatesGrid">
           {templates.map((item) => (
-            <article class="template-card">
+            <article
+              class="template-card"
+              data-template-id={item.id}
+              data-storage-path={item.storagePath}
+              data-required-roles={item.requiredRoles.join(',')}
+            >
               <div class="template-card__meta">
                 <span class="template-card__category">{item.category}</span>
                 <span class="template-card__format">{item.format}</span>
               </div>
               <h2 class="template-card__title">{item.title}</h2>
               <p class="template-card__description">{item.description}</p>
-              <a class="btn btn--secondary template-card__cta" href={item.downloadUrl} download>
+              <p class="template-card__access" data-role-copy></p>
+              <button class="btn btn--secondary template-card__cta" data-download-btn type="button" disabled>
                 Descargar
-              </a>
+              </button>
             </article>
           ))}
         </div>
@@ -66,11 +65,107 @@ const categories = Array.from(new Set(templates.map((item) => item.category))).s
   </section>
 </Layout>
 
+<script type="module">
+  import { onAuthStateChanged } from 'firebase/auth';
+  import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+  import { getDownloadURL, ref } from 'firebase/storage';
+  import { auth, db, hasFirebaseConfig, storage } from '../lib/firebase';
+  import { ensureUserProfile, getUserProfile } from '../lib/auth';
+
+  const sessionBox = document.getElementById('templatesSession');
+  const cards = Array.from(document.querySelectorAll('.template-card'));
+
+  const roleLabels = {
+    cliente_final: 'Cliente final',
+    profesional_reposteria: 'Profesional repostería',
+    admin: 'Admin',
+  };
+
+  const roleAllowed = (requiredRoles, role) => requiredRoles.includes(role) || role === 'admin';
+
+  if (!hasFirebaseConfig()) {
+    sessionBox.textContent = 'Configura Firebase para activar login y descargas.';
+  } else {
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        sessionBox.innerHTML = 'Necesitas iniciar sesión para descargar. <a href="/login?next=/plantillas">Ir a login</a>';
+        cards.forEach((card) => {
+          const button = card.querySelector('[data-download-btn]');
+          const roleCopy = card.querySelector('[data-role-copy]');
+          const roles = (card.dataset.requiredRoles || '').split(',').filter(Boolean);
+          roleCopy.textContent = `Acceso: ${roles.map((role) => roleLabels[role] || role).join(', ')}`;
+          button.setAttribute('disabled', 'true');
+        });
+        return;
+      }
+
+      await ensureUserProfile(user);
+      const profile = await getUserProfile(user.uid);
+      const role = profile?.role || 'cliente_final';
+
+      sessionBox.innerHTML = `Sesión activa: <strong>${profile?.name || user.email}</strong> · Rol: <strong>${roleLabels[role] || role}</strong> · <a href="#" id="logoutLink">Cerrar sesión</a>`;
+      document.getElementById('logoutLink')?.addEventListener('click', async (event) => {
+        event.preventDefault();
+        await auth.signOut();
+      });
+
+      cards.forEach((card) => {
+        const button = card.querySelector('[data-download-btn]');
+        const roleCopy = card.querySelector('[data-role-copy]');
+        const templateId = card.dataset.templateId;
+        const storagePath = card.dataset.storagePath;
+        const requiredRoles = (card.dataset.requiredRoles || '').split(',').filter(Boolean);
+
+        const allowed = roleAllowed(requiredRoles, role);
+        roleCopy.textContent = `Acceso: ${requiredRoles.map((r) => roleLabels[r] || r).join(', ')}`;
+
+        if (!allowed) {
+          button.textContent = 'No disponible para tu cuenta';
+          button.setAttribute('disabled', 'true');
+          return;
+        }
+
+        button.removeAttribute('disabled');
+        button.addEventListener('click', async () => {
+          try {
+            const fileRef = ref(storage, storagePath);
+            const url = await getDownloadURL(fileRef);
+            const link = document.createElement('a');
+            link.href = url;
+            link.target = '_blank';
+            link.rel = 'noopener';
+            link.click();
+
+            await addDoc(collection(db, 'downloads'), {
+              uid: user.uid,
+              templateId,
+              downloadedAt: serverTimestamp(),
+            });
+          } catch (error) {
+            console.error(error);
+            alert('No se pudo iniciar la descarga. Revisa permisos o configuración de Firebase.');
+          }
+        });
+      });
+    });
+  }
+</script>
+
 <style>
   .templates-hero {
     padding-top: calc(var(--space-24) + var(--space-8));
     padding-bottom: var(--space-8);
     text-align: center;
+  }
+
+  .templates-session {
+    margin-top: var(--space-4);
+    display: inline-block;
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-full);
+    background: #fff;
+    border: 1px solid var(--color-gray-200);
+    font-size: var(--text-sm);
   }
 
   .templates-hero__title {
@@ -112,14 +207,6 @@ const categories = Array.from(new Set(templates.map((item) => item.category))).s
     text-align: center;
   }
 
-  .templates-empty h2 {
-    margin-bottom: var(--space-3);
-  }
-
-  .templates-empty p {
-    margin-bottom: var(--space-6);
-  }
-
   .templates__grid {
     display: grid;
     gap: var(--space-6);
@@ -159,8 +246,14 @@ const categories = Array.from(new Set(templates.map((item) => item.category))).s
     margin: 0;
   }
 
-  .template-card__description {
+  .template-card__description,
+  .template-card__access {
     margin: 0;
+  }
+
+  .template-card__access {
+    font-size: var(--text-sm);
+    color: var(--color-gray-500);
   }
 
   .template-card__cta {

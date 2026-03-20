@@ -1,61 +1,142 @@
-# Astro Starter Kit: Minimal
+# Valu Landing (Astro)
 
-```sh
-npm create astro@latest -- --template minimal
+Landing de Valu Kraft con módulo de plantillas protegido por Firebase.
+
+## Funcionalidades incluidas
+
+- Página de login (`/login`)
+- Registro (`/registro`)
+- Recuperación de contraseña (`/olvide-contrasena`)
+- Login con Google
+- Página `/plantillas` protegida por sesión
+- Roles de usuario:
+  - `cliente_final`
+  - `profesional_reposteria`
+  - `admin`
+- Descarga de plantillas desde Firebase Storage según rol
+- Registro de descargas en colección `downloads`
+
+---
+
+## 1) Configuración local
+
+```bash
+npm install
+cp .env.example .env
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Completa `.env` con las credenciales web de Firebase.
 
-## 🚀 Project Structure
+Variables requeridas:
 
-Inside of your Astro project, you'll see the following folders and files:
+- `PUBLIC_FIREBASE_API_KEY`
+- `PUBLIC_FIREBASE_AUTH_DOMAIN`
+- `PUBLIC_FIREBASE_PROJECT_ID`
+- `PUBLIC_FIREBASE_STORAGE_BUCKET`
+- `PUBLIC_FIREBASE_APP_ID`
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+---
+
+## 2) Estructura de datos esperada
+
+### Colección `users/{uid}`
+
+```json
+{
+  "uid": "...",
+  "email": "...",
+  "name": "...",
+  "role": "cliente_final",
+  "active": true
+}
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+### Colección `downloads/{autoId}`
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+```json
+{
+  "uid": "...",
+  "templateId": "...",
+  "downloadedAt": "timestamp"
+}
+```
 
-Any static assets, like images, can be placed in the `public/` directory.
+### Plantillas en código
 
-## 🧞 Commands
+Archivo: `src/data/templates.ts`
 
-All commands are run from the root of the project, from a terminal:
+Cada plantilla necesita:
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+- `storagePath`: ruta del archivo en Firebase Storage
+- `requiredRoles`: roles permitidos
 
-## 👀 Want to learn more?
+Ejemplo:
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+```ts
+{
+  id: 'tpl-cumple-001',
+  title: 'Topper Cumple Stitch',
+  category: 'Cumpleaños',
+  description: 'Plantilla editable para topper de tarta.',
+  format: 'PDF',
+  storagePath: 'templates/topper-cumple-stitch.pdf',
+  requiredRoles: ['cliente_final', 'profesional_reposteria']
+}
+```
 
-## Auto-deploy to GitHub Pages (GitHub Actions)
+---
 
-This repo includes `.github/workflows/deploy-pages.yml`.
+## 3) Reglas recomendadas (base)
 
-Trigger:
-- Push to `main` and `master`
-- Manual run via `workflow_dispatch`
+### Firestore Rules
 
-Requirements:
-- In GitHub repo settings, enable Pages source as `GitHub Actions`.
-- No SSH or Hostinger secrets are required.
+```txt
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function isAdmin() {
+      return signedIn() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
 
-What the workflow does:
-- `npm ci`
-- `npm run build` (Astro)
-- Uploads `dist/` artifact
-- Publishes to GitHub Pages
+    match /users/{uid} {
+      allow read: if signedIn() && request.auth.uid == uid;
+      allow create: if signedIn() && request.auth.uid == uid;
+      allow update: if signedIn() && request.auth.uid == uid;
+      allow delete: if false;
+    }
+
+    match /downloads/{docId} {
+      allow create: if signedIn() && request.resource.data.uid == request.auth.uid;
+      allow read: if isAdmin();
+    }
+  }
+}
+```
+
+### Storage Rules
+
+```txt
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /templates/{allPaths=**} {
+      allow read: if request.auth != null;
+      allow write: if false; // subir archivos desde consola/admin
+    }
+  }
+}
+```
+
+> Nota: el control fino por rol se está aplicando en frontend (MVP). Si más adelante queréis blindaje total, migramos a validación server-side (SSR/Functions).
+
+---
+
+## 4) Comandos
+
+```bash
+npm run dev
+npm run build
+npm run preview
+```
