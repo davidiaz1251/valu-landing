@@ -90,18 +90,64 @@ const categories = Array.from(new Set(templates.map((item) => item.category))).s
     });
   }
 
-  if (!hasSupabaseConfig()) {
-    sessionBox.textContent = 'Configura Supabase para activar login y descargas.';
-    lockCards();
-  } else {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
+  function enableCardsForRole(role, userId) {
+    cards.forEach((card) => {
+      const button = card.querySelector('[data-download-btn]');
+      const roleCopy = card.querySelector('[data-role-copy]');
+      const templateId = card.dataset.templateId;
+      const storagePath = card.dataset.storagePath;
+      const requiredRoles = (card.dataset.requiredRoles || '').split(',').filter(Boolean);
 
-    if (!session?.user) {
-      sessionBox.innerHTML = 'Necesitas iniciar sesión para descargar. <a href="/login?next=/plantillas">Ir a login</a>';
-      lockCards();
-    } else {
+      const allowed = roleAllowed(requiredRoles, role);
+      roleCopy.textContent = `Acceso: ${requiredRoles.map((r) => roleLabels[r] || r).join(', ')}`;
+
+      if (!allowed) {
+        button.textContent = 'No disponible para tu cuenta';
+        button.setAttribute('disabled', 'true');
+        return;
+      }
+
+      button.removeAttribute('disabled');
+      button.addEventListener('click', async () => {
+        const { data, error } = await supabase.storage.from('templates').createSignedUrl(storagePath, 60);
+
+        if (error || !data?.signedUrl) {
+          alert('No se pudo generar la descarga. Revisa permisos en Supabase.');
+          return;
+        }
+
+        const link = document.createElement('a');
+        link.href = data.signedUrl;
+        link.target = '_blank';
+        link.rel = 'noopener';
+        link.click();
+
+        await supabase.from('downloads').insert({
+          user_id: userId,
+          template_id: templateId,
+        });
+      });
+    });
+  }
+
+  async function initTemplatesAuth() {
+    try {
+      if (!hasSupabaseConfig()) {
+        sessionBox.textContent = 'Configura Supabase para activar login y descargas.';
+        lockCards();
+        return;
+      }
+
+      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError) throw sessionError;
+
+      const session = sessionData?.session;
+      if (!session?.user) {
+        sessionBox.innerHTML = 'Necesitas iniciar sesión para descargar. <a href="/login?next=/plantillas">Ir a login</a>';
+        lockCards();
+        return;
+      }
+
       await ensureUserProfile();
       const profile = await getUserProfile();
       const role = profile?.role || 'cliente_final';
@@ -114,45 +160,15 @@ const categories = Array.from(new Set(templates.map((item) => item.category))).s
         window.location.reload();
       });
 
-      cards.forEach((card) => {
-        const button = card.querySelector('[data-download-btn]');
-        const roleCopy = card.querySelector('[data-role-copy]');
-        const templateId = card.dataset.templateId;
-        const storagePath = card.dataset.storagePath;
-        const requiredRoles = (card.dataset.requiredRoles || '').split(',').filter(Boolean);
-
-        const allowed = roleAllowed(requiredRoles, role);
-        roleCopy.textContent = `Acceso: ${requiredRoles.map((r) => roleLabels[r] || r).join(', ')}`;
-
-        if (!allowed) {
-          button.textContent = 'No disponible para tu cuenta';
-          button.setAttribute('disabled', 'true');
-          return;
-        }
-
-        button.removeAttribute('disabled');
-        button.addEventListener('click', async () => {
-          const { data, error } = await supabase.storage.from('templates').createSignedUrl(storagePath, 60);
-
-          if (error || !data?.signedUrl) {
-            alert('No se pudo generar la descarga. Revisa permisos en Supabase.');
-            return;
-          }
-
-          const link = document.createElement('a');
-          link.href = data.signedUrl;
-          link.target = '_blank';
-          link.rel = 'noopener';
-          link.click();
-
-          await supabase.from('downloads').insert({
-            user_id: session.user.id,
-            template_id: templateId,
-          });
-        });
-      });
+      enableCardsForRole(role, session.user.id);
+    } catch (error) {
+      console.error(error);
+      sessionBox.textContent = 'No se pudo validar la sesión. Recarga la página o vuelve a iniciar sesión.';
+      lockCards();
     }
   }
+
+  initTemplatesAuth();
 </script>
 
 <style>
