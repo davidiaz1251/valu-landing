@@ -12,7 +12,7 @@ const usersList = document.getElementById('usersList');
 const ROLES = ['cliente_final', 'profesional_reposteria', 'admin'];
 
 function setStatus(text) { if (statusEl) statusEl.textContent = text; }
-function escapeHtml(v) { return String(v).replace(/[&<>'"]/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;' }[c])); }
+function escapeHtml(v) { return String(v ?? '').replace(/[&<>'"]/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;' }[c])); }
 function roleOptions(current) { return ROLES.map((r) => `<option value="${r}" ${r===current?'selected':''}>${r}</option>`).join(''); }
 
 async function loadFiles() {
@@ -29,12 +29,17 @@ async function loadFiles() {
 
   filesList.innerHTML = data.map((f) => `
     <div class="admin-file" data-id="${escapeHtml(f.id)}" data-path="${escapeHtml(f.storage_path)}">
-      <div>
-        <div class="admin-file__name">${escapeHtml(f.title || f.storage_path)}</div>
-        <span class="admin-file__path">storagePath: ${escapeHtml(f.storage_path)}</span>
+      <div style="display:grid; gap:8px;">
+        <input data-title value="${escapeHtml(f.title || '')}" placeholder="Título" class="user-role" style="min-width:unset;" />
+        <input data-description value="${escapeHtml(f.description || '')}" placeholder="Descripción" class="user-role" style="min-width:unset;" />
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+          <span class="admin-file__path">storagePath: ${escapeHtml(f.storage_path)}</span>
+          <input data-order type="number" value="${Number(f.sort_order || 100)}" class="user-role" style="width:110px; min-width:110px;" title="Orden" />
+        </div>
       </div>
       <div class="admin-actions">
         <button class="btn-mini" data-copy="${escapeHtml(f.storage_path)}">Copiar ruta</button>
+        <button class="btn-mini" data-save="${escapeHtml(f.id)}">Guardar</button>
         <button class="btn-mini danger" data-delete-id="${escapeHtml(f.id)}" data-delete-path="${escapeHtml(f.storage_path)}">Eliminar</button>
       </div>
     </div>
@@ -45,6 +50,31 @@ async function loadFiles() {
       await navigator.clipboard.writeText(btn.getAttribute('data-copy'));
       btn.textContent = 'Copiado';
       setTimeout(() => (btn.textContent = 'Copiar ruta'), 1200);
+    });
+  });
+
+  filesList.querySelectorAll('[data-save]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const row = btn.closest('.admin-file');
+      const id = btn.getAttribute('data-save');
+      const title = row.querySelector('[data-title]').value.trim();
+      const description = row.querySelector('[data-description]').value.trim();
+      const sort_order = Number(row.querySelector('[data-order]').value || 100);
+      btn.textContent = 'Guardando…';
+
+      const { error } = await supabase
+        .from('templates_catalog')
+        .update({ title, description, sort_order })
+        .eq('id', id);
+
+      if (error) {
+        alert(`No se pudo guardar: ${error.message}`);
+        btn.textContent = 'Guardar';
+        return;
+      }
+      btn.textContent = 'Guardado';
+      btn.classList.add('is-ok');
+      setTimeout(() => { btn.textContent = 'Guardar'; btn.classList.remove('is-ok'); }, 1200);
     });
   });
 
