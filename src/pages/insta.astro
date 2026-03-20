@@ -10,61 +10,106 @@
     <meta name="description" content="Accede rápido a todos los enlaces de Valu Kraft." />
   </head>
   <body>
-    <section class="bio section section--sm">
-      <div class="container bio__container">
-        <div class="bio-card">
+    <section class="bio">
+      <div class="bio__container">
+        <article class="bio-card">
           <div class="bio-head">
-            <div class="bio-avatar-wrap">
-              <img src="/images/logo-valu.jpeg" alt="Valu Kraft" class="bio-avatar" onerror="this.style.display='none'; this.parentElement.innerHTML='✨';" />
-            </div>
+            <div class="bio-logo">✨</div>
             <h1>Valu Kraft</h1>
-            <p>🎨 Papelería creativa personalizada</p>
-            <p>📦 Cajitas, toppers, recuerdos & más</p>
-            <p>💌 Encargos únicos para cada ocasión</p>
-            <p>📍 Hecho con amor desde España</p>
-            <p>🛍️ Haz tu pedido en nuestra web 👇</p>
+            <p>🎨 Papelería creativa personalizada · 📦 Cajitas, toppers, recuerdos y más · 💌 Encargos únicos para cada ocasión · 📍 Hecho con amor desde España</p>
           </div>
 
           <div class="bio-links">
-            <a class="bio-link" href="https://www.valukraft.com" target="_blank" rel="noopener">
-              <span class="bio-link__icon">🌐</span><span>Web</span>
-            </a>
-            <a class="bio-link" href="https://instagram.com/valu_kraft" target="_blank" rel="noopener">
-              <span class="bio-link__icon">📸</span><span>Instagram</span>
-            </a>
-            <a class="bio-link" href="https://facebook.com/valu.kraft" target="_blank" rel="noopener">
-              <span class="bio-link__icon">📘</span><span>Facebook</span>
-            </a>
-            <a class="bio-link" href="https://tiktok.com/@valu_kraft" target="_blank" rel="noopener">
-              <span class="bio-link__icon">🎵</span><span>TikTok</span>
-            </a>
+            <a class="bio-link bio-link--primary" href="https://www.valukraft.com" target="_blank" rel="noopener">Web oficial</a>
+            <a class="bio-link" href="https://instagram.com/valu_kraft" target="_blank" rel="noopener">Instagram</a>
+            <a class="bio-link" href="https://facebook.com/valu.kraft" target="_blank" rel="noopener">Facebook</a>
+            <a class="bio-link" href="https://tiktok.com/@valu_kraft" target="_blank" rel="noopener">TikTok</a>
           </div>
-        </div>
+        </article>
       </div>
     </section>
   </body>
 </html>
 
 <style>
-  :root{font-family: Inter, system-ui, Arial, sans-serif;}
-  *{box-sizing:border-box}
-  body{margin:0}
-  .bio { min-height: 100dvh; display:flex; align-items:flex-start; background: #d98ab7; padding-top: 30px; }
-  .bio__container { width:100%; display:flex; justify-content:center; padding:0 12px; }
-  .bio-card { width:100%; max-width:560px; padding:14px 8px 30px; }
-  .bio-head { text-align:center; margin-bottom:16px; color:#fff; text-shadow:0 1px 0 rgba(0,0,0,.1); }
-  .bio-avatar-wrap { width:160px; height:160px; border-radius:999px; margin:0 auto 12px; background:#fff; border:3px solid #2f1f2c; display:grid; place-items:center; font-size:42px; overflow:hidden; }
-  .bio-avatar { width:100%; height:100%; object-fit:cover; }
-  .bio-head h1 { margin:0 0 8px; font-size:42px; line-height:1; }
-  .bio-head p { margin:2px 0; font-size:28px; font-weight:600; }
-  .bio-links { display:grid; gap:14px; margin-top:14px; }
-  .bio-link {display:flex;align-items:center;gap:18px;text-decoration:none;padding:18px 20px;border-radius:18px;border:3px dashed #3a2934;color:#241a21;font-weight:700;font-size:34px;background:#e7a4ca;}
-  .bio-link__icon { width:52px; height:52px; border-radius:999px; display:grid; place-items:center; font-size:34px; background:#f5d2e5; }
-  @media (max-width: 760px) {
-    .bio-avatar-wrap { width:120px; height:120px; }
-    .bio-head h1 { font-size:22px; }
-    .bio-head p { font-size:17px; }
-    .bio-link { font-size:30px; padding:14px 14px; }
-    .bio-link__icon { width:44px; height:44px; font-size:26px; }
+  :root { font-family: Inter, system-ui, Arial, sans-serif; }
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+
+  .bio {
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    background: linear-gradient(180deg, #fffaf7 0%, #fff 100%);
+    padding: 20px 12px;
+  }
+
+  .bio__container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .bio-card {
+    width: 100%;
+    max-width: 560px;
+    background: #fff;
+    border: 1px solid #f0e3df;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 16px 36px rgba(53, 27, 35, 0.08);
+  }
+
+  .bio-head {
+    text-align: center;
+    margin-bottom: 16px;
+  }
+
+  .bio-logo {
+    width: 64px;
+    height: 64px;
+    border-radius: 999px;
+    margin: 0 auto 10px;
+    display: grid;
+    place-items: center;
+    font-size: 28px;
+    background: #fff3ef;
+    border: 1px solid #f2d8cf;
+  }
+
+  .bio-head h1 {
+    margin: 0 0 8px;
+    color: #2d1c23;
+  }
+
+  .bio-head p {
+    margin: 0;
+    color: #6b5b60;
+    line-height: 1.6;
+  }
+
+  .bio-links {
+    display: grid;
+    gap: 10px;
+  }
+
+  .bio-link {
+    display: block;
+    text-decoration: none;
+    text-align: center;
+    padding: 12px 14px;
+    border-radius: 999px;
+    border: 1px solid #e8d7d1;
+    color: #2d1c23;
+    font-weight: 600;
+    background: #fff;
+  }
+
+  .bio-link:hover { background: #fff6f2; }
+
+  .bio-link--primary {
+    background: linear-gradient(135deg, #e8b4bc, #d08b96);
+    color: #fff;
+    border: none;
   }
 </style>
