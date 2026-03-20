@@ -229,7 +229,9 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? 'sb_publisha
         font-size: var(--text-2xl);
       }
       
-      .nav__avatar { width: 28px; height: 28px; border-radius: 999px; object-fit: cover; border: 1px solid var(--color-gray-200); margin-right: 8px; }
+      .nav__avatar { width: 28px; height: 28px; border-radius: 999px; object-fit: cover; border: 1px solid var(--color-gray-200); margin-right: 8px; display:block; }
+      .nav__avatar[hidden] { display:none !important; }
+      .nav__auth-dropdown[hidden] { display:none !important; }
       .nav__auth-item { display:flex; align-items:center; position: relative; }
       .nav__auth-dropdown { position:absolute; top: calc(100% + 8px); right: 0; min-width: 180px; background:#fff; border:1px solid var(--color-gray-200); border-radius: 12px; box-shadow: var(--shadow-md); padding: 8px; z-index: 1000; display:grid; gap:4px; }
       .nav__auth-dropdown-link { display:block; width:100%; text-align:left; background:transparent; border:none; padding:8px 10px; border-radius:8px; color: var(--color-gray-700); text-decoration:none; cursor:pointer; font: inherit; }

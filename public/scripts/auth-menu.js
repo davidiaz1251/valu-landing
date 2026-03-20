@@ -4,6 +4,11 @@ const authItem = document.querySelector('.nav__auth-item');
 const link = document.querySelector('[data-auth-menu]');
 const avatar = document.getElementById('authAvatar');
 
+if (avatar) {
+  avatar.hidden = true;
+  avatar.style.display = 'none';
+}
+
 if (authItem && link && hasSupabaseConfig() && supabase) {
   const menu = document.createElement('div');
   menu.className = 'nav__auth-dropdown';
@@ -14,15 +19,24 @@ if (authItem && link && hasSupabaseConfig() && supabase) {
   `;
   authItem.appendChild(menu);
 
-  const openMenu = () => { menu.hidden = false; authItem.classList.add('is-open'); };
-  const closeMenu = () => { menu.hidden = true; authItem.classList.remove('is-open'); };
+  const openMenu = () => {
+    const { data } = authItem.getBoundingClientRect();
+    menu.hidden = false;
+    menu.style.display = 'grid';
+  };
+  const closeMenu = () => {
+    menu.hidden = true;
+    menu.style.display = 'none';
+  };
 
   authItem.addEventListener('mouseenter', openMenu);
   authItem.addEventListener('mouseleave', closeMenu);
-  authItem.addEventListener('click', (e) => {
-    if (window.innerWidth > 900) return;
-    e.preventDefault();
-    menu.hidden ? openMenu() : closeMenu();
+
+  link.addEventListener('click', (e) => {
+    if (!link.getAttribute('href') || link.getAttribute('href') === '#') {
+      e.preventDefault();
+      if (menu.hidden) openMenu(); else closeMenu();
+    }
   });
 
   document.addEventListener('click', (e) => {
@@ -32,6 +46,7 @@ if (authItem && link && hasSupabaseConfig() && supabase) {
   const apply = async () => {
     const { data } = await supabase.auth.getSession();
     const session = data?.session;
+
     if (session?.user) {
       link.textContent = 'Mi cuenta';
       link.setAttribute('href', '#');
@@ -40,6 +55,7 @@ if (authItem && link && hasSupabaseConfig() && supabase) {
       if (avatar && photo) {
         avatar.src = photo;
         avatar.hidden = false;
+        avatar.style.display = 'block';
       }
 
       document.getElementById('authLogoutBtn')?.addEventListener('click', async (e) => {
@@ -50,9 +66,14 @@ if (authItem && link && hasSupabaseConfig() && supabase) {
     } else {
       link.textContent = 'Iniciar sesión';
       link.setAttribute('href', '/login');
-      if (avatar) avatar.hidden = true;
+      if (avatar) {
+        avatar.hidden = true;
+        avatar.style.display = 'none';
+      }
+      closeMenu();
       menu.remove();
     }
   };
+
   apply();
 }
