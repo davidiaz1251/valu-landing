@@ -1,4 +1,4 @@
-import { hasSupabaseConfig, supabase } from '/scripts/supabase-client.js';
+import { hasSupabaseConfig, supabase, getUserProfile } from '/scripts/supabase-client.js';
 
 const authItem = document.querySelector('.nav__auth-item');
 const link = document.querySelector('[data-auth-menu]');
@@ -27,6 +27,9 @@ if (authItem && link && hasSupabaseConfig() && supabase) {
       return;
     }
 
+    const profile = await getUserProfile();
+    const isAdmin = profile?.role === 'admin';
+
     const photo = session.user.user_metadata?.avatar_url || session.user.user_metadata?.picture;
     if (avatar && photo) {
       avatar.src = photo;
@@ -35,26 +38,34 @@ if (authItem && link && hasSupabaseConfig() && supabase) {
     }
 
     if (isMobile) {
-      link.textContent = 'Cerrar sesión';
-      link.setAttribute('href', '#');
-      link.addEventListener('click', async (e) => {
-        e.preventDefault();
-        await supabase.auth.signOut();
-        window.location.href = '/';
-      });
+      if (isAdmin) {
+        link.textContent = 'Panel admin';
+        link.setAttribute('href', '/admin/panel');
+      } else {
+        link.textContent = 'Cerrar sesión';
+        link.setAttribute('href', '#');
+        link.addEventListener('click', async (e) => {
+          e.preventDefault();
+          await supabase.auth.signOut();
+          window.location.href = '/';
+        });
+      }
       return;
     }
 
-    // Desktop: toggle por click (sin hover para evitar que se cierre al mover el ratón)
+    // Desktop: dropdown toggle
     link.textContent = 'Mi cuenta';
     link.setAttribute('href', '#');
 
     const menu = document.createElement('div');
     menu.className = 'nav__auth-dropdown';
     menu.hidden = true;
+
     menu.innerHTML =
+      (isAdmin ? '<a href="/admin/panel" class="nav__auth-dropdown-link">Panel admin</a>' : '') +
       '<a href="/plantillas" class="nav__auth-dropdown-link">Mis plantillas</a>' +
       '<button type="button" class="nav__auth-dropdown-link" id="authLogoutBtn">Cerrar sesión</button>';
+
     authItem.appendChild(menu);
 
     const openMenu = () => {
