@@ -6,10 +6,10 @@ const grid = document.querySelector('.templates__grid');
 
 const roleAllowed = (requiredRoles, role) => requiredRoles.includes(role) || role === 'admin';
 
-function templateCardHtml(item, enabled) {
+function templateCardHtml(item, enabled, imageUrl) {
   return `
     <article class="template-card" data-template-id="${item.id}" data-storage-path="${item.storage_path}" data-required-roles="${(item.required_roles || []).join(',')}">
-      <div class="template-card__media">${item.image_path ? `<img src="https://wshszoghxaserycscvka.supabase.co/storage/v1/object/public/templates/${item.image_path}" alt="${item.title || 'Plantilla'}" />` : ""}</div>
+      <div class="template-card__media">${imageUrl ? `<img src="${imageUrl}" alt="${item.title || 'Plantilla'}" />` : ''}</div>
       <div class="template-card__meta"><span class="template-card__format">${item.format || ''}</span></div>
       <h2 class="template-card__title">${item.title || 'Plantilla'}</h2>
       <p class="template-card__description">${item.description || ''}</p>
@@ -32,6 +32,13 @@ async function loadCatalog() {
   return data || [];
 }
 
+async function signedImage(path) {
+  if (!path) return '';
+  const { data, error } = await supabase.storage.from('templates').createSignedUrl(path, 3600);
+  if (error || !data?.signedUrl) return '';
+  return data.signedUrl;
+}
+
 async function renderTemplates(role, userId, loggedIn) {
   if (!grid) return;
 
@@ -46,19 +53,18 @@ async function renderTemplates(role, userId, loggedIn) {
   for (const item of catalog) {
     const requiredRoles = item.required_roles || [];
 
-    // Sin sesión: mostrar catálogo completo, solo bloquear descarga
     if (!loggedIn) {
-      visible.push({ item, allowed: false });
+      visible.push({ item, allowed: false, imageUrl: '' });
       continue;
     }
 
-    // Con sesión: comprobamos que exista archivo y permisos
     const { data: probe, error: probeError } = await supabase.storage.from('templates').createSignedUrl(item.storage_path, 30);
     const exists = !probeError && !!probe?.signedUrl;
     if (!exists) continue;
 
     const allowed = roleAllowed(requiredRoles, role);
-    visible.push({ item, allowed });
+    const imageUrl = await signedImage(item.image_path);
+    visible.push({ item, allowed, imageUrl });
   }
 
   if (!visible.length) {
@@ -66,7 +72,7 @@ async function renderTemplates(role, userId, loggedIn) {
     return;
   }
 
-  grid.innerHTML = visible.map(({ item, allowed }) => templateCardHtml(item, allowed)).join('');
+  grid.innerHTML = visible.map(({ item, allowed, imageUrl }) => templateCardHtml(item, allowed, imageUrl)).join('');
 
   grid.querySelectorAll('[data-download-btn]').forEach((button) => {
     button.addEventListener('click', async () => {

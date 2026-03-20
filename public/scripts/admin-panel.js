@@ -19,17 +19,34 @@ const modalOrder = document.getElementById('modalOrder');
 const modalPathLabel = document.getElementById('modalPathLabel');
 const modalImageFile = document.getElementById('modalImageFile');
 const toastEl = document.getElementById('adminToast');
-function showToast(msg,type='ok'){ if(!toastEl) return; toastEl.textContent=msg; toastEl.className='toast '+(type==='err'?'err':'ok'); toastEl.hidden=false; setTimeout(()=>{toastEl.hidden=true;},1600); }
 
 const ROLES = ['cliente_final', 'profesional_reposteria', 'admin'];
 
 function setStatus(text) { if (statusEl) statusEl.textContent = text; }
-function escapeHtml(v) { return String(v ?? '').replace(/[&<>'"]/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;' }[c])); }
-function roleOptions(current) { return ROLES.map((r) => `<option value="${r}" ${r===current?'selected':''}>${r}</option>`).join(''); }
+function showToast(msg, type = 'ok') {
+  if (!toastEl) return;
+  toastEl.textContent = msg;
+  toastEl.className = `toast ${type === 'err' ? 'err' : 'ok'}`;
+  toastEl.hidden = false;
+  setTimeout(() => { toastEl.hidden = true; }, 1600);
+}
+function escapeHtml(v) {
+  return String(v ?? '').replace(/[&<>'"]/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;' }[c]));
+}
+function roleOptions(current) {
+  return ROLES.map((r) => `<option value="${r}" ${r===current?'selected':''}>${r}</option>`).join('');
+}
 
 function openModal() { editModal.hidden = false; }
 function closeModal() { editModal.hidden = true; }
 document.querySelectorAll('[data-close-modal]').forEach((el) => el.addEventListener('click', closeModal));
+
+async function getSignedPreview(path) {
+  if (!path) return '';
+  const { data, error } = await supabase.storage.from('templates').createSignedUrl(path, 3600);
+  if (error || !data?.signedUrl) return '';
+  return data.signedUrl;
+}
 
 async function loadFiles() {
   filesList.textContent = 'Cargando archivos…';
@@ -43,22 +60,27 @@ async function loadFiles() {
   if (error) return (filesList.textContent = `Error al listar: ${error.message}`);
   if (!data?.length) return (filesList.textContent = 'No hay plantillas aún.');
 
-  filesList.innerHTML = data.map((f) => `
+  const withPreview = await Promise.all(data.map(async (f) => ({
+    ...f,
+    previewUrl: await getSignedPreview(f.image_path),
+  })));
+
+  filesList.innerHTML = withPreview.map((f) => `
     <div class="admin-file" data-id="${escapeHtml(f.id)}" data-path="${escapeHtml(f.storage_path)}" data-image="${escapeHtml(f.image_path || '')}" data-title="${escapeHtml(f.title || '')}" data-description="${escapeHtml(f.description || '')}" data-order="${Number(f.sort_order || 100)}">
       <div style="display:flex; gap:10px; align-items:center;">
-        <img src="${f.image_path ? `https://wshszoghxaserycscvka.supabase.co/storage/v1/object/public/templates/${f.image_path}` : ""}" class="admin-file__thumb" ${f.image_path ? "" : "style=\"display:none\""} alt="preview" />
+        <img src="${escapeHtml(f.previewUrl || '')}" class="admin-file__thumb" ${f.previewUrl ? '' : 'style="display:none"'} alt="preview" />
         <div>
           <div class="admin-file__name">${escapeHtml(f.title || f.storage_path)}</div>
           <span class="admin-file__path">storagePath: ${escapeHtml(f.storage_path)}</span>
         </div>
       </div>
       <div class="admin-actions">
-        
         <button class="btn-mini" data-edit>Editar</button>
         <button class="btn-mini danger" data-delete-id="${escapeHtml(f.id)}" data-delete-path="${escapeHtml(f.storage_path)}">Eliminar</button>
       </div>
     </div>
   `).join('');
+
   filesList.querySelectorAll('[data-edit]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const row = btn.closest('.admin-file');
@@ -67,8 +89,6 @@ async function loadFiles() {
       modalDescription.value = row.dataset.description || '';
       modalOrder.value = row.dataset.order || 100;
       if (modalImageFile) modalImageFile.value = '';
-
-
       modalPathLabel.textContent = `Ruta: ${row.dataset.path}`;
       openModal();
     });
@@ -81,10 +101,10 @@ async function loadFiles() {
       if (!confirm('Eliminar plantilla y archivo?')) return;
 
       const { error: storageErr } = await supabase.storage.from('templates').remove([path]);
-      if (storageErr) { showToast('No se pudo eliminar archivo','err'); return; }
+      if (storageErr) { showToast('No se pudo eliminar archivo', 'err'); return; }
 
       const { error: rowErr } = await supabase.from('templates_catalog').delete().eq('id', id);
-      if (rowErr) { showToast('No se pudo eliminar registro','err'); return; }
+      if (rowErr) { showToast('No se pudo eliminar registro', 'err'); return; }
 
       showToast('Plantilla eliminada');
       loadFiles();
@@ -98,20 +118,20 @@ editForm?.addEventListener('submit', async (e) => {
   const title = modalTitle.value.trim();
   const description = modalDescription.value.trim();
   const sort_order = Number(modalOrder.value || 100);
-  let image_path = undefined;
+
+  const payload = { title, description, sort_order };
+
   if (modalImageFile?.files?.[0]) {
     const img = modalImageFile.files[0];
     const ext = (img.name.split('.').pop() || 'jpg').toLowerCase();
     const imgPath = `previews/${Date.now()}-preview.${ext}`;
     const { error: imgErr } = await supabase.storage.from('templates').upload(imgPath, img, { upsert: true });
-    if (imgErr) { showToast('No se pudo subir imagen','err'); return; }
-    image_path = imgPath;
+    if (imgErr) { showToast('No se pudo subir imagen', 'err'); return; }
+    payload.image_path = imgPath;
   }
 
-  const payload = { title, description, sort_order };
-  if (typeof image_path === 'string') payload.image_path = image_path;
   const { error } = await supabase.from('templates_catalog').update(payload).eq('id', id);
-  if (error) { showToast('No se pudo guardar','err'); return; }
+  if (error) { showToast('No se pudo guardar', 'err'); return; }
 
   closeModal();
   showToast('Cambios guardados');
@@ -140,7 +160,7 @@ async function loadUsers() {
       btn.textContent = 'Guardando…';
       const { error } = await supabase.from('profiles').update({ role }).eq('id', id);
       if (error) {
-        alert(`No se pudo actualizar: ${error.message}`);
+        showToast('No se pudo actualizar', 'err');
         btn.textContent = 'Guardar';
         return;
       }
@@ -168,9 +188,11 @@ async function init() {
     e.preventDefault();
     const file = fileInput.files?.[0];
     if (!file) return;
+
     const folder = (folderInput.value || '').trim().replace(/^\/+|\/+$/g, '');
     const safeName = file.name.replace(/\s+/g, '-');
     const path = folder ? `${folder}/${safeName}` : safeName;
+
     let image_path = '';
     if (imageInput?.files?.[0]) {
       const img = imageInput.files[0];
@@ -201,7 +223,8 @@ async function init() {
 
     if (insErr) { setStatus('Archivo subido pero falló registro'); showToast('Error al registrar plantilla','err'); return; }
 
-    setStatus('Plantilla creada correctamente.'); showToast('Plantilla subida');
+    setStatus('Plantilla creada correctamente.');
+    showToast('Plantilla subida');
     uploadForm.reset();
     await loadFiles();
   });
