@@ -236,6 +236,10 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? 'sb_publisha
       .nav__auth-dropdown { position:absolute; top: calc(100% + 8px); right: 0; min-width: 180px; background:#fff; border:1px solid var(--color-gray-200); border-radius: 12px; box-shadow: var(--shadow-md); padding: 8px; z-index: 1000; display:grid; gap:4px; }
       .nav__auth-dropdown-link { display:block; width:100%; text-align:left; background:transparent; border:none; padding:8px 10px; border-radius:8px; color: var(--color-gray-700); text-decoration:none; cursor:pointer; font: inherit; }
       .nav__auth-dropdown-link:hover { background: var(--color-secondary-light); }
+      :global(.nav__auth-dropdown) { position:absolute; top: calc(100% + 8px); right: 0; min-width: 180px; background:#fff; border:1px solid var(--color-gray-200); border-radius: 12px; box-shadow: var(--shadow-md); padding: 8px; z-index: 1000; display:grid; gap:4px; }
+      :global(.nav__auth-dropdown[hidden]) { display:none !important; }
+      :global(.nav__auth-dropdown-link) { display:block; width:100%; text-align:left; background:transparent; border:none; padding:8px 10px; border-radius:8px; color: var(--color-gray-700); text-decoration:none; cursor:pointer; font: inherit; }
+      :global(.nav__auth-dropdown-link:hover) { background: var(--color-secondary-light); }
       @media (max-width: 900px) { .nav__auth-dropdown { display:none !important; } .nav__auth-item { width:100%; } .nav__auth-item .nav__link { width:100%; } .nav__auth-item .nav__avatar { margin-right:10px; } }
       .nav__menu {
         display: flex;
