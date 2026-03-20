@@ -33,7 +33,7 @@ async function loadFiles() {
   filesList.textContent = 'Cargando archivos…';
   const { data, error } = await supabase
     .from('templates_catalog')
-    .select('id,title,description,format,storage_path,required_roles,active,sort_order')
+    .select('id,title,description,format,storage_path,image_path,required_roles,active,sort_order')
     .eq('active', true)
     .order('sort_order', { ascending: true })
     .order('title', { ascending: true });
@@ -42,10 +42,13 @@ async function loadFiles() {
   if (!data?.length) return (filesList.textContent = 'No hay plantillas aún.');
 
   filesList.innerHTML = data.map((f) => `
-    <div class="admin-file" data-id="${escapeHtml(f.id)}" data-path="${escapeHtml(f.storage_path)}" data-title="${escapeHtml(f.title || '')}" data-description="${escapeHtml(f.description || '')}" data-order="${Number(f.sort_order || 100)}">
-      <div>
-        <div class="admin-file__name">${escapeHtml(f.title || f.storage_path)}</div>
-        <span class="admin-file__path">storagePath: ${escapeHtml(f.storage_path)}</span>
+    <div class="admin-file" data-id="${escapeHtml(f.id)}" data-path="${escapeHtml(f.storage_path)}" data-image="${escapeHtml(f.image_path || '')}" data-title="${escapeHtml(f.title || '')}" data-description="${escapeHtml(f.description || '')}" data-order="${Number(f.sort_order || 100)}">
+      <div style="display:flex; gap:10px; align-items:center;">
+        <img src="${f.image_path ? `https://wshszoghxaserycscvka.supabase.co/storage/v1/object/public/templates/${f.image_path}` : ""}" class="admin-file__thumb" ${f.image_path ? "" : "style="display:none""} alt="preview" />
+        <div>
+          <div class="admin-file__name">${escapeHtml(f.title || f.storage_path)}</div>
+          <span class="admin-file__path">storagePath: ${escapeHtml(f.storage_path)}</span>
+        </div>
       </div>
       <div class="admin-actions">
         
@@ -61,6 +64,9 @@ async function loadFiles() {
       modalTitle.value = row.dataset.title || '';
       modalDescription.value = row.dataset.description || '';
       modalOrder.value = row.dataset.order || 100;
+      const imageInput = document.getElementById('modalImagePath');
+      if (imageInput) imageInput.value = row.dataset.image || '';
+
       modalPathLabel.textContent = `Ruta: ${row.dataset.path}`;
       openModal();
     });
@@ -90,8 +96,9 @@ editForm?.addEventListener('submit', async (e) => {
   const title = modalTitle.value.trim();
   const description = modalDescription.value.trim();
   const sort_order = Number(modalOrder.value || 100);
+  const image_path = (document.getElementById('modalImagePath')?.value || '').trim();
 
-  const { error } = await supabase.from('templates_catalog').update({ title, description, sort_order }).eq('id', id);
+  const { error } = await supabase.from('templates_catalog').update({ title, description, sort_order, image_path }).eq('id', id);
   if (error) { showToast('No se pudo guardar','err'); return; }
 
   closeModal();
@@ -165,6 +172,7 @@ async function init() {
       description: 'Plantilla disponible para descarga.',
       format,
       storage_path: path,
+      image_path: '',
       required_roles: ['cliente_final', 'profesional_reposteria', 'admin'],
       active: true,
       sort_order: 100,

@@ -9,6 +9,7 @@ const roleAllowed = (requiredRoles, role) => requiredRoles.includes(role) || rol
 function templateCardHtml(item, enabled) {
   return `
     <article class="template-card" data-template-id="${item.id}" data-storage-path="${item.storage_path}" data-required-roles="${(item.required_roles || []).join(',')}">
+      <div class="template-card__media">${item.image_path ? `<img src="https://wshszoghxaserycscvka.supabase.co/storage/v1/object/public/templates/${item.image_path}" alt="${item.title || 'Plantilla'}" />` : ""}</div>
       <div class="template-card__meta"><span class="template-card__format">${item.format || ''}</span></div>
       <h2 class="template-card__title">${item.title || 'Plantilla'}</h2>
       <p class="template-card__description">${item.description || ''}</p>
@@ -22,7 +23,7 @@ function templateCardHtml(item, enabled) {
 async function loadCatalog() {
   const { data, error } = await supabase
     .from('templates_catalog')
-    .select('id,title,description,format,storage_path,required_roles,active,sort_order')
+    .select('id,title,description,format,storage_path,image_path,required_roles,active,sort_order')
     .eq('active', true)
     .order('sort_order', { ascending: true })
     .order('title', { ascending: true });

@@ -63,6 +63,10 @@ import Layout from '../../layouts/Layout.astro';
           Orden
           <input id="modalOrder" type="number" min="1" step="1" value="100" />
         </label>
+        <label>
+          Ruta de imagen (opcional)
+          <input id="modalImagePath" type="text" placeholder="ej: previews/stitch.jpg" />
+        </label>
         <div style="display:flex; gap:8px; justify-content:flex-end;">
           <button type="button" class="btn-mini" data-close-modal>Cancelar</button>
           <button type="submit" class="btn btn--primary">Guardar cambios</button>
