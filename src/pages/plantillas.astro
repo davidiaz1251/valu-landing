@@ -1,8 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { templates } from '../data/templates';
-
-const categories = Array.from(new Set(templates.map((item) => item.category))).sort();
 ---
 
 <Layout
@@ -13,30 +11,17 @@ const categories = Array.from(new Set(templates.map((item) => item.category))).s
     <div class="container">
       <span class="section__badge">Recursos</span>
       <h1 class="templates-hero__title">Plantillas descargables</h1>
-      <p class="templates-hero__description">
-        Accede con tu cuenta para descargar plantillas según tu tipo de usuario.
-      </p>
+      <p class="templates-hero__description">Inicia sesión para descargar tus plantillas.</p>
       <div id="templatesSession" class="templates-session">Comprobando sesión...</div>
     </div>
   </section>
 
   <section class="templates section">
     <div class="container">
-      {categories.length > 0 && (
-        <div class="templates__filters" aria-label="Categorías disponibles">
-          {categories.map((category) => (
-            <span class="templates__chip">{category}</span>
-          ))}
-        </div>
-      )}
-
       {templates.length === 0 ? (
         <div class="templates-empty">
           <h2>Estamos preparando las primeras plantillas ✨</h2>
-          <p>
-            Muy pronto verás aquí descargas listas para tus celebraciones. Mientras tanto, puedes pedir una plantilla
-            personalizada por encargo.
-          </p>
+          <p>Muy pronto verás aquí descargas listas para tus celebraciones.</p>
         </div>
       ) : (
         <div class="templates__grid">
@@ -48,7 +33,6 @@ const categories = Array.from(new Set(templates.map((item) => item.category))).s
               data-required-roles={item.requiredRoles.join(',')}
             >
               <div class="template-card__meta">
-                <span class="template-card__category">{item.category}</span>
                 <span class="template-card__format">{item.format}</span>
               </div>
               <h2 class="template-card__title">{item.title}</h2>
@@ -64,27 +48,22 @@ const categories = Array.from(new Set(templates.map((item) => item.category))).s
     </div>
   </section>
 
+  <script type="module" src="/scripts/plantillas.js"></script>
 
-<script type="module" src="/scripts/plantillas.js"></script>
-
-<style>
-  .templates-hero { padding-top: calc(var(--space-24) + var(--space-8)); padding-bottom: var(--space-8); text-align: center; }
-  .templates-session { margin-top: var(--space-4); display: inline-block; padding: var(--space-2) var(--space-4); border-radius: var(--radius-full); background: #fff; border: 1px solid var(--color-gray-200); font-size: var(--text-sm); }
-  .templates-hero__title { margin-top: var(--space-3); margin-bottom: var(--space-4); }
-  .templates-hero__description { max-width: 700px; margin: 0 auto; font-size: var(--text-lg); }
-  .templates__filters { display: flex; flex-wrap: wrap; gap: var(--space-2); justify-content: center; margin-bottom: var(--space-8); }
-  .templates__chip { padding: var(--space-2) var(--space-4); border-radius: var(--radius-full); background: var(--color-secondary-light); color: var(--color-gray-600); font-size: var(--text-sm); font-weight: var(--font-medium); }
-  .templates-empty { max-width: 760px; margin: 0 auto; background: var(--color-white); border: 1px solid var(--color-gray-200); box-shadow: var(--shadow-md); border-radius: var(--radius-2xl); padding: var(--space-10); text-align: center; }
-  .templates__grid { display: grid; gap: var(--space-6); grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-  .template-card { background: var(--color-white); border: 1px solid var(--color-gray-200); border-radius: var(--radius-xl); padding: var(--space-6); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: var(--space-4); }
-  .template-card__meta { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); font-size: var(--text-sm); }
-  .template-card__category { font-weight: var(--font-semibold); color: var(--color-primary-dark); }
-  .template-card__format { color: var(--color-gray-500); }
-  .template-card__title { font-size: var(--text-2xl); margin: 0; }
-  .template-card__description, .template-card__access { margin: 0; }
-  .template-card__access { font-size: var(--text-sm); color: var(--color-gray-500); }
-  .template-card__cta { margin-top: auto; align-self: flex-start; }
-  @media (max-width: 768px) { .templates-empty { padding: var(--space-6); } }
-</style>
-
+  <style>
+    .templates-hero { padding-top: calc(var(--space-24) + var(--space-8)); padding-bottom: var(--space-8); text-align: center; }
+    .templates-session { margin-top: var(--space-4); display: inline-block; padding: var(--space-2) var(--space-4); border-radius: var(--radius-full); background: #fff; border: 1px solid var(--color-gray-200); font-size: var(--text-sm); }
+    .templates-hero__title { margin-top: var(--space-3); margin-bottom: var(--space-4); }
+    .templates-hero__description { max-width: 700px; margin: 0 auto; font-size: var(--text-lg); }
+    .templates-empty { max-width: 760px; margin: 0 auto; background: var(--color-white); border: 1px solid var(--color-gray-200); box-shadow: var(--shadow-md); border-radius: var(--radius-2xl); padding: var(--space-10); text-align: center; }
+    .templates__grid { display: grid; gap: var(--space-6); grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+    .template-card { background: var(--color-white); border: 1px solid var(--color-gray-200); border-radius: var(--radius-xl); padding: var(--space-6); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: var(--space-4); }
+    .template-card__meta { display: flex; justify-content: flex-end; font-size: var(--text-sm); }
+    .template-card__format { color: var(--color-gray-500); }
+    .template-card__title { font-size: var(--text-2xl); margin: 0; }
+    .template-card__description, .template-card__access { margin: 0; }
+    .template-card__access { font-size: var(--text-sm); color: var(--color-gray-500); display:none; }
+    .template-card__cta { margin-top: auto; align-self: flex-start; }
+    @media (max-width: 768px) { .templates-empty { padding: var(--space-6); } }
+  </style>
 </Layout>
