@@ -70,9 +70,12 @@ import Layout from '../../layouts/Layout.astro';
   .btn-mini:hover { background:#f7f7fb; }
   .btn-mini.danger { border-color:#f0c3c3; color:#9b1c1c; background:#fff5f5; }
   
-  .user-meta strong { display:block; }
-  .user-meta small { color:#666; }
-  .user-role { border:1px solid var(--color-gray-300); border-radius:8px; padding:8px; min-width:190px; }
+  .user-meta strong { display:block; font-size: 15px; line-height:1.25; margin-bottom:2px; }
+  .user-meta small { color:#666; font-size: 12px; display:inline-block; max-width: 360px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .user-role { border:1px solid var(--color-gray-300); border-radius:10px; padding:8px 10px; min-width:210px; background:#fff; font-weight:600; }
+  .user-row { background: linear-gradient(180deg, #fff 0%, #fffdfd 100%); }
+  .user-row .btn-mini { min-width: 92px; }
+  .user-row .btn-mini.is-ok { border-color:#c8e9d0; background:#f1fff4; color:#1f7a2e; }
   .admin-actions { display:flex; gap:8px; }
   .btn-mini { border:1px solid var(--color-gray-300); border-radius:8px; background:#fff; padding:6px 10px; cursor:pointer; }
   .btn-mini.danger { border-color:#e9b1b1; color:#9b1c1c; }

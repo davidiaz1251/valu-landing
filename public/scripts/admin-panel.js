@@ -80,7 +80,8 @@ async function loadUsers() {
         return;
       }
       btn.textContent = 'Guardado';
-      setTimeout(() => (btn.textContent = 'Guardar'), 1200);
+      btn.classList.add('is-ok');
+      setTimeout(() => { btn.textContent = 'Guardar'; btn.classList.remove('is-ok'); }, 1200);
     });
   });
 }
