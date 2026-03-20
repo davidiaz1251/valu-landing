@@ -141,7 +141,7 @@ async function init() {
   const profile = await getUserProfile();
   if (!profile || profile.role !== 'admin') return setStatus('No tienes permisos para este panel.');
 
-  setStatus('Acceso admin OK');
+  statusEl.hidden = true;
   appEl.hidden = false;
   await Promise.all([loadFiles(), loadUsers()]);
 
