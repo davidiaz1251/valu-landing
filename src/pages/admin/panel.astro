@@ -92,9 +92,9 @@ import Layout from '../../layouts/Layout.astro';
   .admin-upload input { border:1px solid var(--color-gray-300); border-radius:8px; padding:10px; }
   .admin-files, .users-list { display:grid; gap:10px; }
 
-  .admin-file { display:flex; justify-content:space-between; align-items:center; gap:12px; border:1px solid #efe3df; border-radius:12px; padding:12px; background:linear-gradient(180deg,#fff 0%,#fffdfc 100%); box-shadow:0 6px 16px rgba(53,27,35,.05); }
-  .admin-file__name { font-weight:700; }
-  .admin-file__path { display:inline-block; margin-top:4px; background:#f7f7fb; border:1px solid #ececf2; border-radius:8px; padding:4px 8px; font-size:12px; color:#555; }
+  :global(.admin-file) { display:flex; justify-content:space-between; align-items:center; gap:12px; border:1px solid #efe3df; border-radius:12px; padding:12px; background:linear-gradient(180deg,#fff 0%,#fffdfc 100%); box-shadow:0 6px 16px rgba(53,27,35,.05); }
+  :global(.admin-file__name) { font-weight:700; }
+  :global(.admin-file__path) { display:inline-block; margin-top:4px; background:#f7f7fb; border:1px solid #ececf2; border-radius:8px; padding:4px 8px; font-size:12px; color:#555; }
   .admin-actions { display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap; }
   :global(.admin-actions) { display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap; }
 
