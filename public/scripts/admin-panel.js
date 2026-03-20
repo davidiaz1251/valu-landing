@@ -17,19 +17,25 @@ function roleOptions(current) { return ROLES.map((r) => `<option value="${r}" ${
 
 async function loadFiles() {
   filesList.textContent = 'Cargando archivos…';
-  const { data, error } = await supabase.storage.from('templates').list('', { limit: 100, offset: 0, sortBy: { column: 'name', order: 'asc' } });
-  if (error) return (filesList.textContent = `Error al listar: ${error.message}`);
-  if (!data?.length) return (filesList.textContent = 'No hay archivos aún.');
+  const { data, error } = await supabase
+    .from('templates_catalog')
+    .select('id,title,description,format,storage_path,required_roles,active,sort_order')
+    .eq('active', true)
+    .order('sort_order', { ascending: true })
+    .order('title', { ascending: true });
 
-  filesList.innerHTML = data.filter((f) => f.name).map((f) => `
-    <div class="admin-file">
+  if (error) return (filesList.textContent = `Error al listar: ${error.message}`);
+  if (!data?.length) return (filesList.textContent = 'No hay plantillas aún.');
+
+  filesList.innerHTML = data.map((f) => `
+    <div class="admin-file" data-id="${escapeHtml(f.id)}" data-path="${escapeHtml(f.storage_path)}">
       <div>
-        <div class="admin-file__name">${escapeHtml(f.name)}</div>
-        <span class="admin-file__path">storagePath: ${escapeHtml(f.name)}</span>
+        <div class="admin-file__name">${escapeHtml(f.title || f.storage_path)}</div>
+        <span class="admin-file__path">storagePath: ${escapeHtml(f.storage_path)}</span>
       </div>
       <div class="admin-actions">
-        <button class="btn-mini" data-copy="${escapeHtml(f.name)}">Copiar ruta</button>
-        <button class="btn-mini danger" data-delete="${escapeHtml(f.name)}">Eliminar</button>
+        <button class="btn-mini" data-copy="${escapeHtml(f.storage_path)}">Copiar ruta</button>
+        <button class="btn-mini danger" data-delete-id="${escapeHtml(f.id)}" data-delete-path="${escapeHtml(f.storage_path)}">Eliminar</button>
       </div>
     </div>
   `).join('');
@@ -42,12 +48,18 @@ async function loadFiles() {
     });
   });
 
-  filesList.querySelectorAll('[data-delete]').forEach((btn) => {
+  filesList.querySelectorAll('[data-delete-id]').forEach((btn) => {
     btn.addEventListener('click', async () => {
-      const path = btn.getAttribute('data-delete');
-      if (!confirm(`Eliminar ${path}?`)) return;
-      const { error } = await supabase.storage.from('templates').remove([path]);
-      if (error) return alert(`No se pudo eliminar: ${error.message}`);
+      const id = btn.getAttribute('data-delete-id');
+      const path = btn.getAttribute('data-delete-path');
+      if (!confirm('Eliminar plantilla y archivo?')) return;
+
+      const { error: storageErr } = await supabase.storage.from('templates').remove([path]);
+      if (storageErr) return alert(`No se pudo eliminar archivo: ${storageErr.message}`);
+
+      const { error: rowErr } = await supabase.from('templates_catalog').delete().eq('id', id);
+      if (rowErr) return alert(`No se pudo eliminar registro: ${rowErr.message}`);
+
       loadFiles();
     });
   });
@@ -111,7 +123,22 @@ async function init() {
     const { error } = await supabase.storage.from('templates').upload(path, file, { upsert: true });
     if (error) return setStatus(`Error al subir: ${error.message}`);
 
-    setStatus('Archivo subido.');
+    const title = file.name.replace(/\.[^/.]+$/, '');
+    const format = (file.name.split('.').pop() || '').toUpperCase();
+
+    const { error: insErr } = await supabase.from('templates_catalog').insert({
+      title,
+      description: 'Plantilla disponible para descarga.',
+      format,
+      storage_path: path,
+      required_roles: ['cliente_final', 'profesional_reposteria', 'admin'],
+      active: true,
+      sort_order: 100,
+    });
+
+    if (insErr) return setStatus(`Archivo subido, pero no se pudo crear registro: ${insErr.message}`);
+
+    setStatus('Plantilla creada correctamente.');
     uploadForm.reset();
     await loadFiles();
   });
@@ -119,8 +146,6 @@ async function init() {
 
 init();
 
-
-// Sidebar dashboard tabs
 const tabLinks = document.querySelectorAll('[data-tab-link]');
 const tabs = document.querySelectorAll('[data-tab]');
 function setTab(name){

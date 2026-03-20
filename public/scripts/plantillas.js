@@ -1,75 +1,88 @@
 import { hasSupabaseConfig, supabase, ensureUserProfile, getUserProfile } from '/scripts/supabase-client.js';
 
 const sessionBox = document.getElementById('templatesSession');
-const cards = Array.from(document.querySelectorAll('.template-card'));
 const heroCopy = document.querySelector('.templates-hero__description');
+const grid = document.querySelector('.templates__grid');
+
 const roleAllowed = (requiredRoles, role) => requiredRoles.includes(role) || role === 'admin';
 
-function lockCards() {
-  cards.forEach((card) => {
-    const button = card.querySelector('[data-download-btn]');
-    button.setAttribute('disabled', 'true');
-    button.classList.add('is-disabled');
-    button.textContent = 'Inicia sesión para descargar';
-  });
+function templateCardHtml(item, enabled) {
+  return `
+    <article class="template-card" data-template-id="${item.id}" data-storage-path="${item.storage_path}" data-required-roles="${(item.required_roles || []).join(',')}">
+      <div class="template-card__meta"><span class="template-card__format">${item.format || ''}</span></div>
+      <h2 class="template-card__title">${item.title || 'Plantilla'}</h2>
+      <p class="template-card__description">${item.description || ''}</p>
+      <button class="btn btn--secondary template-card__cta ${enabled ? '' : 'is-disabled'}" data-download-btn type="button" ${enabled ? '' : 'disabled'}>
+        ${enabled ? 'Descargar' : 'Inicia sesión para descargar'}
+      </button>
+    </article>
+  `;
 }
 
-async function enableCardsForRole(role, userId) {
-  let visibleCount = 0;
+async function loadCatalog() {
+  const { data, error } = await supabase
+    .from('templates_catalog')
+    .select('id,title,description,format,storage_path,required_roles,active,sort_order')
+    .eq('active', true)
+    .order('sort_order', { ascending: true })
+    .order('title', { ascending: true });
 
-  for (const card of cards) {
-    const button = card.querySelector('[data-download-btn]');
-    const templateId = card.dataset.templateId;
-    const storagePath = card.dataset.storagePath;
-    const requiredRoles = (card.dataset.requiredRoles || '').split(',').filter(Boolean);
-    const allowed = roleAllowed(requiredRoles, role);
+  if (error) throw error;
+  return data || [];
+}
 
-    // Verifica si el archivo existe realmente en Storage
-    const { data: probe, error: probeError } = await supabase.storage.from('templates').createSignedUrl(storagePath, 30);
+async function renderTemplates(role, userId, loggedIn) {
+  if (!grid) return;
+
+  const catalog = await loadCatalog();
+  if (!catalog.length) {
+    grid.innerHTML = '<div class="templates-empty"><h2>Ahora mismo no hay plantillas disponibles</h2><p>Estamos preparando nuevas descargas.</p></div>';
+    return;
+  }
+
+  const visible = [];
+
+  for (const item of catalog) {
+    const { data: probe, error: probeError } = await supabase.storage.from('templates').createSignedUrl(item.storage_path, 30);
     const exists = !probeError && !!probe?.signedUrl;
+    if (!exists) continue;
 
-    if (!exists) {
-      card.style.display = 'none';
-      continue;
-    }
+    const requiredRoles = item.required_roles || [];
+    const allowed = loggedIn && roleAllowed(requiredRoles, role);
+    visible.push({ item, allowed });
+  }
 
-    visibleCount += 1;
+  if (!visible.length) {
+    grid.innerHTML = '<div class="templates-empty"><h2>Ahora mismo no hay plantillas disponibles</h2><p>Estamos preparando nuevas descargas.</p></div>';
+    return;
+  }
 
-    if (!allowed) {
-      button.textContent = 'No disponible';
-      button.setAttribute('disabled', 'true');
-      button.classList.add('is-disabled');
-      continue;
-    }
+  grid.innerHTML = visible.map(({ item, allowed }) => templateCardHtml(item, allowed)).join('');
 
-    button.removeAttribute('disabled');
-    button.classList.remove('is-disabled');
-    button.textContent = 'Descargar';
+  grid.querySelectorAll('[data-download-btn]').forEach((button) => {
     button.addEventListener('click', async () => {
+      const card = button.closest('.template-card');
+      const templateId = card.getAttribute('data-template-id');
+      const storagePath = card.getAttribute('data-storage-path');
+
       const { data, error } = await supabase.storage.from('templates').createSignedUrl(storagePath, 60);
       if (error || !data?.signedUrl) return alert('No se pudo generar la descarga.');
+
       const link = document.createElement('a');
       link.href = data.signedUrl;
       link.target = '_blank';
       link.rel = 'noopener';
       link.click();
+
       await supabase.from('downloads').insert({ user_id: userId, template_id: templateId });
     });
-  }
-
-  if (visibleCount === 0) {
-    const grid = document.querySelector('.templates__grid');
-    if (grid) {
-      grid.innerHTML = '<div class="templates-empty"><h2>Ahora mismo no hay plantillas disponibles</h2><p>Estamos preparando nuevas descargas.</p></div>';
-    }
-  }
+  });
 }
 
 async function init() {
   try {
     if (!hasSupabaseConfig()) {
       sessionBox.textContent = 'Inicia sesión para continuar.';
-      lockCards();
       return;
     }
 
@@ -80,12 +93,14 @@ async function init() {
     if (!session?.user) {
       sessionBox.innerHTML = 'Inicia sesión para continuar. <a href="/login?next=/plantillas">Entrar</a>';
       if (heroCopy) heroCopy.textContent = 'Inicia sesión para descargar tus plantillas.';
-      lockCards();
+      await renderTemplates('cliente_final', '', false);
       return;
     }
 
     await ensureUserProfile();
     const profile = await getUserProfile();
+    const role = profile?.role || 'cliente_final';
+
     sessionBox.innerHTML = `Sesión activa · <a href="#" id="logoutLink">Cerrar sesión</a>`;
     if (heroCopy) heroCopy.textContent = 'Ya puedes descargar tus plantillas.';
 
@@ -95,11 +110,10 @@ async function init() {
       window.location.reload();
     });
 
-    enableCardsForRole(profile?.role || 'cliente_final', session.user.id);
+    await renderTemplates(role, session.user.id, true);
   } catch (e) {
     console.error(e);
     sessionBox.textContent = 'No se pudo validar la sesión.';
-    lockCards();
   }
 }
 
