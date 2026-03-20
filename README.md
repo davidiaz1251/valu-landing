@@ -1,142 +1,108 @@
-# Valu Landing (Astro)
+# Valu Landing (Astro + Supabase)
 
-Landing de Valu Kraft con módulo de plantillas protegido por Firebase.
+Landing de Valu Kraft con login, roles y descargas de plantillas usando Supabase.
 
-## Funcionalidades incluidas
+## Incluye
 
-- Página de login (`/login`)
-- Registro (`/registro`)
-- Recuperación de contraseña (`/olvide-contrasena`)
-- Login con Google
-- Página `/plantillas` protegida por sesión
-- Roles de usuario:
-  - `cliente_final`
-  - `profesional_reposteria`
-  - `admin`
-- Descarga de plantillas desde Firebase Storage según rol
-- Registro de descargas en colección `downloads`
+- `/login` (email/password + Google)
+- `/registro`
+- `/olvide-contrasena`
+- `/plantillas` con control por rol
+- Descarga de archivos con signed URLs desde bucket `templates`
+- Registro de descargas en tabla `downloads`
 
----
-
-## 1) Configuración local
+## Variables de entorno
 
 ```bash
-npm install
 cp .env.example .env
 ```
 
-Completa `.env` con las credenciales web de Firebase.
+Completar:
 
-Variables requeridas:
+- `PUBLIC_SUPABASE_URL`
+- `PUBLIC_SUPABASE_ANON_KEY`
 
-- `PUBLIC_FIREBASE_API_KEY`
-- `PUBLIC_FIREBASE_AUTH_DOMAIN`
-- `PUBLIC_FIREBASE_PROJECT_ID`
-- `PUBLIC_FIREBASE_STORAGE_BUCKET`
-- `PUBLIC_FIREBASE_APP_ID`
+## Estructura esperada en Supabase
 
----
+### Tabla `profiles`
 
-## 2) Estructura de datos esperada
+- `id uuid primary key` (igual a `auth.users.id`)
+- `email text`
+- `full_name text`
+- `role text` (`cliente_final` | `profesional_reposteria` | `admin`)
+- `active boolean default true`
 
-### Colección `users/{uid}`
+### Tabla `downloads`
 
-```json
-{
-  "uid": "...",
-  "email": "...",
-  "name": "...",
-  "role": "cliente_final",
-  "active": true
-}
+- `id bigint generated`
+- `user_id uuid`
+- `template_id text`
+- `created_at timestamptz default now()`
+
+### Bucket Storage
+
+- Bucket: `templates`
+- Los `storagePath` de `src/data/templates.ts` deben existir ahí.
+
+## SQL base (ejecutar en Supabase SQL Editor)
+
+```sql
+create table if not exists public.profiles (
+  id uuid primary key,
+  email text,
+  full_name text,
+  role text not null default 'cliente_final',
+  active boolean not null default true
+);
+
+create table if not exists public.downloads (
+  id bigint generated always as identity primary key,
+  user_id uuid not null,
+  template_id text not null,
+  created_at timestamptz not null default now()
+);
+
+alter table public.profiles enable row level security;
+alter table public.downloads enable row level security;
+
+create policy "profiles_select_own" on public.profiles
+for select to authenticated
+using (auth.uid() = id);
+
+create policy "profiles_insert_own" on public.profiles
+for insert to authenticated
+with check (auth.uid() = id);
+
+create policy "profiles_update_own" on public.profiles
+for update to authenticated
+using (auth.uid() = id)
+with check (auth.uid() = id);
+
+create policy "downloads_insert_own" on public.downloads
+for insert to authenticated
+with check (auth.uid() = user_id);
+
+create policy "downloads_select_own" on public.downloads
+for select to authenticated
+using (auth.uid() = user_id);
 ```
 
-### Colección `downloads/{autoId}`
+## Storage policy base
 
-```json
-{
-  "uid": "...",
-  "templateId": "...",
-  "downloadedAt": "timestamp"
-}
+```sql
+insert into storage.buckets (id, name, public)
+values ('templates', 'templates', false)
+on conflict (id) do nothing;
+
+create policy "templates_read_authenticated"
+on storage.objects for select to authenticated
+using (bucket_id = 'templates');
 ```
 
-### Plantillas en código
-
-Archivo: `src/data/templates.ts`
-
-Cada plantilla necesita:
-
-- `storagePath`: ruta del archivo en Firebase Storage
-- `requiredRoles`: roles permitidos
-
-Ejemplo:
-
-```ts
-{
-  id: 'tpl-cumple-001',
-  title: 'Topper Cumple Stitch',
-  category: 'Cumpleaños',
-  description: 'Plantilla editable para topper de tarta.',
-  format: 'PDF',
-  storagePath: 'templates/topper-cumple-stitch.pdf',
-  requiredRoles: ['cliente_final', 'profesional_reposteria']
-}
-```
-
----
-
-## 3) Reglas recomendadas (base)
-
-### Firestore Rules
-
-```txt
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    function signedIn() { return request.auth != null; }
-    function isAdmin() {
-      return signedIn() &&
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
-    }
-
-    match /users/{uid} {
-      allow read: if signedIn() && request.auth.uid == uid;
-      allow create: if signedIn() && request.auth.uid == uid;
-      allow update: if signedIn() && request.auth.uid == uid;
-      allow delete: if false;
-    }
-
-    match /downloads/{docId} {
-      allow create: if signedIn() && request.resource.data.uid == request.auth.uid;
-      allow read: if isAdmin();
-    }
-  }
-}
-```
-
-### Storage Rules
-
-```txt
-rules_version = '2';
-service firebase.storage {
-  match /b/{bucket}/o {
-    match /templates/{allPaths=**} {
-      allow read: if request.auth != null;
-      allow write: if false; // subir archivos desde consola/admin
-    }
-  }
-}
-```
-
-> Nota: el control fino por rol se está aplicando en frontend (MVP). Si más adelante queréis blindaje total, migramos a validación server-side (SSR/Functions).
-
----
-
-## 4) Comandos
+## Comandos
 
 ```bash
+npm install
 npm run dev
 npm run build
-npm run preview
 ```

@@ -37,7 +37,7 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <script type="module">
-  import { hasFirebaseConfig } from '../lib/firebase';
+  import { hasSupabaseConfig } from '../lib/supabase';
   import { loginWithEmail, loginWithGoogle } from '../lib/auth';
 
   const alertBox = document.getElementById('authAlert');
@@ -50,8 +50,8 @@ import Layout from '../layouts/Layout.astro';
     alertBox.hidden = false;
   };
 
-  if (!hasFirebaseConfig()) {
-    showError('Falta configurar Firebase en variables de entorno.');
+  if (!hasSupabaseConfig()) {
+    showError('Falta configurar Supabase en variables de entorno.');
   }
 
   loginForm?.addEventListener('submit', async (event) => {

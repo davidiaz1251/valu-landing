@@ -39,7 +39,7 @@ const categories = Array.from(new Set(templates.map((item) => item.category))).s
           </p>
         </div>
       ) : (
-        <div class="templates__grid" id="templatesGrid">
+        <div class="templates__grid">
           {templates.map((item) => (
             <article
               class="template-card"
@@ -66,11 +66,8 @@ const categories = Array.from(new Set(templates.map((item) => item.category))).s
 </Layout>
 
 <script type="module">
-  import { onAuthStateChanged } from 'firebase/auth';
-  import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-  import { getDownloadURL, ref } from 'firebase/storage';
-  import { auth, db, hasFirebaseConfig, storage } from '../lib/firebase';
-  import { ensureUserProfile, getUserProfile } from '../lib/auth';
+  import { hasSupabaseConfig, supabase, ensureUserProfile, getUserProfile } from '../lib/supabase';
+  import { logout } from '../lib/auth';
 
   const sessionBox = document.getElementById('templatesSession');
   const cards = Array.from(document.querySelectorAll('.template-card'));
@@ -83,30 +80,38 @@ const categories = Array.from(new Set(templates.map((item) => item.category))).s
 
   const roleAllowed = (requiredRoles, role) => requiredRoles.includes(role) || role === 'admin';
 
-  if (!hasFirebaseConfig()) {
-    sessionBox.textContent = 'Configura Firebase para activar login y descargas.';
-  } else {
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        sessionBox.innerHTML = 'Necesitas iniciar sesión para descargar. <a href="/login?next=/plantillas">Ir a login</a>';
-        cards.forEach((card) => {
-          const button = card.querySelector('[data-download-btn]');
-          const roleCopy = card.querySelector('[data-role-copy]');
-          const roles = (card.dataset.requiredRoles || '').split(',').filter(Boolean);
-          roleCopy.textContent = `Acceso: ${roles.map((role) => roleLabels[role] || role).join(', ')}`;
-          button.setAttribute('disabled', 'true');
-        });
-        return;
-      }
+  function lockCards() {
+    cards.forEach((card) => {
+      const button = card.querySelector('[data-download-btn]');
+      const roleCopy = card.querySelector('[data-role-copy]');
+      const roles = (card.dataset.requiredRoles || '').split(',').filter(Boolean);
+      roleCopy.textContent = `Acceso: ${roles.map((role) => roleLabels[role] || role).join(', ')}`;
+      button.setAttribute('disabled', 'true');
+    });
+  }
 
-      await ensureUserProfile(user);
-      const profile = await getUserProfile(user.uid);
+  if (!hasSupabaseConfig()) {
+    sessionBox.textContent = 'Configura Supabase para activar login y descargas.';
+    lockCards();
+  } else {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    if (!session?.user) {
+      sessionBox.innerHTML = 'Necesitas iniciar sesión para descargar. <a href="/login?next=/plantillas">Ir a login</a>';
+      lockCards();
+    } else {
+      await ensureUserProfile();
+      const profile = await getUserProfile();
       const role = profile?.role || 'cliente_final';
 
-      sessionBox.innerHTML = `Sesión activa: <strong>${profile?.name || user.email}</strong> · Rol: <strong>${roleLabels[role] || role}</strong> · <a href="#" id="logoutLink">Cerrar sesión</a>`;
+      sessionBox.innerHTML = `Sesión activa: <strong>${profile?.full_name || session.user.email}</strong> · Rol: <strong>${roleLabels[role] || role}</strong> · <a href="#" id="logoutLink">Cerrar sesión</a>`;
+
       document.getElementById('logoutLink')?.addEventListener('click', async (event) => {
         event.preventDefault();
-        await auth.signOut();
+        await logout();
+        window.location.reload();
       });
 
       cards.forEach((card) => {
@@ -127,143 +132,45 @@ const categories = Array.from(new Set(templates.map((item) => item.category))).s
 
         button.removeAttribute('disabled');
         button.addEventListener('click', async () => {
-          try {
-            const fileRef = ref(storage, storagePath);
-            const url = await getDownloadURL(fileRef);
-            const link = document.createElement('a');
-            link.href = url;
-            link.target = '_blank';
-            link.rel = 'noopener';
-            link.click();
+          const { data, error } = await supabase.storage.from('templates').createSignedUrl(storagePath, 60);
 
-            await addDoc(collection(db, 'downloads'), {
-              uid: user.uid,
-              templateId,
-              downloadedAt: serverTimestamp(),
-            });
-          } catch (error) {
-            console.error(error);
-            alert('No se pudo iniciar la descarga. Revisa permisos o configuración de Firebase.');
+          if (error || !data?.signedUrl) {
+            alert('No se pudo generar la descarga. Revisa permisos en Supabase.');
+            return;
           }
+
+          const link = document.createElement('a');
+          link.href = data.signedUrl;
+          link.target = '_blank';
+          link.rel = 'noopener';
+          link.click();
+
+          await supabase.from('downloads').insert({
+            user_id: session.user.id,
+            template_id: templateId,
+          });
         });
       });
-    });
+    }
   }
 </script>
 
 <style>
-  .templates-hero {
-    padding-top: calc(var(--space-24) + var(--space-8));
-    padding-bottom: var(--space-8);
-    text-align: center;
-  }
-
-  .templates-session {
-    margin-top: var(--space-4);
-    display: inline-block;
-    padding: var(--space-2) var(--space-4);
-    border-radius: var(--radius-full);
-    background: #fff;
-    border: 1px solid var(--color-gray-200);
-    font-size: var(--text-sm);
-  }
-
-  .templates-hero__title {
-    margin-top: var(--space-3);
-    margin-bottom: var(--space-4);
-  }
-
-  .templates-hero__description {
-    max-width: 700px;
-    margin: 0 auto;
-    font-size: var(--text-lg);
-  }
-
-  .templates__filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-    justify-content: center;
-    margin-bottom: var(--space-8);
-  }
-
-  .templates__chip {
-    padding: var(--space-2) var(--space-4);
-    border-radius: var(--radius-full);
-    background: var(--color-secondary-light);
-    color: var(--color-gray-600);
-    font-size: var(--text-sm);
-    font-weight: var(--font-medium);
-  }
-
-  .templates-empty {
-    max-width: 760px;
-    margin: 0 auto;
-    background: var(--color-white);
-    border: 1px solid var(--color-gray-200);
-    box-shadow: var(--shadow-md);
-    border-radius: var(--radius-2xl);
-    padding: var(--space-10);
-    text-align: center;
-  }
-
-  .templates__grid {
-    display: grid;
-    gap: var(--space-6);
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  }
-
-  .template-card {
-    background: var(--color-white);
-    border: 1px solid var(--color-gray-200);
-    border-radius: var(--radius-xl);
-    padding: var(--space-6);
-    box-shadow: var(--shadow-sm);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
-  }
-
-  .template-card__meta {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-3);
-    font-size: var(--text-sm);
-  }
-
-  .template-card__category {
-    font-weight: var(--font-semibold);
-    color: var(--color-primary-dark);
-  }
-
-  .template-card__format {
-    color: var(--color-gray-500);
-  }
-
-  .template-card__title {
-    font-size: var(--text-2xl);
-    margin: 0;
-  }
-
-  .template-card__description,
-  .template-card__access {
-    margin: 0;
-  }
-
-  .template-card__access {
-    font-size: var(--text-sm);
-    color: var(--color-gray-500);
-  }
-
-  .template-card__cta {
-    margin-top: auto;
-    align-self: flex-start;
-  }
-
-  @media (max-width: 768px) {
-    .templates-empty {
-      padding: var(--space-6);
-    }
-  }
+  .templates-hero { padding-top: calc(var(--space-24) + var(--space-8)); padding-bottom: var(--space-8); text-align: center; }
+  .templates-session { margin-top: var(--space-4); display: inline-block; padding: var(--space-2) var(--space-4); border-radius: var(--radius-full); background: #fff; border: 1px solid var(--color-gray-200); font-size: var(--text-sm); }
+  .templates-hero__title { margin-top: var(--space-3); margin-bottom: var(--space-4); }
+  .templates-hero__description { max-width: 700px; margin: 0 auto; font-size: var(--text-lg); }
+  .templates__filters { display: flex; flex-wrap: wrap; gap: var(--space-2); justify-content: center; margin-bottom: var(--space-8); }
+  .templates__chip { padding: var(--space-2) var(--space-4); border-radius: var(--radius-full); background: var(--color-secondary-light); color: var(--color-gray-600); font-size: var(--text-sm); font-weight: var(--font-medium); }
+  .templates-empty { max-width: 760px; margin: 0 auto; background: var(--color-white); border: 1px solid var(--color-gray-200); box-shadow: var(--shadow-md); border-radius: var(--radius-2xl); padding: var(--space-10); text-align: center; }
+  .templates__grid { display: grid; gap: var(--space-6); grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .template-card { background: var(--color-white); border: 1px solid var(--color-gray-200); border-radius: var(--radius-xl); padding: var(--space-6); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: var(--space-4); }
+  .template-card__meta { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); font-size: var(--text-sm); }
+  .template-card__category { font-weight: var(--font-semibold); color: var(--color-primary-dark); }
+  .template-card__format { color: var(--color-gray-500); }
+  .template-card__title { font-size: var(--text-2xl); margin: 0; }
+  .template-card__description, .template-card__access { margin: 0; }
+  .template-card__access { font-size: var(--text-sm); color: var(--color-gray-500); }
+  .template-card__cta { margin-top: auto; align-self: flex-start; }
+  @media (max-width: 768px) { .templates-empty { padding: var(--space-6); } }
 </style>

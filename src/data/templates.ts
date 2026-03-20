@@ -12,5 +12,5 @@ export type TemplateItem = {
 };
 
 // Flujo operativo actual: el owner envía la plantilla por chat y el agente actualiza esta lista.
-// Los archivos se suben al bucket de Firebase Storage y aquí se referencia su ruta.
+// Los archivos se suben al bucket de Supabase Storage y aquí se referencia su ruta.
 export const templates: TemplateItem[] = [];
