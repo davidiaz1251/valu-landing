@@ -23,7 +23,10 @@ async function loadFiles() {
 
   filesList.innerHTML = data.filter((f) => f.name).map((f) => `
     <div class="admin-file">
-      <div><strong>${escapeHtml(f.name)}</strong><br/><code>storagePath: ${escapeHtml(f.name)}</code></div>
+      <div>
+        <div class="admin-file__name">${escapeHtml(f.name)}</div>
+        <span class="admin-file__path">storagePath: ${escapeHtml(f.name)}</span>
+      </div>
       <div class="admin-actions">
         <button class="btn-mini" data-copy="${escapeHtml(f.name)}">Copiar ruta</button>
         <button class="btn-mini danger" data-delete="${escapeHtml(f.name)}">Eliminar</button>
