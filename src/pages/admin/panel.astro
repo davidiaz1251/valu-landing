@@ -71,6 +71,7 @@ import Layout from '../../layouts/Layout.astro';
     </div>
   </div>
 
+  <div id="adminToast" class="toast" hidden></div>
   <script type="module" src="/scripts/admin-panel.js"></script>
 </Layout>
 
@@ -119,4 +120,11 @@ import Layout from '../../layouts/Layout.astro';
     .admin-file, .user-row { grid-template-columns: 1fr; align-items:flex-start; }
     .user-role { width:100%; }
   }
+
+  .toast[hidden]{display:none}
+  .toast{position:fixed;right:16px;bottom:16px;z-index:2500;background:#111;color:#fff;padding:10px 14px;border-radius:10px;box-shadow:0 12px 28px rgba(0,0,0,.25);font-size:14px}
+  .toast.ok{background:#1f7a2e}
+  .toast.err{background:#9b1c1c}
+  .modal__card{animation:pop .16s ease-out}
+  @keyframes pop{from{transform:translateY(6px) scale(.98);opacity:.6}to{transform:translateY(0) scale(1);opacity:1}}
 </style>

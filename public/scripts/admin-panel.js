@@ -16,6 +16,8 @@ const modalTitle = document.getElementById('modalTitle');
 const modalDescription = document.getElementById('modalDescription');
 const modalOrder = document.getElementById('modalOrder');
 const modalPathLabel = document.getElementById('modalPathLabel');
+const toastEl = document.getElementById('adminToast');
+function showToast(msg,type='ok'){ if(!toastEl) return; toastEl.textContent=msg; toastEl.className='toast '+(type==='err'?'err':'ok'); toastEl.hidden=false; setTimeout(()=>{toastEl.hidden=true;},1600); }
 
 const ROLES = ['cliente_final', 'profesional_reposteria', 'admin'];
 
@@ -46,9 +48,9 @@ async function loadFiles() {
         <span class="admin-file__path">storagePath: ${escapeHtml(f.storage_path)}</span>
       </div>
       <div class="admin-actions">
-        <button class="btn-mini" data-copy="${escapeHtml(f.storage_path)}">Copiar ruta</button>
-        <button class="btn-mini" data-edit>Editar</button>
-        <button class="btn-mini danger" data-delete-id="${escapeHtml(f.id)}" data-delete-path="${escapeHtml(f.storage_path)}">Eliminar</button>
+        <button class="btn-mini" data-copy="${escapeHtml(f.storage_path)}">📋 Copiar ruta</button>
+        <button class="btn-mini" data-edit>✏️ Editar</button>
+        <button class="btn-mini danger" data-delete-id="${escapeHtml(f.id)}" data-delete-path="${escapeHtml(f.storage_path)}">🗑 Eliminar</button>
       </div>
     </div>
   `).join('');
@@ -57,7 +59,7 @@ async function loadFiles() {
     btn.addEventListener('click', async () => {
       await navigator.clipboard.writeText(btn.getAttribute('data-copy'));
       btn.textContent = 'Copiado';
-      setTimeout(() => (btn.textContent = 'Copiar ruta'), 1200);
+      setTimeout(() => (btn.textContent = '📋 Copiar ruta'), 1200); showToast('Ruta copiada');
     });
   });
 
@@ -80,11 +82,12 @@ async function loadFiles() {
       if (!confirm('Eliminar plantilla y archivo?')) return;
 
       const { error: storageErr } = await supabase.storage.from('templates').remove([path]);
-      if (storageErr) return alert(`No se pudo eliminar archivo: ${storageErr.message}`);
+      if (storageErr) { showToast('No se pudo eliminar archivo','err'); return; }
 
       const { error: rowErr } = await supabase.from('templates_catalog').delete().eq('id', id);
-      if (rowErr) return alert(`No se pudo eliminar registro: ${rowErr.message}`);
+      if (rowErr) { showToast('No se pudo eliminar registro','err'); return; }
 
+      showToast('Plantilla eliminada');
       loadFiles();
     });
   });
@@ -98,9 +101,10 @@ editForm?.addEventListener('submit', async (e) => {
   const sort_order = Number(modalOrder.value || 100);
 
   const { error } = await supabase.from('templates_catalog').update({ title, description, sort_order }).eq('id', id);
-  if (error) return alert(`No se pudo guardar: ${error.message}`);
+  if (error) { showToast('No se pudo guardar','err'); return; }
 
   closeModal();
+  showToast('Cambios guardados');
   await loadFiles();
 });
 
@@ -175,9 +179,9 @@ async function init() {
       sort_order: 100,
     });
 
-    if (insErr) return setStatus(`Archivo subido, pero no se pudo crear registro: ${insErr.message}`);
+    if (insErr) { setStatus('Archivo subido pero falló registro'); showToast('Error al registrar plantilla','err'); return; }
 
-    setStatus('Plantilla creada correctamente.');
+    setStatus('Plantilla creada correctamente.'); showToast('Plantilla subida');
     uploadForm.reset();
     await loadFiles();
   });
