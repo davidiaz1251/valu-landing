@@ -48,21 +48,12 @@ async function loadFiles() {
         <span class="admin-file__path">storagePath: ${escapeHtml(f.storage_path)}</span>
       </div>
       <div class="admin-actions">
-        <button class="btn-mini" data-copy="${escapeHtml(f.storage_path)}">📋 Copiar ruta</button>
-        <button class="btn-mini" data-edit>✏️ Editar</button>
-        <button class="btn-mini danger" data-delete-id="${escapeHtml(f.id)}" data-delete-path="${escapeHtml(f.storage_path)}">🗑 Eliminar</button>
+        
+        <button class="btn-mini" data-edit>Editar</button>
+        <button class="btn-mini danger" data-delete-id="${escapeHtml(f.id)}" data-delete-path="${escapeHtml(f.storage_path)}">Eliminar</button>
       </div>
     </div>
   `).join('');
-
-  filesList.querySelectorAll('[data-copy]').forEach((btn) => {
-    btn.addEventListener('click', async () => {
-      await navigator.clipboard.writeText(btn.getAttribute('data-copy'));
-      btn.textContent = 'Copiado';
-      setTimeout(() => (btn.textContent = '📋 Copiar ruta'), 1200); showToast('Ruta copiada');
-    });
-  });
-
   filesList.querySelectorAll('[data-edit]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const row = btn.closest('.admin-file');
