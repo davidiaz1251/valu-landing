@@ -8,9 +8,14 @@ import Layout from '../../layouts/Layout.astro';
       <h1>Panel Admin</h1>
       <p id="adminPanelStatus" class="admin-status">Comprobando acceso…</p>
 
-      <div id="adminPanelApp" hidden>
-        <div class="admin-grid">
-          <section class="admin-card">
+      <div id="adminPanelApp" class="dashboard" hidden>
+        <aside class="dashboard__sidebar">
+          <button class="dash-link is-active" data-tab-link="files">Archivos</button>
+          <button class="dash-link" data-tab-link="users">Usuarios y roles</button>
+        </aside>
+
+        <main class="dashboard__content">
+          <section class="dash-tab is-active" data-tab="files">
             <h2>Gestionar archivos</h2>
             <p class="admin-sub">Bucket <code>templates</code></p>
 
@@ -29,12 +34,12 @@ import Layout from '../../layouts/Layout.astro';
             <div id="filesList" class="admin-files">Cargando archivos…</div>
           </section>
 
-          <section class="admin-card">
+          <section class="dash-tab" data-tab="users">
             <h2>Gestionar usuarios y roles</h2>
             <p class="admin-sub">Roles: cliente_final / profesional_reposteria / admin</p>
             <div id="usersList" class="users-list">Cargando usuarios…</div>
           </section>
-        </div>
+        </main>
       </div>
     </div>
   </section>
@@ -42,10 +47,16 @@ import Layout from '../../layouts/Layout.astro';
 </Layout>
 
 <style>
-  .admin-wrap { max-width: 1100px; }
+  .admin-wrap { max-width: 1200px; }
   .admin-status { margin: 10px 0 20px; }
-  .admin-grid { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
-  .admin-card { background:#fff; border:1px solid var(--color-gray-200); border-radius:12px; padding:16px; }
+  .dashboard { display:grid; grid-template-columns: 240px 1fr; gap:16px; }
+  .dashboard__sidebar { background:#fff; border:1px solid var(--color-gray-200); border-radius:12px; padding:10px; display:grid; gap:8px; align-content:start; }
+  .dash-link { border:1px solid var(--color-gray-200); background:#fff; border-radius:10px; padding:10px 12px; text-align:left; cursor:pointer; font: inherit; }
+  .dash-link.is-active { border-color: var(--color-primary); background: var(--color-secondary-light); font-weight:600; }
+  .dashboard__content { background:#fff; border:1px solid var(--color-gray-200); border-radius:12px; padding:16px; }
+  .dash-tab { display:none; }
+  .dash-tab.is-active { display:block; }
+
   .admin-sub { color:#666; margin-top: 4px; }
   .admin-upload { display:grid; gap:10px; margin: 12px 0 16px; }
   .admin-upload label { display:grid; gap:6px; }
@@ -59,6 +70,13 @@ import Layout from '../../layouts/Layout.astro';
   .admin-actions { display:flex; gap:8px; }
   .btn-mini { border:1px solid var(--color-gray-300); border-radius:8px; background:#fff; padding:6px 10px; cursor:pointer; }
   .btn-mini.danger { border-color:#e9b1b1; color:#9b1c1c; }
-  @media (max-width: 1000px) { .admin-grid { grid-template-columns: 1fr; } }
-  @media (max-width: 800px) { .admin-file, .user-row { grid-template-columns: 1fr; } .user-role { width:100%; } }
+
+  @media (max-width: 1000px) {
+    .dashboard { grid-template-columns: 1fr; }
+    .dashboard__sidebar { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 800px) {
+    .admin-file, .user-row { grid-template-columns: 1fr; }
+    .user-role { width:100%; }
+  }
 </style>

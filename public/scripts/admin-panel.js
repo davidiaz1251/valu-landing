@@ -114,3 +114,13 @@ async function init() {
 }
 
 init();
+
+
+// Sidebar dashboard tabs
+const tabLinks = document.querySelectorAll('[data-tab-link]');
+const tabs = document.querySelectorAll('[data-tab]');
+function setTab(name){
+  tabLinks.forEach((b)=>b.classList.toggle('is-active', b.getAttribute('data-tab-link')===name));
+  tabs.forEach((t)=>t.classList.toggle('is-active', t.getAttribute('data-tab')===name));
+}
+tabLinks.forEach((btn)=>btn.addEventListener('click',()=>setTab(btn.getAttribute('data-tab-link'))));
