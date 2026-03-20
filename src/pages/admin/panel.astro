@@ -1,0 +1,64 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Panel admin | Valu Kraft" description="Dashboard de administración de usuarios y archivos.">
+  <section class="section section--sm" style="padding-top: calc(var(--space-24) + var(--space-8));">
+    <div class="container admin-wrap">
+      <h1>Panel Admin</h1>
+      <p id="adminPanelStatus" class="admin-status">Comprobando acceso…</p>
+
+      <div id="adminPanelApp" hidden>
+        <div class="admin-grid">
+          <section class="admin-card">
+            <h2>Gestionar archivos</h2>
+            <p class="admin-sub">Bucket <code>templates</code></p>
+
+            <form id="uploadForm" class="admin-upload">
+              <label>
+                Archivo
+                <input type="file" id="fileInput" required />
+              </label>
+              <label>
+                Carpeta (opcional)
+                <input type="text" id="folderInput" placeholder="ej: temporada-mayo" />
+              </label>
+              <button class="btn btn--primary" type="submit">Subir archivo</button>
+            </form>
+
+            <div id="filesList" class="admin-files">Cargando archivos…</div>
+          </section>
+
+          <section class="admin-card">
+            <h2>Gestionar usuarios y roles</h2>
+            <p class="admin-sub">Roles: cliente_final / profesional_reposteria / admin</p>
+            <div id="usersList" class="users-list">Cargando usuarios…</div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script type="module" src="/scripts/admin-panel.js"></script>
+</Layout>
+
+<style>
+  .admin-wrap { max-width: 1100px; }
+  .admin-status { margin: 10px 0 20px; }
+  .admin-grid { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+  .admin-card { background:#fff; border:1px solid var(--color-gray-200); border-radius:12px; padding:16px; }
+  .admin-sub { color:#666; margin-top: 4px; }
+  .admin-upload { display:grid; gap:10px; margin: 12px 0 16px; }
+  .admin-upload label { display:grid; gap:6px; }
+  .admin-upload input { border:1px solid var(--color-gray-300); border-radius:8px; padding:10px; }
+  .admin-files, .users-list { display:grid; gap:8px; }
+  .admin-file, .user-row { display:grid; grid-template-columns: 1fr auto auto; gap:10px; align-items:center; border:1px solid var(--color-gray-200); border-radius:10px; padding:10px; }
+  .admin-file code { font-size:12px; color:#555; }
+  .user-meta strong { display:block; }
+  .user-meta small { color:#666; }
+  .user-role { border:1px solid var(--color-gray-300); border-radius:8px; padding:8px; min-width:190px; }
+  .admin-actions { display:flex; gap:8px; }
+  .btn-mini { border:1px solid var(--color-gray-300); border-radius:8px; background:#fff; padding:6px 10px; cursor:pointer; }
+  .btn-mini.danger { border-color:#e9b1b1; color:#9b1c1c; }
+  @media (max-width: 1000px) { .admin-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 800px) { .admin-file, .user-row { grid-template-columns: 1fr; } .user-role { width:100%; } }
+</style>
