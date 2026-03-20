@@ -1,0 +1,39 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Valu Kraft | Enlaces" description="Accede rápido a todos los enlaces de Valu Kraft.">
+  <section class="bio section section--sm">
+    <div class="container bio__container">
+      <div class="bio-card">
+        <div class="bio-head">
+          <div class="bio-logo">✨</div>
+          <h1>Valu Kraft</h1>
+          <p>Papelería creativa y personalizada para momentos únicos.</p>
+        </div>
+
+        <div class="bio-links">
+          <a class="bio-link bio-link--primary" href="https://www.valukraft.com" target="_blank" rel="noopener">🌐 Web oficial</a>
+          <a class="bio-link" href="https://instagram.com/valu_kraft" target="_blank" rel="noopener">📸 Instagram</a>
+          <a class="bio-link" href="https://www.facebook.com/share/1DvtccCQzt/?mibextid=wwXIfr" target="_blank" rel="noopener">📘 Facebook</a>
+          <a class="bio-link" href="https://www.tiktok.com" target="_blank" rel="noopener">🎵 TikTok</a>
+          <a class="bio-link" href="https://wa.me/34600000000" target="_blank" rel="noopener">💬 WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .bio { min-height: 100dvh; display:flex; align-items:center; background: linear-gradient(180deg, #fffaf7 0%, #fff 100%); }
+  .bio__container { display:flex; justify-content:center; }
+  .bio-card { width:100%; max-width:560px; background:#fff; border:1px solid #f0e3df; border-radius:20px; padding:24px; box-shadow:0 16px 36px rgba(53,27,35,.08); }
+  .bio-head { text-align:center; margin-bottom:16px; }
+  .bio-logo { width:64px; height:64px; border-radius:999px; margin:0 auto 10px; display:grid; place-items:center; font-size:28px; background:#fff3ef; border:1px solid #f2d8cf; }
+  .bio-head h1 { margin:0 0 6px; }
+  .bio-head p { margin:0; color:#6b5b60; }
+  .bio-links { display:grid; gap:10px; }
+  .bio-link { display:block; text-decoration:none; text-align:center; padding:12px 14px; border-radius:999px; border:1px solid #e8d7d1; color:#2d1c23; font-weight:600; background:#fff; }
+  .bio-link:hover { background:#fff6f2; }
+  .bio-link--primary { background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); color:#fff; border:none; }
+</style>
