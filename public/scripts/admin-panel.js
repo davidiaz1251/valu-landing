@@ -6,6 +6,7 @@ const appEl = document.getElementById('adminPanelApp');
 const uploadForm = document.getElementById('uploadForm');
 const fileInput = document.getElementById('fileInput');
 const folderInput = document.getElementById('folderInput');
+const imageInput = document.getElementById('imageInput');
 const filesList = document.getElementById('filesList');
 const usersList = document.getElementById('usersList');
 
@@ -16,6 +17,7 @@ const modalTitle = document.getElementById('modalTitle');
 const modalDescription = document.getElementById('modalDescription');
 const modalOrder = document.getElementById('modalOrder');
 const modalPathLabel = document.getElementById('modalPathLabel');
+const modalImageFile = document.getElementById('modalImageFile');
 const toastEl = document.getElementById('adminToast');
 function showToast(msg,type='ok'){ if(!toastEl) return; toastEl.textContent=msg; toastEl.className='toast '+(type==='err'?'err':'ok'); toastEl.hidden=false; setTimeout(()=>{toastEl.hidden=true;},1600); }
 
@@ -66,6 +68,8 @@ async function loadFiles() {
       modalOrder.value = row.dataset.order || 100;
       const imageInput = document.getElementById('modalImagePath');
       if (imageInput) imageInput.value = row.dataset.image || '';
+      if (modalImageFile) modalImageFile.value = '';
+
 
       modalPathLabel.textContent = `Ruta: ${row.dataset.path}`;
       openModal();
@@ -96,7 +100,15 @@ editForm?.addEventListener('submit', async (e) => {
   const title = modalTitle.value.trim();
   const description = modalDescription.value.trim();
   const sort_order = Number(modalOrder.value || 100);
-  const image_path = (document.getElementById('modalImagePath')?.value || '').trim();
+  let image_path = (document.getElementById('modalImagePath')?.value || '').trim();
+  if (modalImageFile?.files?.[0]) {
+    const img = modalImageFile.files[0];
+    const ext = (img.name.split('.').pop() || 'jpg').toLowerCase();
+    const imgPath = `previews/${Date.now()}-preview.${ext}`;
+    const { error: imgErr } = await supabase.storage.from('templates').upload(imgPath, img, { upsert: true });
+    if (imgErr) { showToast('No se pudo subir imagen','err'); return; }
+    image_path = imgPath;
+  }
 
   const { error } = await supabase.from('templates_catalog').update({ title, description, sort_order, image_path }).eq('id', id);
   if (error) { showToast('No se pudo guardar','err'); return; }
@@ -159,6 +171,15 @@ async function init() {
     const folder = (folderInput.value || '').trim().replace(/^\/+|\/+$/g, '');
     const safeName = file.name.replace(/\s+/g, '-');
     const path = folder ? `${folder}/${safeName}` : safeName;
+    let image_path = '';
+    if (imageInput?.files?.[0]) {
+      const img = imageInput.files[0];
+      const ext = (img.name.split('.').pop() || 'jpg').toLowerCase();
+      const imgPath = `previews/${Date.now()}-preview.${ext}`;
+      const { error: imgErr } = await supabase.storage.from('templates').upload(imgPath, img, { upsert: true });
+      if (imgErr) return setStatus(`Error al subir imagen: ${imgErr.message}`);
+      image_path = imgPath;
+    }
 
     setStatus('Subiendo archivo…');
     const { error } = await supabase.storage.from('templates').upload(path, file, { upsert: true });
@@ -172,7 +193,7 @@ async function init() {
       description: 'Plantilla disponible para descarga.',
       format,
       storage_path: path,
-      image_path: '',
+      image_path,
       required_roles: ['cliente_final', 'profesional_reposteria', 'admin'],
       active: true,
       sort_order: 100,

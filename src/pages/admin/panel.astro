@@ -28,6 +28,10 @@ import Layout from '../../layouts/Layout.astro';
                 Carpeta (opcional)
                 <input type="text" id="folderInput" placeholder="ej: temporada-mayo" />
               </label>
+              <label>
+                Imagen preview (opcional)
+                <input type="file" id="imageInput" accept="image/*" />
+              </label>
               <button class="btn btn--primary" type="submit">Subir archivo</button>
             </form>
 
@@ -66,6 +70,10 @@ import Layout from '../../layouts/Layout.astro';
         <label>
           Ruta de imagen (opcional)
           <input id="modalImagePath" type="text" placeholder="ej: previews/stitch.jpg" />
+        </label>
+        <label>
+          Reemplazar imagen (opcional)
+          <input id="modalImageFile" type="file" accept="image/*" />
         </label>
         <div style="display:flex; gap:8px; justify-content:flex-end;">
           <button type="button" class="btn-mini" data-close-modal>Cancelar</button>
