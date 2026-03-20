@@ -43,12 +43,20 @@ async function renderTemplates(role, userId, loggedIn) {
   const visible = [];
 
   for (const item of catalog) {
+    const requiredRoles = item.required_roles || [];
+
+    // Sin sesión: mostrar catálogo completo, solo bloquear descarga
+    if (!loggedIn) {
+      visible.push({ item, allowed: false });
+      continue;
+    }
+
+    // Con sesión: comprobamos que exista archivo y permisos
     const { data: probe, error: probeError } = await supabase.storage.from('templates').createSignedUrl(item.storage_path, 30);
     const exists = !probeError && !!probe?.signedUrl;
     if (!exists) continue;
 
-    const requiredRoles = item.required_roles || [];
-    const allowed = loggedIn && roleAllowed(requiredRoles, role);
+    const allowed = roleAllowed(requiredRoles, role);
     visible.push({ item, allowed });
   }
 
