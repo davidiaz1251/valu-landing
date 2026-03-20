@@ -2,12 +2,15 @@ import { hasSupabaseConfig, supabase, ensureUserProfile, getUserProfile } from '
 
 const sessionBox = document.getElementById('templatesSession');
 const cards = Array.from(document.querySelectorAll('.template-card'));
+const heroCopy = document.querySelector('.templates-hero__description');
 const roleAllowed = (requiredRoles, role) => requiredRoles.includes(role) || role === 'admin';
 
 function lockCards() {
   cards.forEach((card) => {
     const button = card.querySelector('[data-download-btn]');
     button.setAttribute('disabled', 'true');
+    button.classList.add('is-disabled');
+    button.textContent = 'Inicia sesión para descargar';
   });
 }
 
@@ -22,10 +25,13 @@ function enableCardsForRole(role, userId) {
     if (!allowed) {
       button.textContent = 'No disponible';
       button.setAttribute('disabled', 'true');
+      button.classList.add('is-disabled');
       return;
     }
 
     button.removeAttribute('disabled');
+    button.classList.remove('is-disabled');
+    button.textContent = 'Descargar';
     button.addEventListener('click', async () => {
       const { data, error } = await supabase.storage.from('templates').createSignedUrl(storagePath, 60);
       if (error || !data?.signedUrl) return alert('No se pudo generar la descarga.');
@@ -53,6 +59,7 @@ async function init() {
     const session = sessionData?.session;
     if (!session?.user) {
       sessionBox.innerHTML = 'Inicia sesión para continuar. <a href="/login?next=/plantillas">Entrar</a>';
+      if (heroCopy) heroCopy.textContent = 'Inicia sesión para descargar tus plantillas.';
       lockCards();
       return;
     }
@@ -60,6 +67,7 @@ async function init() {
     await ensureUserProfile();
     const profile = await getUserProfile();
     sessionBox.innerHTML = `Sesión activa · <a href="#" id="logoutLink">Cerrar sesión</a>`;
+    if (heroCopy) heroCopy.textContent = 'Ya puedes descargar tus plantillas.';
 
     document.getElementById('logoutLink')?.addEventListener('click', async (event) => {
       event.preventDefault();

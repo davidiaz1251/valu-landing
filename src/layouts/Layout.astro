@@ -63,7 +63,7 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? 'sb_publisha
             <li><a href="/encargos" class="nav__link">Encargos</a></li>
             <li><a href="/galeria" class="nav__link">Galería</a></li>
             <li><a href="/plantillas" class="nav__link">Plantillas</a></li>
-            <li><a href="/login" class="nav__link nav__link--login">Iniciar sesión</a></li>
+            <li><a href="/login" class="nav__link nav__link--login" id="authMenuLink" data-auth-menu>Iniciar sesión</a></li>
             <li><a href="/contacto" class="nav__link nav__link--cta">Contacto</a></li>
           </ul>
         </nav>
@@ -516,5 +516,6 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? 'sb_publisha
         }
       }
     </style>
+      <script type="module" src="/scripts/auth-menu.js"></script>
   </body>
 </html>
