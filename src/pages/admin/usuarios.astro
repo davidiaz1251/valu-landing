@@ -1,0 +1,32 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Panel admin · Usuarios | Valu Kraft" description="Gestión de roles de usuarios.">
+  <section class="section section--sm" style="padding-top: calc(var(--space-24) + var(--space-8));">
+    <div class="container admin-wrap">
+      <h1>Usuarios y roles</h1>
+      <p id="adminUsersStatus" class="admin-status">Comprobando acceso…</p>
+
+      <div id="adminUsersApp" hidden>
+        <div id="usersList" class="users-list">Cargando usuarios…</div>
+      </div>
+    </div>
+  </section>
+  <script type="module" src="/scripts/admin-usuarios.js"></script>
+</Layout>
+
+<style>
+  .admin-wrap { max-width: 980px; }
+  .admin-status { margin: 10px 0 20px; }
+  .users-list { display:grid; gap:10px; }
+  .user-row { display:grid; grid-template-columns: 1fr auto auto; gap:10px; align-items:center; border:1px solid var(--color-gray-200); border-radius:10px; padding:10px; background:#fff; }
+  .user-meta strong { display:block; }
+  .user-meta small { color:#666; }
+  .user-role { border:1px solid var(--color-gray-300); border-radius:8px; padding:8px; min-width:200px; }
+  .btn-mini { border:1px solid var(--color-gray-300); border-radius:8px; background:#fff; padding:8px 12px; cursor:pointer; }
+  @media (max-width: 800px) {
+    .user-row { grid-template-columns: 1fr; }
+    .user-role { width:100%; }
+  }
+</style>
