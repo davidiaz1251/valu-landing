@@ -46,8 +46,7 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? 'sb_publisha
       <div class="container">
         <nav class="nav">
           <a href="/" class="nav__logo">
-            <span class="nav__logo-icon">✨</span>
-            <span class="nav__logo-text">Valu Kraft</span>
+            <img src="/images/logo-valu.jpg" alt="Logo Valu Kraft" class="nav__logo-image" />
           </a>
           
           <button class="nav__toggle" id="navToggle" aria-label="Toggle menu">
@@ -79,8 +78,7 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? 'sb_publisha
         <div class="footer__content">
           <div class="footer__brand">
             <a href="/" class="footer__logo">
-              <span class="footer__logo-icon">✨</span>
-              <span class="footer__logo-text">Valu Kraft</span>
+              <img src="/images/logo-valu.jpg" alt="Logo Valu Kraft" class="footer__logo-image" />
             </a>
             <p class="footer__tagline">Transformamos ideas en recuerdos únicos</p>
             <div class="footer__social">
@@ -225,8 +223,10 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? 'sb_publisha
         text-decoration: none;
       }
       
-      .nav__logo-icon {
-        font-size: var(--text-2xl);
+      .nav__logo-image {
+        height: 52px;
+        width: auto;
+        display: block;
       }
       
       .nav__avatar { width: 28px; height: 28px; border-radius: 999px; object-fit: cover; border: 1px solid var(--color-gray-200); margin-right: 8px; display:block; }
@@ -354,8 +354,10 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? 'sb_publisha
         text-decoration: none;
       }
       
-      .footer__logo-icon {
-        font-size: var(--text-2xl);
+      .footer__logo-image {
+        height: 58px;
+        width: auto;
+        display: block;
       }
       
       .footer__tagline {
