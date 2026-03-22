@@ -14,10 +14,8 @@ import { catalogCategories, catalogProducts } from '../../data/products';
   <section class="section">
     <div class="container admin-grid">
       <aside class="admin-card">
-        <h2 id="form-title">Nuevo producto</h2>
-        <form id="product-form" class="admin-form">
-          <input type="hidden" name="id" />
-
+        <h2>Nuevo producto</h2>
+        <form id="new-product-form" class="admin-form">
           <label>Nombre
             <input type="text" name="name" required />
           </label>
@@ -50,7 +48,7 @@ import { catalogCategories, catalogProducts } from '../../data/products';
 
           <div class="admin-actions">
             <button class="btn btn--primary" type="submit">Guardar producto</button>
-            <button class="btn btn--secondary" type="button" id="reset-form">Limpiar</button>
+            <button class="btn btn--secondary" type="reset">Limpiar</button>
           </div>
         </form>
 
@@ -70,14 +68,59 @@ import { catalogCategories, catalogProducts } from '../../data/products';
     </div>
   </section>
 
+  <div id="productEditModal" class="modal" hidden>
+    <div class="modal__backdrop" data-close-modal></div>
+    <div class="modal__card">
+      <h3 id="modal-title">Editar producto</h3>
+      <form id="edit-product-form" class="admin-form">
+        <input type="hidden" name="id" />
+
+        <label>Nombre
+          <input type="text" name="name" required />
+        </label>
+
+        <label>Categoría
+          <select name="categoryId" required>
+            {catalogCategories.map((c) => <option value={c.id}>{c.title}</option>)}
+          </select>
+        </label>
+
+        <label>Descripción
+          <textarea name="description" rows="4" required></textarea>
+        </label>
+
+        <label>Imagen (URL)
+          <input type="url" name="image" placeholder="https://..." />
+        </label>
+
+        <label>Orden
+          <input type="number" name="order" min="1" step="1" value="1" />
+        </label>
+
+        <label class="checkline">
+          <input type="checkbox" name="customizable" /> Personalizable
+        </label>
+
+        <label class="checkline">
+          <input type="checkbox" name="active" /> Activo
+        </label>
+
+        <div class="admin-actions admin-actions--end">
+          <button class="btn btn--secondary" type="button" data-close-modal>Cancelar</button>
+          <button class="btn btn--primary" type="submit">Guardar cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script is:inline define:vars={{ catalogProducts }}>
     (() => {
       const KEY = 'valu_catalog_products_v1';
-      const form = document.getElementById('product-form');
+      const newForm = document.getElementById('new-product-form');
+      const editForm = document.getElementById('edit-product-form');
       const list = document.getElementById('product-list');
-      const title = document.getElementById('form-title');
-      const resetBtn = document.getElementById('reset-form');
       const restoreBtn = document.getElementById('restore-defaults');
+      const modal = document.getElementById('productEditModal');
 
       let products = JSON.parse(localStorage.getItem(KEY) || 'null');
       if (!Array.isArray(products)) {
@@ -86,6 +129,11 @@ import { catalogCategories, catalogProducts } from '../../data/products';
       }
 
       const safe = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+
+      const persist = () => {
+        localStorage.setItem(KEY, JSON.stringify(products));
+        render();
+      };
 
       const render = () => {
         if (!list) return;
@@ -98,36 +146,17 @@ import { catalogCategories, catalogProducts } from '../../data/products';
               <small>Categoría: <strong>${safe(p.categoryId)}</strong> · ${p.customizable ? 'Personalizable' : 'No personalizable'} · ${p.active ? 'Activo' : 'Oculto'}</small>
             </div>
             <div class="item-actions">
-              <button class="btn btn--secondary" data-edit="${safe(p.id)}">Editar</button>
-              <button class="btn btn--secondary" data-toggle="${safe(p.id)}">${p.active ? 'Ocultar' : 'Activar'}</button>
-              <button class="btn btn--secondary" data-delete="${safe(p.id)}">Eliminar</button>
+              <button class="btn btn--secondary" type="button" data-edit="${safe(p.id)}">Editar</button>
+              <button class="btn btn--secondary" type="button" data-toggle="${safe(p.id)}">${p.active ? 'Ocultar' : 'Activar'}</button>
+              <button class="btn btn--secondary" type="button" data-delete="${safe(p.id)}">Eliminar</button>
             </div>
           </article>
         `).join('') : '<p>No hay productos aún.</p>';
       };
 
-      const persist = () => {
-        localStorage.setItem(KEY, JSON.stringify(products));
-        render();
-      };
-
-      const fillForm = (product = null) => {
-        if (!form) return;
-        form.id.value = product?.id || '';
-        form.name.value = product?.name || '';
-        form.categoryId.value = product?.categoryId || form.categoryId.options[0].value;
-        form.description.value = product?.description || '';
-        form.image.value = product?.images?.[0] || '';
-        form.order.value = String(product?.order ?? 1);
-        form.customizable.checked = product?.customizable ?? true;
-        form.active.checked = product?.active ?? true;
-        if (title) title.textContent = product ? `Editar: ${product.name}` : 'Nuevo producto';
-      };
-
-      form?.addEventListener('submit', (e) => {
-        e.preventDefault();
+      const formToPayload = (form) => {
         const data = new FormData(form);
-        const payload = {
+        return {
           id: String(data.get('id') || '').trim() || `prod-${Date.now()}`,
           name: String(data.get('name') || '').trim(),
           categoryId: String(data.get('categoryId') || '').trim(),
@@ -137,22 +166,58 @@ import { catalogCategories, catalogProducts } from '../../data/products';
           customizable: form.customizable.checked,
           active: form.active.checked
         };
+      };
 
-        const existingIndex = products.findIndex((p) => p.id === payload.id);
-        if (existingIndex >= 0) products[existingIndex] = payload;
-        else products.push(payload);
+      const fillEditForm = (product) => {
+        if (!editForm || !product) return;
+        editForm.id.value = product.id;
+        editForm.name.value = product.name || '';
+        editForm.categoryId.value = product.categoryId || editForm.categoryId.options[0].value;
+        editForm.description.value = product.description || '';
+        editForm.image.value = product.images?.[0] || '';
+        editForm.order.value = String(product.order ?? 1);
+        editForm.customizable.checked = product.customizable ?? true;
+        editForm.active.checked = product.active ?? true;
+      };
 
+      const openModal = () => {
+        if (!modal) return;
+        modal.hidden = false;
+        document.body.style.overflow = 'hidden';
+      };
+
+      const closeModal = () => {
+        if (!modal) return;
+        modal.hidden = true;
+        document.body.style.overflow = '';
+      };
+
+      newForm?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const payload = formToPayload(newForm);
+        products.push(payload);
         persist();
-        fillForm();
+        newForm.reset();
+        newForm.order.value = '1';
+        newForm.customizable.checked = true;
+        newForm.active.checked = true;
       });
 
-      resetBtn?.addEventListener('click', () => fillForm());
+      editForm?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const payload = formToPayload(editForm);
+        const idx = products.findIndex((p) => p.id === payload.id);
+        if (idx >= 0) {
+          products[idx] = payload;
+          persist();
+          closeModal();
+        }
+      });
 
       restoreBtn?.addEventListener('click', () => {
         if (!confirm('¿Restaurar catálogo base? Esto sobrescribe cambios locales de este navegador.')) return;
         products = structuredClone(catalogProducts);
         persist();
-        fillForm();
       });
 
       list?.addEventListener('click', (e) => {
@@ -162,7 +227,10 @@ import { catalogCategories, catalogProducts } from '../../data/products';
         const editId = target.getAttribute('data-edit');
         if (editId) {
           const product = products.find((p) => p.id === editId);
-          if (product) fillForm(product);
+          if (product) {
+            fillEditForm(product);
+            openModal();
+          }
           return;
         }
 
@@ -180,8 +248,17 @@ import { catalogCategories, catalogProducts } from '../../data/products';
         }
       });
 
+      modal?.addEventListener('click', (e) => {
+        const target = e.target;
+        if (!(target instanceof HTMLElement)) return;
+        if (target.hasAttribute('data-close-modal')) closeModal();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal && !modal.hidden) closeModal();
+      });
+
       render();
-      fillForm();
     })();
   </script>
 </Layout>
@@ -194,10 +271,18 @@ import { catalogCategories, catalogProducts } from '../../data/products';
   .checkline { display: flex; gap: .5rem; align-items: center; }
   .checkline input { width: auto; }
   .admin-actions { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: .45rem; }
+  .admin-actions--end { justify-content: flex-end; }
   .list-header { display: flex; justify-content: space-between; align-items: center; gap: .75rem; margin-bottom: .75rem; }
-  .list-item { display: flex; justify-content: space-between; gap: .75rem; border: 1px solid #ececec; border-radius: .8rem; padding: .8rem; margin-bottom: .7rem; }
-  .list-item h3 { margin: 0 0 .25rem; }
-  .list-item p { margin: 0 0 .25rem; color: var(--color-gray-600); }
-  .item-actions { display: grid; gap: .4rem; align-content: start; }
+
+  :global(.list-item) { display: flex; justify-content: space-between; gap: .75rem; border: 1px solid #ececec; border-radius: .8rem; padding: .8rem; margin-bottom: .7rem; }
+  :global(.list-item h3) { margin: 0 0 .25rem; }
+  :global(.list-item p) { margin: 0 0 .25rem; color: var(--color-gray-600); }
+  :global(.item-actions) { display: grid; gap: .4rem; align-content: start; }
+
+  .modal[hidden] { display:none; }
+  .modal { position: fixed; inset: 0; z-index: 2000; }
+  .modal__backdrop { position:absolute; inset:0; background:rgba(20,20,20,.45); }
+  .modal__card { position:relative; max-width: 620px; margin: 6vh auto 0; background:#fff; border:1px solid #ececec; border-radius: 14px; padding: 1rem; box-shadow: 0 24px 48px rgba(0,0,0,.2); }
+
   @media (max-width: 980px) { .admin-grid { grid-template-columns: 1fr; } }
 </style>
