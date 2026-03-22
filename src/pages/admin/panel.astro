@@ -12,6 +12,7 @@ import Layout from '../../layouts/Layout.astro';
         <aside class="dashboard__sidebar">
           <button class="dash-link is-active" data-tab-link="files">Archivos</button>
           <button class="dash-link" data-tab-link="users">Usuarios y roles</button>
+          <a class="dash-link dash-link--anchor" href="/admin/productos">Productos (catálogo)</a>
         </aside>
 
         <main class="dashboard__content">
@@ -88,7 +89,8 @@ import Layout from '../../layouts/Layout.astro';
   .admin-status { margin: 10px 0 20px; }
   .dashboard { display:grid; grid-template-columns: 240px 1fr; gap:16px; }
   .dashboard__sidebar { background:#fff; border:1px solid var(--color-gray-200); border-radius:12px; padding:10px; display:grid; gap:8px; align-content:start; }
-  .dash-link { border:1px solid var(--color-gray-200); background:#fff; border-radius:10px; padding:10px 12px; text-align:left; cursor:pointer; font: inherit; }
+  .dash-link { border:1px solid var(--color-gray-200); background:#fff; border-radius:10px; padding:10px 12px; text-align:left; cursor:pointer; font: inherit; text-decoration:none; color:inherit; display:block; }
+  .dash-link--anchor:hover { background:#f7f7fb; }
   .dash-link.is-active { border-color: var(--color-primary); background: var(--color-secondary-light); font-weight:600; }
   .dashboard__content { background:#fff; border:1px solid var(--color-gray-200); border-radius:12px; padding:16px; }
   .dash-tab { display:none; }
