@@ -1,0 +1,144 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { catalogCategories, catalogProducts, WHATSAPP_NUMBER, INSTAGRAM_USERNAME } from '../data/products';
+
+const activeProducts = catalogProducts
+  .filter((p) => p.active !== false)
+  .sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+
+const categories = catalogCategories.map((category) => ({
+  ...category,
+  products: activeProducts.filter((p) => p.categoryId === category.id)
+})).filter((c) => c.products.length > 0);
+---
+
+<Layout title="Productos | Valu Kraft" description="Catálogo de productos de Valu Kraft. Pedidos por WhatsApp e Instagram.">
+  <section class="section section--lg">
+    <div class="container">
+      <span class="section__badge">Catálogo</span>
+      <h1>Productos Valu Kraft</h1>
+      <p class="section__description">Catálogo visual sin precios. Pide información por WhatsApp o Instagram.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container tabs" id="category-tabs">
+      {categories.map((category) => (
+        <a href={`#${category.id}`} class="tab-link">{category.title}</a>
+      ))}
+    </div>
+  </section>
+
+  <div id="catalog-root" data-categories={JSON.stringify(catalogCategories)} data-products={JSON.stringify(catalogProducts)}>
+    {categories.map((category) => (
+      <section class="section" id={category.id}>
+        <div class="container">
+          <h2>{category.title}</h2>
+          <p class="section__description">{category.description}</p>
+
+          <div class="product-grid">
+            {category.products.map((product) => {
+              const message = `Hola, quiero info de ${product.name}. ¿Me puedes indicar opciones de personalización y tiempo de entrega?`;
+              const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+              const igLink = `https://instagram.com/${INSTAGRAM_USERNAME}`;
+              return (
+                <article class="product-card">
+                  <div class="product-card__media">
+                    {product.images?.[0] ? (
+                      <img src={product.images[0]} alt={product.name} loading="lazy" />
+                    ) : (
+                      <div class="product-card__placeholder">Valu Kraft</div>
+                    )}
+                  </div>
+                  <div class="product-card__body">
+                    <h3>{product.name}</h3>
+                    <p>{product.description}</p>
+                    {product.customizable && <span class="product-badge">Personalizable</span>}
+                    <div class="product-card__actions">
+                      <a href={waLink} class="btn btn--primary" target="_blank" rel="noopener noreferrer">Pedir por WhatsApp</a>
+                      <a href={igLink} class="btn btn--secondary" target="_blank" rel="noopener noreferrer">Pedir por Instagram</a>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    ))}
+  </div>
+
+  <script is:inline>
+    (() => {
+      const KEY = 'valu_catalog_products_v1';
+      const root = document.getElementById('catalog-root');
+      if (!root) return;
+
+      const categories = JSON.parse(root.dataset.categories || '[]');
+      const fallbackProducts = JSON.parse(root.dataset.products || '[]');
+      const localProducts = JSON.parse(localStorage.getItem(KEY) || 'null');
+      if (!Array.isArray(localProducts)) return;
+
+      const products = localProducts.filter((p) => p.active !== false).sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+      if (!products.length) return;
+
+      const escapeHtml = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+      const byCategory = categories.map((cat) => ({ ...cat, products: products.filter((p) => p.categoryId === cat.id) })).filter((c) => c.products.length > 0);
+      if (!byCategory.length) return;
+
+      const tabs = document.getElementById('category-tabs');
+      if (tabs) {
+        tabs.innerHTML = byCategory.map((c) => `<a href="#${escapeHtml(c.id)}" class="tab-link">${escapeHtml(c.title)}</a>`).join('');
+      }
+
+      root.innerHTML = byCategory.map((category) => {
+        const cards = category.products.map((product) => {
+          const text = encodeURIComponent(`Hola, quiero info de ${product.name}. ¿Me puedes indicar opciones de personalización y tiempo de entrega?`);
+          const media = product.images?.[0]
+            ? `<img src="${escapeHtml(product.images[0])}" alt="${escapeHtml(product.name)}" loading="lazy" />`
+            : `<div class="product-card__placeholder">Valu Kraft</div>`;
+          return `
+            <article class="product-card">
+              <div class="product-card__media">${media}</div>
+              <div class="product-card__body">
+                <h3>${escapeHtml(product.name)}</h3>
+                <p>${escapeHtml(product.description)}</p>
+                ${product.customizable ? '<span class="product-badge">Personalizable</span>' : ''}
+                <div class="product-card__actions">
+                  <a href="https://wa.me/${WHATSAPP_NUMBER}?text=${text}" class="btn btn--primary" target="_blank" rel="noopener noreferrer">Pedir por WhatsApp</a>
+                  <a href="https://instagram.com/${INSTAGRAM_USERNAME}" class="btn btn--secondary" target="_blank" rel="noopener noreferrer">Pedir por Instagram</a>
+                </div>
+              </div>
+            </article>
+          `;
+        }).join('');
+
+        return `
+          <section class="section" id="${escapeHtml(category.id)}">
+            <div class="container">
+              <h2>${escapeHtml(category.title)}</h2>
+              <p class="section__description">${escapeHtml(category.description)}</p>
+              <div class="product-grid">${cards}</div>
+            </div>
+          </section>
+        `;
+      }).join('');
+    })();
+  </script>
+</Layout>
+
+<style>
+  .tabs { display: flex; flex-wrap: wrap; gap: .75rem; }
+  .tab-link { background: #fff; border: 1px solid #e6e6e6; border-radius: 999px; padding: .55rem .9rem; color: var(--color-gray-700); font-weight: 600; }
+  .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-top: 1.25rem; }
+  .product-card { background: #fff; border: 1px solid #ececec; border-radius: 1rem; overflow: hidden; display: flex; flex-direction: column; }
+  .product-card__media { aspect-ratio: 4 / 3; background: #fafafa; }
+  .product-card__media img { width: 100%; height: 100%; object-fit: cover; }
+  .product-card__placeholder { height: 100%; display: grid; place-items: center; color: #999; font-weight: 600; }
+  .product-card__body { padding: 1rem; display: grid; gap: .65rem; }
+  .product-card__body h3 { margin: 0; }
+  .product-card__body p { margin: 0; color: var(--color-gray-600); }
+  .product-badge { font-size: .8rem; width: max-content; border-radius: 999px; background: #f3e8ff; color: #6b21a8; padding: .25rem .6rem; font-weight: 700; }
+  .product-card__actions { display: grid; gap: .55rem; }
+  .product-card__actions .btn { justify-content: center; }
+</style>
