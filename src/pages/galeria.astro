@@ -1,0 +1,133 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const categories = [
+  { id: 'todos', label: 'Todos', icon: '✨' },
+  { id: 'papeleria', label: 'Papelería', icon: '🎁' },
+  { id: 'toppers', label: 'Cake Toppers', icon: '🎂' },
+  { id: 'textil', label: 'Textil', icon: '👕' },
+  { id: 'encuadernacion', label: 'Encuadernación', icon: '📚' }
+];
+
+const projects = [
+  { id: 1, title: 'Invitaciones de Boda Florales', category: 'papeleria', description: 'Invitaciones elegantes con diseño floral', tags: ['Boda', 'Floral'] },
+  { id: 2, title: 'Cake Topper Unicornio', category: 'toppers', description: 'Topper acrílico rosa', tags: ['Cumpleaños', 'Infantil'] },
+  { id: 3, title: 'Camisetas Corporativas', category: 'textil', description: 'Pack de camisetas', tags: ['Corporativo'] },
+  { id: 4, title: 'Agenda 2025', category: 'encuadernacion', description: 'Agenda artesanal', tags: ['Agenda', 'Regalo'] },
+  { id: 5, title: 'Cajitas Bautizo', category: 'papeleria', description: 'Cajitas para dulces', tags: ['Bautizo'] },
+  { id: 6, title: 'Topper Aniversario', category: 'toppers', description: 'Topper madera grabada', tags: ['Aniversario'] },
+  { id: 7, title: 'Tazas Navideñas', category: 'textil', description: 'Set tazas personalizadas', tags: ['Navidad'] },
+  { id: 8, title: 'Álbum de Viaje', category: 'encuadernacion', description: 'Álbum scrapbook', tags: ['Álbum'] }
+];
+---
+
+<Layout title="Galería | Valu Kraft" description="Explora nuestra galería de proyectos realizados.">
+  <section class="gallery-hero section--lg">
+    <div class="container">
+      <div class="gallery-hero__content">
+        <span class="section__badge">Nuestros trabajos</span>
+        <h1>Creatividad en <span class="gradient-text">acción</span></h1>
+        <p>Explora algunos de los proyectos que hemos realizado.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="gallery-filter section--sm">
+    <div class="container">
+      <div class="gallery-filter__wrapper">
+        {categories.map((cat) => (
+          <button class={`filter-btn ${cat.id === 'todos' ? 'filter-btn--active' : ''}`} data-filter={cat.id}>
+            <span>{cat.icon}</span>
+            <span>{cat.label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="gallery-grid section">
+    <div class="container">
+      <div class="gallery__wrapper" id="gallery">
+        {projects.map((project) => (
+          <article class="project-card" data-category={project.category}>
+            <div class="project-card__image">
+              <div class="project-card__placeholder">
+                {categories.find(c => c.id === project.category)?.icon || '✨'}
+              </div>
+            </div>
+            <div class="project-card__content">
+              <h3>{project.title}</h3>
+              <p>{project.description}</p>
+              <div class="project-card__tags">
+                {project.tags.map((tag) => (<span class="project-card__tag">{tag}</span>))}
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="gallery-cta section">
+    <div class="container">
+      <div class="gallery-cta__wrapper">
+        <h2>¿Te gustaría algo así?</h2>
+        <p>Cuéntanos tu idea y creamos algo único para ti.</p>
+        <a href="/encargos" class="btn btn--primary btn--lg">Iniciar mi encargo</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .gallery-hero { padding-top: calc(var(--space-24) + 60px); text-align: center; }
+  .gallery-hero__content { max-width: 700px; margin: 0 auto; }
+  .gallery-hero__content h1 { margin-bottom: var(--space-6); }
+  .gallery-hero__content p { font-size: var(--text-xl); color: var(--color-gray-600); }
+  
+  .gallery-filter__wrapper { display: flex; justify-content: center; gap: var(--space-3); flex-wrap: wrap; }
+  .filter-btn { display: inline-flex; align-items: center; gap: var(--space-2); padding: var(--space-3) var(--space-5); background: var(--color-white); border: 2px solid var(--color-gray-200); border-radius: var(--radius-full); font-size: var(--text-sm); font-weight: var(--font-medium); color: var(--color-gray-600); cursor: pointer; transition: all var(--transition-base); }
+  .filter-btn:hover { border-color: var(--color-primary); color: var(--color-primary-dark); }
+  .filter-btn--active { background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); border-color: var(--color-primary); color: var(--color-white); }
+  
+  .gallery__wrapper { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-6); }
+  .project-card { background: var(--color-white); border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-md); transition: all var(--transition-base); }
+  .project-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-xl); }
+  .project-card.hidden { display: none; }
+  .project-card__image { aspect-ratio: 1; overflow: hidden; }
+  .project-card__placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--color-primary-light), var(--color-lavender)); font-size: 4rem; }
+  .project-card__content { padding: var(--space-5); }
+  .project-card__content h3 { font-family: var(--font-primary); font-size: var(--text-base); font-weight: var(--font-semibold); margin-bottom: var(--space-2); }
+  .project-card__content p { font-size: var(--text-sm); color: var(--color-gray-500); margin-bottom: var(--space-3); }
+  .project-card__tags { display: flex; flex-wrap: wrap; gap: var(--space-1); }
+  .project-card__tag { padding: var(--space-1) var(--space-2); background: var(--color-gray-100); border-radius: var(--radius-full); font-size: var(--text-xs); color: var(--color-gray-600); }
+  
+  .gallery-cta__wrapper { text-align: center; background: linear-gradient(135deg, var(--color-primary-light), var(--color-peach)); padding: var(--space-16); border-radius: var(--radius-2xl); }
+  .gallery-cta__wrapper h2 { margin-bottom: var(--space-4); }
+  .gallery-cta__wrapper p { font-size: var(--text-lg); color: var(--color-gray-600); margin-bottom: var(--space-8); }
+  
+  @media (max-width: 992px) { .gallery__wrapper { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 768px) { .gallery__wrapper { grid-template-columns: 1fr; } .gallery-cta__wrapper { padding: var(--space-10) var(--space-6); } }
+</style>
+
+<script>
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const projectCards = document.querySelectorAll('.project-card');
+  
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('filter-btn--active'));
+      btn.classList.add('filter-btn--active');
+      const filter = btn.dataset.filter;
+      
+      projectCards.forEach(card => {
+        const category = card.getAttribute('data-category');
+        if (filter === 'todos' || category === filter) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    });
+  });
+</script>

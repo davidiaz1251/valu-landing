@@ -1,0 +1,176 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { templates } from '../data/templates';
+
+const categories = Array.from(new Set(templates.map((item) => item.category))).sort();
+---
+
+<Layout
+  title="Plantillas descargables | Valu Kraft"
+  description="Descarga plantillas de diseño listas para personalizar en tus celebraciones."
+>
+  <section class="templates-hero section section--sm">
+    <div class="container">
+      <span class="section__badge">Recursos gratis</span>
+      <h1 class="templates-hero__title">Plantillas descargables</h1>
+      <p class="templates-hero__description">
+        Aquí encontrarás plantillas de Valu Kraft para que puedas descargar, imprimir o personalizar de forma sencilla.
+      </p>
+    </div>
+  </section>
+
+  <section class="templates section">
+    <div class="container">
+      {categories.length > 0 && (
+        <div class="templates__filters" aria-label="Categorías disponibles">
+          {categories.map((category) => (
+            <span class="templates__chip">{category}</span>
+          ))}
+        </div>
+      )}
+
+      {templates.length === 0 ? (
+        <div class="templates-empty">
+          <h2>Estamos preparando las primeras plantillas ✨</h2>
+          <p>
+            Muy pronto verás aquí descargas listas para tus celebraciones. Mientras tanto, puedes pedir una plantilla
+            personalizada por encargo.
+          </p>
+          <a
+            class="btn btn--primary"
+            href="https://wa.me/34600000000?text=Hola%20Valu%20Kraft%2C%20quiero%20una%20plantilla%20personalizada"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Pedir plantilla personalizada
+          </a>
+        </div>
+      ) : (
+        <div class="templates__grid">
+          {templates.map((item) => (
+            <article class="template-card">
+              <div class="template-card__meta">
+                <span class="template-card__category">{item.category}</span>
+                <span class="template-card__format">{item.format}</span>
+              </div>
+              <h2 class="template-card__title">{item.title}</h2>
+              <p class="template-card__description">{item.description}</p>
+              <a class="btn btn--secondary template-card__cta" href={item.downloadUrl} download>
+                Descargar
+              </a>
+            </article>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .templates-hero {
+    padding-top: calc(var(--space-24) + var(--space-8));
+    padding-bottom: var(--space-8);
+    text-align: center;
+  }
+
+  .templates-hero__title {
+    margin-top: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+
+  .templates-hero__description {
+    max-width: 700px;
+    margin: 0 auto;
+    font-size: var(--text-lg);
+  }
+
+  .templates__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    justify-content: center;
+    margin-bottom: var(--space-8);
+  }
+
+  .templates__chip {
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-full);
+    background: var(--color-secondary-light);
+    color: var(--color-gray-600);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+  }
+
+  .templates-empty {
+    max-width: 760px;
+    margin: 0 auto;
+    background: var(--color-white);
+    border: 1px solid var(--color-gray-200);
+    box-shadow: var(--shadow-md);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-10);
+    text-align: center;
+  }
+
+  .templates-empty h2 {
+    margin-bottom: var(--space-3);
+  }
+
+  .templates-empty p {
+    margin-bottom: var(--space-6);
+  }
+
+  .templates__grid {
+    display: grid;
+    gap: var(--space-6);
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
+
+  .template-card {
+    background: var(--color-white);
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .template-card__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    font-size: var(--text-sm);
+  }
+
+  .template-card__category {
+    font-weight: var(--font-semibold);
+    color: var(--color-primary-dark);
+  }
+
+  .template-card__format {
+    color: var(--color-gray-500);
+  }
+
+  .template-card__title {
+    font-size: var(--text-2xl);
+    margin: 0;
+  }
+
+  .template-card__description {
+    margin: 0;
+  }
+
+  .template-card__cta {
+    margin-top: auto;
+    align-self: flex-start;
+  }
+
+  @media (max-width: 768px) {
+    .templates-empty {
+      padding: var(--space-6);
+    }
+  }
+</style>
