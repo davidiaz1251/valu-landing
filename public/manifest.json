@@ -1,0 +1,22 @@
+{
+  "background_color": "#ffffff",
+  "description": "A boutique studio crafting personalized stationery, invitations, and handmade paper treasures to turn your special moments into tangible art.",
+  "display": "standalone",
+  "icons": [
+    {
+      "sizes": "192x192",
+      "src": "https://media.base44.com/images/public/69c11d14bba13990f133d6d0/7170738c9_logo.png",
+      "type": "image/png"
+    },
+    {
+      "sizes": "512x512",
+      "src": "https://media.base44.com/images/public/69c11d14bba13990f133d6d0/7170738c9_logo.png",
+      "type": "image/png"
+    }
+  ],
+  "name": "Valu Kraft",
+  "scope": "https://valu-craft-boutique.base44.app",
+  "short_name": "Valu Kraft",
+  "start_url": "https://valu-craft-boutique.base44.app",
+  "theme_color": "#000000"
+}
