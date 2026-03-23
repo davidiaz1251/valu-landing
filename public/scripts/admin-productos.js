@@ -17,6 +17,8 @@ const productCategorySelect = document.getElementById('product-category-select')
 
 const newCategoryBtn = document.getElementById('new-category-btn');
 const newProductBtn = document.getElementById('new-product-btn');
+const tabLinks = Array.from(document.querySelectorAll('[data-admin-tab-link]'));
+const tabPanels = Array.from(document.querySelectorAll('[data-admin-tab]'));
 
 let categories = [];
 let products = [];
@@ -65,12 +67,25 @@ function bindEvents() {
     if (target instanceof HTMLElement && target.hasAttribute('data-close-product-modal')) closeProductModal();
   });
 
+  tabLinks.forEach((btn) => {
+    btn.addEventListener('click', () => setTab(btn.getAttribute('data-admin-tab-link') || 'categorias'));
+  });
+
+  const initial = (window.location.hash || '').replace('#','');
+  if (initial === 'productos' || initial === 'categorias') setTab(initial);
+
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       if (!categoryModal.hidden) closeCategoryModal();
       if (!productModal.hidden) closeProductModal();
     }
   });
+}
+
+function setTab(tab) {
+  tabLinks.forEach((btn) => btn.classList.toggle('is-active', btn.getAttribute('data-admin-tab-link') === tab));
+  tabPanels.forEach((panel) => panel.classList.toggle('is-active', panel.getAttribute('data-admin-tab') === tab));
+  if (window.location.hash !== '#' + tab) history.replaceState(null, '', '#' + tab);
 }
 
 async function refreshData() {
