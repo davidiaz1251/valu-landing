@@ -1,15 +1,5 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { catalogCategories, catalogProducts, WHATSAPP_NUMBER, INSTAGRAM_USERNAME } from '../data/products';
-
-const activeProducts = catalogProducts
-  .filter((p) => p.active !== false)
-  .sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
-
-const categories = catalogCategories.map((category) => ({
-  ...category,
-  products: activeProducts.filter((p) => p.categoryId === category.id)
-})).filter((c) => c.products.length > 0);
 ---
 
 <Layout title="Productos | Valu Kraft" description="Catálogo de productos de Valu Kraft. Pedidos por WhatsApp e Instagram.">
@@ -18,60 +8,23 @@ const categories = catalogCategories.map((category) => ({
       <span class="section__badge">Catálogo</span>
       <h1>Productos Valu Kraft</h1>
       <p class="section__description">Catálogo visual sin precios. Pide información por WhatsApp o Instagram.</p>
+      <p id="catalog-status" class="catalog-status">Cargando catálogo…</p>
     </div>
   </section>
 
   <section class="section">
-    <div class="container tabs" id="category-tabs">
-      {categories.map((category) => (
-        <a href={`#${category.id}`} class="tab-link">{category.title}</a>
-      ))}
-    </div>
+    <div class="container tabs" id="category-tabs"></div>
   </section>
 
-  <div id="catalog-root">
-    {categories.map((category) => (
-      <section class="section" id={category.id}>
-        <div class="container">
-          <h2>{category.title}</h2>
-          <p class="section__description">{category.description}</p>
+  <div id="catalog-root"></div>
 
-          <div class="product-grid">
-            {category.products.map((product) => {
-              const message = `Hola, quiero info de ${product.name}. ¿Me puedes indicar opciones de personalización y tiempo de entrega?`;
-              const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-              const igLink = `https://instagram.com/${INSTAGRAM_USERNAME}`;
-              return (
-                <article class="product-card">
-                  <div class="product-card__media">
-                    {product.images?.[0] ? (
-                      <img src={product.images[0]} alt={product.name} loading="lazy" />
-                    ) : (
-                      <div class="product-card__placeholder">Valu Kraft</div>
-                    )}
-                  </div>
-                  <div class="product-card__body">
-                    <h3>{product.name}</h3>
-                    <p>{product.description}</p>
-                    {product.customizable && <span class="product-badge">Personalizable</span>}
-                    <div class="product-card__actions">
-                      <a href={waLink} class="btn btn--primary" target="_blank" rel="noopener noreferrer">Pedir por WhatsApp</a>
-                      <a href={igLink} class="btn btn--secondary" target="_blank" rel="noopener noreferrer">Pedir por Instagram</a>
-                    </div>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-    ))}
-  </div>
+  <script type="module" src="/scripts/productos-public.js"></script>
 </Layout>
 
 <style>
   .tabs { display: flex; flex-wrap: wrap; gap: .75rem; }
   .tab-link { background: #fff; border: 1px solid #e6e6e6; border-radius: 999px; padding: .55rem .9rem; color: var(--color-gray-700); font-weight: 600; }
+  .catalog-status { margin-top: .6rem; color: var(--color-gray-600); }
   .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-top: 1.25rem; }
   .product-card { background: #fff; border: 1px solid #ececec; border-radius: 1rem; overflow: hidden; display: flex; flex-direction: column; }
   .product-card__media { aspect-ratio: 4 / 3; background: #fafafa; }
