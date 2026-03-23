@@ -1,0 +1,95 @@
+---
+const categories = [
+  {
+    title: 'Bodas',
+    description: 'Invitaciones, toppers y detalles que hacen mágico tu gran día',
+    icon: '♡',
+    image: '/media/images_public_69c11d14bba13990f133d6d0_296b37a14_generated_5a63a946.png',
+    color: 'var(--lk-secondary)'
+  },
+  {
+    title: 'Cumpleaños',
+    description: 'Decoraciones únicas para celebrar cada año de vida',
+    icon: '✦',
+    image: '/media/images_public_69c11d14bba13990f133d6d0_e09c2d23f_generated_2175fea1.png',
+    color: 'var(--lk-mint)'
+  },
+  {
+    title: 'Baby Showers',
+    description: 'Detalles tiernos para dar la bienvenida al bebé',
+    icon: '◌',
+    image: '/media/images_public_69c11d14bba13990f133d6d0_de5f491dc_generated_d6523004.png',
+    color: 'hsla(42,65%,65%,.22)'
+  },
+  {
+    title: 'Eventos Especiales',
+    description: 'Graduaciones, aniversarios y todo lo que merece ser celebrado',
+    icon: '★',
+    image: '/media/images_public_69c11d14bba13990f133d6d0_4ed3bd86b_generated_6d0099b4.png',
+    color: 'hsla(350,40%,90%,.7)'
+  }
+];
+---
+
+<section id="momentos" class="lk-momentos">
+  <div class="lk-momentos__container">
+    <header class="lk-momentos__head">
+      <span>Lo que hacemos</span>
+      <h2>Momentos que creamos</h2>
+      <p>Cada celebración merece algo hecho con el corazón</p>
+    </header>
+
+    <div class="lk-momentos__grid">
+      {categories.map((item) => (
+        <article class="lk-m-card">
+          <div class="lk-m-card__bg" style={`background:${item.color};`}></div>
+          <img src={item.image} alt={item.title} />
+          <div class="lk-m-card__overlay"></div>
+
+          <div class="lk-m-card__content">
+            <div class="lk-m-card__icon">{item.icon}</div>
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+          </div>
+
+          <div class="lk-m-card__tape"></div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  :root {
+    --lk-secondary: hsla(350,40%,90%,.95);
+    --lk-mint: hsla(160,30%,85%,.75);
+  }
+
+  .lk-momentos { padding: 96px 0 120px; position: relative; }
+  .lk-momentos__container { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+
+  .lk-momentos__head { text-align: center; margin-bottom: 56px; }
+  .lk-momentos__head span { color: hsl(42 65% 55%); text-transform: uppercase; letter-spacing: .14em; font-size: .78rem; font-weight: 700; }
+  .lk-momentos__head h2 { margin: 12px 0 0; font-family: 'Playfair Display', Georgia, serif; font-size: clamp(2rem, 4.4vw, 3.2rem); color: #2f1f28; }
+  .lk-momentos__head p { margin: 14px 0 0; color: #726069; font-size: 1.03rem; }
+
+  .lk-momentos__grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
+
+  .lk-m-card { position: relative; border-radius: 18px; overflow: hidden; aspect-ratio: 3 / 4; cursor: default; }
+  .lk-m-card__bg { position: absolute; inset: 0; opacity: .72; }
+  .lk-m-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .7s ease; }
+  .lk-m-card:hover img { transform: scale(1.05); }
+
+  .lk-m-card__overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(20,15,18,.73), rgba(20,15,18,.2) 45%, transparent); }
+  .lk-m-card__content { position: absolute; left: 0; right: 0; bottom: 0; padding: 18px; color: #fff; z-index: 2; }
+  .lk-m-card__icon { width: 34px; height: 34px; border-radius: 999px; display: grid; place-items: center; background: rgba(255,255,255,.2); backdrop-filter: blur(7px); margin-bottom: 10px; }
+  .lk-m-card h3 { margin: 0; font-family: 'Playfair Display', Georgia, serif; font-size: 1.26rem; }
+  .lk-m-card p { margin: 6px 0 0; color: rgba(255,255,255,.84); font-size: .9rem; line-height: 1.45; max-width: 280px; }
+
+  .lk-m-card__tape { position: absolute; top: 16px; right: 16px; width: 46px; height: 16px; border-radius: 3px; transform: rotate(12deg); background: hsla(42,65%,65%,.63); opacity: 0; transition: opacity .28s ease; }
+  .lk-m-card:hover .lk-m-card__tape { opacity: 1; }
+
+  @media (min-width: 1024px) {
+    .lk-momentos__grid { grid-template-columns: repeat(4, minmax(0,1fr)); gap: 20px; }
+  }
+</style>

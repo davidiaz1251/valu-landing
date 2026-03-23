@@ -1,0 +1,101 @@
+---
+const heroImg = '/media/images_public_69c11d14bba13990f133d6d0_a2d451895_generated_d22ed13b.png';
+---
+
+<section class="lk-hero">
+  <div class="lk-hero__bg">
+    <div class="lk-blob lk-blob--1"></div>
+    <div class="lk-blob lk-blob--2"></div>
+    <div class="lk-blob lk-blob--3"></div>
+  </div>
+
+  <div class="lk-hero__container">
+    <div class="lk-hero__grid">
+      <div class="lk-hero__content">
+        <div class="lk-pill">✦ Hecho a mano con amor</div>
+
+        <h1>
+          Creamos <span class="lk-underline">momentos</span><br />
+          que se <em>sienten</em>
+        </h1>
+
+        <p>
+          Cada pieza es única, personalizada y creada a mano con materiales premium.
+          Desde invitaciones hasta toppers — hacemos que tus ideas cobren vida.
+        </p>
+
+        <div class="lk-hero__actions">
+          <a href="#personaliza" class="lk-btn lk-btn--primary">Diseña el tuyo</a>
+          <a href="#productos" class="lk-btn lk-btn--ghost">Ver catálogo</a>
+        </div>
+
+        <div class="lk-trust">
+          <span><i></i> +500 pedidos</span>
+          <span><i></i> 100% personalizado</span>
+        </div>
+      </div>
+
+      <div class="lk-hero__media">
+        <div class="lk-paper lk-paper--a"></div>
+        <div class="lk-paper lk-paper--b"></div>
+        <div class="lk-hero__imageWrap">
+          <img src={heroImg} alt="Cake topper artesanal de Valu Kraft" />
+          <div class="lk-hero__overlay"></div>
+        </div>
+
+        <div class="lk-badge">
+          <span class="lk-badge__icon">✦</span>
+          <div>
+            <small>Calidad</small>
+            <strong>Premium</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .lk-hero { position: relative; min-height: 100vh; display: flex; align-items: center; overflow: hidden; padding-top: 92px; }
+  .lk-hero__bg { position: absolute; inset: 0; pointer-events: none; }
+  .lk-blob { position: absolute; border-radius: 999px; filter: blur(52px); opacity: .7; }
+  .lk-blob--1 { top: -90px; right: -70px; width: 360px; height: 360px; background: hsla(350,40%,90%,.75); }
+  .lk-blob--2 { bottom: -120px; left: -60px; width: 340px; height: 340px; background: hsla(160,30%,85%,.55); }
+  .lk-blob--3 { top: 34%; right: 24%; width: 220px; height: 220px; background: hsla(42,65%,65%,.18); }
+
+  .lk-hero__container { position: relative; width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+  .lk-hero__grid { display: grid; gap: 34px; align-items: center; }
+
+  .lk-pill { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 999px; background: hsla(350,40%,90%,.62); border: 1px solid hsla(350,40%,80%,.7); color: #5f4a54; font-size: .74rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  .lk-hero h1 { margin: 18px 0 0; font-family: 'Playfair Display', Georgia, serif; font-size: clamp(2.2rem, 7vw, 4.5rem); line-height: 1.04; color: #2f1f28; }
+  .lk-hero h1 em { color: hsl(160 30% 45%); font-style: normal; }
+  .lk-underline { position: relative; display: inline-block; }
+  .lk-underline::after { content: ''; position: absolute; left: 0; bottom: -6px; width: 100%; height: 10px; background: radial-gradient(ellipse at center, hsla(42,65%,65%,.75) 0%, hsla(42,65%,65%,0) 72%); }
+  .lk-hero p { margin: 20px 0 0; max-width: 560px; color: #6b5963; font-size: 1.06rem; line-height: 1.65; }
+
+  .lk-hero__actions { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 12px; }
+  .lk-btn { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; border-radius: 999px; padding: 13px 24px; font-weight: 600; }
+  .lk-btn--primary { background: hsl(160 30% 45%); color: #fff; }
+  .lk-btn--ghost { border: 2px solid #e6ddda; color: #3d2d37; }
+
+  .lk-trust { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 20px; color: #7a6871; font-size: .92rem; }
+  .lk-trust span { display: inline-flex; align-items: center; gap: 8px; }
+  .lk-trust i { width: 8px; height: 8px; border-radius: 50%; background: hsl(160 30% 45%); display: inline-block; }
+
+  .lk-hero__media { position: relative; }
+  .lk-paper { position: absolute; inset: -16px; border-radius: 24px; }
+  .lk-paper--a { background: hsla(350,40%,90%,.6); transform: rotate(3deg); }
+  .lk-paper--b { background: hsla(160,30%,85%,.45); transform: rotate(-2deg); }
+  .lk-hero__imageWrap { position: relative; border-radius: 20px; overflow: hidden; box-shadow: 0 30px 60px rgba(20,10,18,.15); }
+  .lk-hero__imageWrap img { width: 100%; display: block; }
+  .lk-hero__overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(250,248,246,.18), transparent 55%); }
+
+  .lk-badge { position: absolute; left: -10px; bottom: -14px; background: #fff; border: 1px solid rgba(230,220,214,.8); border-radius: 16px; padding: 12px 14px; box-shadow: 0 10px 28px rgba(0,0,0,.1); display: flex; align-items: center; gap: 10px; }
+  .lk-badge__icon { width: 34px; height: 34px; border-radius: 999px; background: hsla(42,65%,65%,.22); display: grid; place-items: center; color: hsl(42 65% 45%); }
+  .lk-badge small { display: block; color: #8b7a82; font-size: .7rem; }
+  .lk-badge strong { font-family: 'Playfair Display', Georgia, serif; color: #3c2b35; }
+
+  @media (min-width: 1024px) {
+    .lk-hero__grid { grid-template-columns: 1.03fr .97fr; gap: 64px; }
+  }
+</style>

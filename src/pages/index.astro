@@ -1,29 +1,55 @@
 ---
+import Navbar from '../components/landing-clean/Navbar.astro';
+import Hero from '../components/landing-clean/Hero.astro';
+import Momentos from '../components/landing-clean/Momentos.astro';
+import Proceso from '../components/landing-clean/Proceso.astro';
+import Productos from '../components/landing-clean/Productos.astro';
+import Personaliza from '../components/landing-clean/Personaliza.astro';
+import Testimonios from '../components/landing-clean/Testimonios.astro';
+import CTA from '../components/landing-clean/CTA.astro';
+import Footer from '../components/landing-clean/Footer.astro';
 ---
 
 <html lang="es">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/png" href="/media/7170738c9_logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/media/7170738c9_logo.png" />
     <link rel="manifest" href="/manifest.json" />
 
     <title>Valu Kraft</title>
     <meta name="description" content="Creaciones artesanales personalizadas para tus momentos más especiales." />
-    <meta property="og:title" content="Valu Kraft" />
-    <meta property="og:description" content="Creaciones artesanales personalizadas para tus momentos más especiales." />
-    <meta property="og:image" content="/media/7170738c9_logo.png" />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Valu Kraft" />
-    <meta name="twitter:title" content="Valu Kraft" />
-    <meta name="twitter:description" content="Creaciones artesanales personalizadas para tus momentos más especiales." />
-    <meta name="twitter:image" content="/media/7170738c9_logo.png" />
-    <meta name="twitter:card" content="summary_large_image" />
 
-    <link rel="stylesheet" href="/assets/index--L5SMwUw.css" crossorigin="" />
-    <script is:inline type="module" src="/assets/index-DEgNbQEQ.js" crossorigin=""></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   </head>
   <body>
-    <div id="root"></div>
+    <Navbar />
+    <Hero />
+    <Momentos />
+    <Proceso />
+    <Productos />
+    <Personaliza />
+    <Testimonios />
+    <CTA />
+    <Footer />
   </body>
 </html>
+
+<style is:global>
+  :root {
+    --background: hsl(30 33% 98%);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--background);
+    color: #2f1f28;
+    font-family: 'DM Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  img { max-width: 100%; }
+  a { transition: all .22s ease; }
+</style>

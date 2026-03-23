@@ -1,0 +1,97 @@
+---
+const products = [
+  {
+    title: 'Toppers Personalizados',
+    subtitle: 'Para pasteles y decoración',
+    image: '/media/images_public_69c11d14bba13990f133d6d0_a8362fcd5_generated_9f17c651.png',
+    tag: 'Más popular',
+    span: 'tall'
+  },
+  {
+    title: 'Invitaciones',
+    subtitle: 'Bodas, cumpleaños y más',
+    image: '/media/images_public_69c11d14bba13990f133d6d0_857462f94_generated_dffdc014.png',
+    tag: 'Nuevo diseño',
+    span: 'normal'
+  },
+  {
+    title: 'Cajas y Packaging',
+    subtitle: 'Empaque premium personalizado',
+    image: '/media/images_public_69c11d14bba13990f133d6d0_c10e70a5b_generated_c64166fd.png',
+    tag: '',
+    span: 'normal'
+  },
+  {
+    title: 'Regalos Personalizados',
+    subtitle: 'Detalles únicos para cada ocasión',
+    image: '/media/images_public_69c11d14bba13990f133d6d0_296d97e84_generated_a3db9b95.png',
+    tag: 'Exclusivo',
+    span: 'wide'
+  }
+];
+---
+
+<section id="productos" class="lk-productos">
+  <div class="lk-productos__container">
+    <header class="lk-productos__head">
+      <div>
+        <span>Catálogo</span>
+        <h2>Nuestros productos</h2>
+      </div>
+      <p>Cada pieza es una obra de arte hecha a medida para ti</p>
+    </header>
+
+    <div class="lk-productos__grid">
+      {products.map((product) => (
+        <article class={`lk-pr-card lk-pr-card--${product.span}`}>
+          <img src={product.image} alt={product.title} />
+          <div class="lk-pr-card__overlay"></div>
+
+          {product.tag && <span class="lk-pr-card__tag">{product.tag}</span>}
+          <span class="lk-pr-card__arrow">↗</span>
+
+          <div class="lk-pr-card__content">
+            <h3>{product.title}</h3>
+            <p>{product.subtitle}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .lk-productos { padding: 100px 0 120px; }
+  .lk-productos__container { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+  .lk-productos__head { display: flex; flex-direction: column; gap: 14px; margin-bottom: 44px; }
+  .lk-productos__head span { color: hsl(42 65% 55%); text-transform: uppercase; letter-spacing: .14em; font-size: .78rem; font-weight: 700; }
+  .lk-productos__head h2 { margin: 12px 0 0; font-family: 'Playfair Display', Georgia, serif; font-size: clamp(2rem, 4.4vw, 3.2rem); color: #2f1f28; }
+  .lk-productos__head p { margin: 0; max-width: 420px; color: #726069; font-size: 1.03rem; }
+
+  .lk-productos__grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+
+  .lk-pr-card { position: relative; border-radius: 18px; overflow: hidden; min-height: 280px; }
+  .lk-pr-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .7s ease; }
+  .lk-pr-card:hover img { transform: scale(1.05); }
+  .lk-pr-card__overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(18,12,16,.84), rgba(18,12,16,.26) 42%, transparent); }
+
+  .lk-pr-card__tag { position: absolute; top: 14px; left: 14px; border-radius: 999px; padding: 6px 10px; font-size: .75rem; font-weight: 700; color: #fff; background: hsla(42,65%,55%,.92); }
+  .lk-pr-card__arrow { position: absolute; top: 14px; right: 14px; width: 38px; height: 38px; border-radius: 999px; display: grid; place-items: center; color: #fff; background: rgba(255,255,255,.2); backdrop-filter: blur(6px); opacity: 0; transform: translateY(8px); transition: all .28s ease; }
+  .lk-pr-card:hover .lk-pr-card__arrow { opacity: 1; transform: translateY(0); }
+
+  .lk-pr-card__content { position: absolute; left: 0; right: 0; bottom: 0; padding: 18px; }
+  .lk-pr-card h3 { margin: 0; font-family: 'Playfair Display', Georgia, serif; font-size: 1.35rem; color: #fff; }
+  .lk-pr-card p { margin: 6px 0 0; color: rgba(255,255,255,.8); font-size: .9rem; }
+
+  @media (min-width: 900px) {
+    .lk-productos__head { flex-direction: row; align-items: flex-end; justify-content: space-between; margin-bottom: 58px; }
+    .lk-productos__grid {
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 14px;
+      grid-auto-rows: minmax(180px, auto);
+    }
+    .lk-pr-card--tall { grid-row: span 2; min-height: 360px; }
+    .lk-pr-card--normal { min-height: 172px; }
+    .lk-pr-card--wide { grid-column: span 2; min-height: 220px; }
+  }
+</style>

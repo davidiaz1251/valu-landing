@@ -1,0 +1,128 @@
+<section class="lk-cta">
+  <div class="lk-cta__bg"></div>
+  <div class="lk-cta__container">
+    <div class="lk-cta__badge">✦ Cada pieza es única</div>
+
+    <h2>
+      ¿Listo para crear algo
+      <span class="lk-cta__underline">inolvidable</span>?
+    </h2>
+
+    <p>
+      Convierte tus ideas en piezas artesanales que emocionan.
+      Escríbenos y empecemos a diseñar juntos tu próximo momento especial.
+    </p>
+
+    <div class="lk-cta__actions">
+      <a href="https://wa.me/" target="_blank" rel="noopener noreferrer" class="lk-cta__btn lk-cta__btn--primary">Haz tu pedido →</a>
+      <a href="#productos" class="lk-cta__btn lk-cta__btn--ghost">Ver productos</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .lk-cta {
+    position: relative;
+    overflow: hidden;
+    padding: 110px 0 120px;
+  }
+  .lk-cta__bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 22% 16%, hsla(42,65%,65%,.15), transparent 36%),
+      radial-gradient(circle at 78% 82%, hsla(350,40%,90%,.6), transparent 44%),
+      linear-gradient(135deg, hsla(160,30%,45%,.05), hsla(350,40%,90%,.36) 45%, hsla(160,30%,85%,.3));
+  }
+
+  .lk-cta__container {
+    position: relative;
+    z-index: 1;
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 0 20px;
+    text-align: center;
+  }
+
+  .lk-cta__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(228,218,213,.75);
+    border-radius: 999px;
+    padding: 8px 14px;
+    background: rgba(255,255,255,.72);
+    color: #6a5962;
+    font-size: .86rem;
+    font-weight: 600;
+    margin-bottom: 24px;
+  }
+
+  .lk-cta h2 {
+    margin: 0;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(2.3rem, 6vw, 4.9rem);
+    line-height: 1.06;
+    color: #2f1f28;
+  }
+
+  .lk-cta__underline {
+    position: relative;
+    display: inline-block;
+  }
+  .lk-cta__underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -6px;
+    height: 10px;
+    background: radial-gradient(ellipse at center, hsla(42,65%,65%,.75), transparent 72%);
+  }
+
+  .lk-cta p {
+    margin: 22px auto 0;
+    max-width: 760px;
+    color: #6b5963;
+    font-size: 1.08rem;
+    line-height: 1.65;
+  }
+
+  .lk-cta__actions {
+    margin-top: 34px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lk-cta__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    border-radius: 999px;
+    padding: 14px 26px;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  .lk-cta__btn--primary {
+    background: hsl(160 30% 45%);
+    color: #fff;
+    box-shadow: 0 14px 30px rgba(50,130,105,.28);
+  }
+
+  .lk-cta__btn--ghost {
+    border: 2px solid rgba(226,215,208,.9);
+    color: #3f2f39;
+    background: rgba(255,255,255,.62);
+  }
+
+  @media (min-width: 700px) {
+    .lk-cta__actions {
+      flex-direction: row;
+    }
+  }
+</style>
