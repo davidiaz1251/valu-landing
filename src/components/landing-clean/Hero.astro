@@ -24,7 +24,11 @@ const dots = Array.from({ length: 6 }, (_, i) => ({
         <div class="lk-pill">✦ <span>Hecho a mano con amor</span></div>
 
         <h1>
-          Creamos <span class="lk-underline">momentos</span><br />
+          Creamos <span class="lk-underline">momentos
+            <svg class="lk-underline-svg" viewBox="0 0 200 12" fill="none" aria-hidden="true">
+              <path d="M2 8C40 2 100 2 198 8" />
+            </svg>
+          </span><br />
           que se <em>sienten</em>
         </h1>
 
@@ -85,15 +89,8 @@ const dots = Array.from({ length: 6 }, (_, i) => ({
   .lk-hero h1 { margin: 0; font-family: 'Playfair Display', Georgia, serif; font-size: clamp(2.25rem, 7vw, 4.5rem); line-height: 1.05; font-weight: 600; color: #2f1f28; }
   .lk-hero h1 em { color: hsl(160 30% 45%); font-style: normal; }
   .lk-underline { position: relative; display: inline-block; }
-  .lk-underline::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -6px;
-    height: 10px;
-    background: radial-gradient(ellipse at center, hsla(42,65%,65%,.78), transparent 72%);
-  }
+  .lk-underline .lk-underline-svg { position: absolute; left: 0; bottom: -8px; width: 100%; height: auto; overflow: visible; }
+  .lk-underline .lk-underline-svg path { stroke: hsl(42 65% 65%); stroke-width: 3; stroke-linecap: round; fill: none; }
 
   .lk-hero p { margin: 24px 0 0; max-width: 540px; color: #6b5963; font-size: clamp(1.02rem, 1.6vw, 1.22rem); line-height: 1.65; }
 
