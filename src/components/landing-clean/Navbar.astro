@@ -18,7 +18,10 @@ const navLinks = [
 
       <div class="lk-nav__links">
         {navLinks.map((link) => (
-          <a href={link.href} class="lk-nav__link">{link.label}</a>
+          <a href={link.href} class="lk-nav__link">
+            {link.label}
+            <span class="lk-nav__line"></span>
+          </a>
         ))}
       </div>
 
@@ -29,8 +32,10 @@ const navLinks = [
 
       <button class="lk-nav__menu" id="lkNavMenuBtn" aria-label="Abrir menú">☰</button>
     </div>
+  </div>
 
-    <div class="lk-mobile" id="lkMobileMenu" hidden>
+  <div class="lk-mobile" id="lkMobileMenu" hidden>
+    <div class="lk-mobile__inner">
       {navLinks.map((link) => (
         <a href={link.href} class="lk-mobile__link">{link.label}</a>
       ))}
@@ -45,10 +50,7 @@ const navLinks = [
   const btn = document.getElementById('lkNavMenuBtn');
   const mobile = document.getElementById('lkMobileMenu');
 
-  const onScroll = () => {
-    if (!nav) return;
-    nav.classList.toggle('is-scrolled', window.scrollY > 40);
-  };
+  const onScroll = () => nav?.classList.toggle('is-scrolled', window.scrollY > 40);
   onScroll();
   window.addEventListener('scroll', onScroll);
 
@@ -65,39 +67,40 @@ const navLinks = [
 </script>
 
 <style>
-  .lk-nav { position: fixed; inset: 0 0 auto 0; z-index: 50; transition: all .45s ease; }
-  .lk-nav.is-scrolled { background: rgba(252,249,246,.8); backdrop-filter: blur(14px); border-bottom: 1px solid rgba(226,215,208,.6); box-shadow: 0 4px 20px rgba(0,0,0,.04); }
-  .lk-nav__container { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+  .lk-nav { position: fixed; inset: 0 0 auto 0; z-index: 50; transition: all .5s ease; background: transparent; }
+  .lk-nav.is-scrolled { background: rgba(252,249,246,.8); backdrop-filter: blur(18px); border-bottom: 1px solid rgba(228,218,213,.6); box-shadow: 0 2px 12px rgba(0,0,0,.04); }
+
+  .lk-nav__container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
   .lk-nav__row { height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+
   .lk-brand { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
-  .lk-brand__spark { color: hsl(42 65% 65%); }
-  .lk-brand__text { font-family: 'Playfair Display', Georgia, serif; font-weight: 600; font-size: 1.35rem; color: #3b2731; }
-  .lk-nav__links { display: none; gap: 28px; }
-  .lk-nav__link { color: #765f6a; text-decoration: none; font-size: .93rem; font-weight: 500; }
+  .lk-brand__spark { color: hsl(42 65% 65%); transition: transform .25s ease; }
+  .lk-brand:hover .lk-brand__spark { transform: rotate(12deg); }
+  .lk-brand__text { font-family: 'Playfair Display', Georgia, serif; font-size: 1.3rem; font-weight: 600; color: #2f1f28; }
+
+  .lk-nav__links { display: none; align-items: center; gap: 32px; }
+  .lk-nav__link { position: relative; text-decoration: none; color: #7a6871; font-size: .9rem; font-weight: 500; }
+  .lk-nav__line { position: absolute; left: 0; bottom: -4px; width: 0; height: 2px; border-radius: 999px; background: hsl(42 65% 65%); transition: width .25s ease; }
+  .lk-nav__link:hover { color: #2f1f28; }
+  .lk-nav__link:hover .lk-nav__line { width: 100%; }
 
   .lk-nav__actions { display: none; align-items: center; gap: 10px; }
-  .lk-nav__login {
-    text-decoration: none;
-    border-radius: 999px;
-    border: 1px solid rgba(226,215,208,.95);
-    background: rgba(255,255,255,.66);
-    color: #5f4a54;
-    padding: 9px 15px;
-    font-weight: 600;
-    font-size: .87rem;
-  }
-  .lk-nav__cta { text-decoration: none; border-radius: 999px; background: hsl(160 30% 45%); color: #fff; padding: 10px 18px; font-weight: 600; font-size: .9rem; }
+  .lk-nav__login { text-decoration: none; border-radius: 999px; border: 1px solid rgba(228,218,213,.9); padding: 10px 14px; font-size: .84rem; font-weight: 600; color: #5f4a54; background: rgba(255,255,255,.7); }
+  .lk-nav__cta { text-decoration: none; border-radius: 999px; background: hsl(160 30% 45%); color: #fff; padding: 10px 18px; font-size: .88rem; font-weight: 600; box-shadow: 0 10px 20px rgba(50,130,105,.15); }
 
-  .lk-nav__menu { border: 0; background: transparent; font-size: 1.1rem; color: #3b2731; }
-  .lk-mobile { border-top: 1px solid rgba(226,215,208,.7); background: rgba(252,249,246,.96); backdrop-filter: blur(10px); padding: 10px 0 14px; display: grid; gap: 8px; }
-  .lk-mobile__link { color: #6e5a64; text-decoration: none; padding: 7px 0; font-weight: 500; }
-  .lk-mobile__login { display: inline-flex; width: max-content; text-decoration: none; border-radius: 999px; border: 1px solid rgba(226,215,208,.95); background: rgba(255,255,255,.66); color: #5f4a54; padding: 9px 15px; font-weight: 600; font-size: .87rem; }
-  .lk-mobile__cta { margin-top: 6px; display: inline-flex; width: max-content; text-decoration: none; border-radius: 999px; background: hsl(160 30% 45%); color: #fff; padding: 10px 18px; font-weight: 600; font-size: .9rem; }
+  .lk-nav__menu { border: 0; background: transparent; color: #2f1f28; font-size: 1.1rem; padding: 6px; }
 
-  @media (min-width: 900px) {
+  .lk-mobile { background: rgba(252,249,246,.95); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(228,218,213,.6); overflow: hidden; }
+  .lk-mobile__inner { max-width: 1280px; margin: 0 auto; padding: 14px 20px 16px; display: grid; gap: 6px; }
+  .lk-mobile__link { display: block; text-decoration: none; color: #6e5a64; font-size: 1rem; font-weight: 500; padding: 8px 0; }
+  .lk-mobile__login { margin-top: 6px; text-decoration: none; width: max-content; border-radius: 999px; border: 1px solid rgba(228,218,213,.9); padding: 10px 14px; font-size: .84rem; font-weight: 600; color: #5f4a54; background: rgba(255,255,255,.7); }
+  .lk-mobile__cta { margin-top: 4px; text-decoration: none; width: max-content; border-radius: 999px; background: hsl(160 30% 45%); color: #fff; padding: 10px 18px; font-size: .88rem; font-weight: 600; }
+
+  @media (min-width: 768px) {
     .lk-nav__row { height: 80px; }
     .lk-nav__links { display: flex; }
     .lk-nav__actions { display: inline-flex; }
     .lk-nav__menu, .lk-mobile { display: none; }
+    .lk-brand__text { font-size: 1.5rem; }
   }
 </style>
