@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout title="Productos | Valu Kraft" description="Catálogo de productos de Valu Kraft. Pedidos por WhatsApp e Instagram.">
-  <section class="section section--lg">
+  <section class="section section--lg products-hero">
     <div class="container">
       <span class="section__badge">Catálogo</span>
       <h1>Productos Valu Kraft</h1>
@@ -12,7 +12,7 @@ import Layout from '../layouts/Layout.astro';
     </div>
   </section>
 
-  <section class="section">
+  <section class="section products-tabs">
     <div class="container tabs" id="category-tabs"></div>
   </section>
 
@@ -36,4 +36,7 @@ import Layout from '../layouts/Layout.astro';
   .product-badge { font-size: .8rem; width: max-content; border-radius: 999px; background: #f3e8ff; color: #6b21a8; padding: .25rem .6rem; font-weight: 700; }
   .product-card__actions { display: grid; gap: .55rem; }
   .product-card__actions .btn { justify-content: center; }
+
+  .products-hero { padding-bottom: var(--space-8); }
+  .products-tabs { padding-top: 0; padding-bottom: var(--space-8); }
 </style>
