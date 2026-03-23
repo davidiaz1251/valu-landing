@@ -29,7 +29,7 @@ const categories = catalogCategories.map((category) => ({
     </div>
   </section>
 
-  <div id="catalog-root" data-categories={JSON.stringify(catalogCategories)} data-products={JSON.stringify(catalogProducts)}>
+  <div id="catalog-root">
     {categories.map((category) => (
       <section class="section" id={category.id}>
         <div class="container">
@@ -67,64 +67,6 @@ const categories = catalogCategories.map((category) => ({
       </section>
     ))}
   </div>
-
-  <script is:inline>
-    (() => {
-      const KEY = 'valu_catalog_products_v1';
-      const root = document.getElementById('catalog-root');
-      if (!root) return;
-
-      const categories = JSON.parse(root.dataset.categories || '[]');
-      const fallbackProducts = JSON.parse(root.dataset.products || '[]');
-      const localProducts = JSON.parse(localStorage.getItem(KEY) || 'null');
-      if (!Array.isArray(localProducts)) return;
-
-      const products = localProducts.filter((p) => p.active !== false).sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
-      if (!products.length) return;
-
-      const escapeHtml = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
-      const byCategory = categories.map((cat) => ({ ...cat, products: products.filter((p) => p.categoryId === cat.id) })).filter((c) => c.products.length > 0);
-      if (!byCategory.length) return;
-
-      const tabs = document.getElementById('category-tabs');
-      if (tabs) {
-        tabs.innerHTML = byCategory.map((c) => `<a href="#${escapeHtml(c.id)}" class="tab-link">${escapeHtml(c.title)}</a>`).join('');
-      }
-
-      root.innerHTML = byCategory.map((category) => {
-        const cards = category.products.map((product) => {
-          const text = encodeURIComponent(`Hola, quiero info de ${product.name}. ¿Me puedes indicar opciones de personalización y tiempo de entrega?`);
-          const media = product.images?.[0]
-            ? `<img src="${escapeHtml(product.images[0])}" alt="${escapeHtml(product.name)}" loading="lazy" />`
-            : `<div class="product-card__placeholder">Valu Kraft</div>`;
-          return `
-            <article class="product-card">
-              <div class="product-card__media">${media}</div>
-              <div class="product-card__body">
-                <h3>${escapeHtml(product.name)}</h3>
-                <p>${escapeHtml(product.description)}</p>
-                ${product.customizable ? '<span class="product-badge">Personalizable</span>' : ''}
-                <div class="product-card__actions">
-                  <a href="https://wa.me/${WHATSAPP_NUMBER}?text=${text}" class="btn btn--primary" target="_blank" rel="noopener noreferrer">Pedir por WhatsApp</a>
-                  <a href="https://instagram.com/${INSTAGRAM_USERNAME}" class="btn btn--secondary" target="_blank" rel="noopener noreferrer">Pedir por Instagram</a>
-                </div>
-              </div>
-            </article>
-          `;
-        }).join('');
-
-        return `
-          <section class="section" id="${escapeHtml(category.id)}">
-            <div class="container">
-              <h2>${escapeHtml(category.title)}</h2>
-              <p class="section__description">${escapeHtml(category.description)}</p>
-              <div class="product-grid">${cards}</div>
-            </div>
-          </section>
-        `;
-      }).join('');
-    })();
-  </script>
 </Layout>
 
 <style>
