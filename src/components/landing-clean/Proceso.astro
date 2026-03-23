@@ -1,0 +1,95 @@
+---
+const steps = [
+  {
+    num: '01',
+    title: 'Diseño',
+    description: 'Creamos un diseño personalizado basado en tu visión y estilo',
+    icon: '✎',
+    image: '/media/images_public_69c11d14bba13990f133d6d0_d18e9f2af_generated_ae86e30b.png'
+  },
+  {
+    num: '02',
+    title: 'Corte',
+    description: 'Utilizamos tecnología de precisión para cortes perfectos en cada detalle',
+    icon: '✂',
+    image: '/media/images_public_69c11d14bba13990f133d6d0_cd65a895f_generated_cc7704cd.png'
+  },
+  {
+    num: '03',
+    title: 'Ensamblaje',
+    description: 'Cada capa se une a mano con cuidado y materiales premium',
+    icon: '✋',
+    image: '/media/images_public_69c11d14bba13990f133d6d0_b23bafa5f_generated_4b856256.png'
+  },
+  {
+    num: '04',
+    title: 'Entrega',
+    description: 'Tu creación llega lista para brillar en tu momento especial',
+    icon: '🎁',
+    image: '/media/images_public_69c11d14bba13990f133d6d0_5b93f955f_generated_49441a7f.png'
+  }
+];
+---
+
+<section id="proceso" class="lk-proceso">
+  <div class="lk-proceso__container">
+    <header class="lk-proceso__head">
+      <span>Nuestro proceso</span>
+      <h2>Hecho a mano con detalle</h2>
+      <p>Del concepto a la realidad, cada paso importa</p>
+    </header>
+
+    <div class="lk-proceso__grid">
+      {steps.map((step, index) => (
+        <article class={`lk-p-card ${index % 2 ? 'is-offset' : ''}`}>
+          <div class="lk-p-card__media">
+            <img src={step.image} alt={step.title} />
+            <div class="lk-p-card__fade"></div>
+            <span class="lk-p-card__num">{step.num}</span>
+          </div>
+
+          <div class="lk-p-card__body">
+            <div class="lk-p-card__icon">{step.icon}</div>
+            <h3>{step.title}</h3>
+            <p>{step.description}</p>
+          </div>
+
+          {index < steps.length - 1 && <i class="lk-p-card__connector" aria-hidden="true"></i>}
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .lk-proceso { padding: 100px 0 120px; background: rgba(245,240,236,.55); position: relative; overflow: hidden; }
+  .lk-proceso::before { content: ''; position: absolute; top: 90px; right: 40px; width: 170px; height: 170px; border-radius: 50%; background: hsla(42,65%,65%,.12); filter: blur(28px); }
+  .lk-proceso::after { content: ''; position: absolute; bottom: 70px; left: 20px; width: 220px; height: 220px; border-radius: 50%; background: hsla(350,40%,90%,.65); filter: blur(36px); }
+
+  .lk-proceso__container { position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+  .lk-proceso__head { text-align: center; margin-bottom: 54px; }
+  .lk-proceso__head span { color: hsl(42 65% 55%); text-transform: uppercase; letter-spacing: .14em; font-size: .78rem; font-weight: 700; }
+  .lk-proceso__head h2 { margin: 12px 0 0; font-family: 'Playfair Display', Georgia, serif; font-size: clamp(2rem, 4.4vw, 3.2rem); color: #2f1f28; }
+  .lk-proceso__head p { margin: 14px 0 0; color: #726069; font-size: 1.03rem; }
+
+  .lk-proceso__grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
+  .lk-p-card { position: relative; background: #fff; border: 1px solid rgba(228,218,213,.65); border-radius: 18px; overflow: hidden; }
+  .lk-p-card__media { position: relative; aspect-ratio: 1 / 1; overflow: hidden; }
+  .lk-p-card__media img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s ease; }
+  .lk-p-card:hover .lk-p-card__media img { transform: scale(1.05); }
+  .lk-p-card__fade { position: absolute; inset: 0; background: linear-gradient(to top, rgba(255,255,255,.75), transparent 58%); }
+  .lk-p-card__num { position: absolute; top: 14px; left: 14px; font-family: 'Playfair Display', Georgia, serif; font-size: 2.25rem; line-height: 1; color: rgba(255,255,255,.36); font-weight: 700; }
+
+  .lk-p-card__body { margin-top: -30px; position: relative; padding: 0 16px 18px; }
+  .lk-p-card__icon { width: 42px; height: 42px; border-radius: 12px; background: hsla(160,30%,45%,.1); border: 1px solid hsla(160,30%,45%,.18); display: grid; place-items: center; font-size: 1.1rem; }
+  .lk-p-card h3 { margin: 10px 0 0; font-family: 'Playfair Display', Georgia, serif; color: #2f1f28; font-size: 1.26rem; }
+  .lk-p-card p { margin: 8px 0 0; color: #6f5b65; font-size: .92rem; line-height: 1.5; }
+
+  .lk-p-card__connector { display: none; }
+
+  @media (min-width: 1024px) {
+    .lk-proceso__grid { grid-template-columns: repeat(4, minmax(0,1fr)); gap: 18px; }
+    .lk-p-card.is-offset { margin-top: 44px; }
+    .lk-p-card__connector { display: block; position: absolute; top: 50%; right: -12px; width: 20px; border-top: 2px dashed rgba(196,177,167,.8); z-index: 2; }
+  }
+</style>

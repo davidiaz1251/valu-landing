@@ -1,0 +1,58 @@
+<footer class="lk-footer">
+  <div class="lk-footer__container">
+    <div class="lk-footer__grid">
+      <div>
+        <div class="lk-footer__brand">✦ <span>Valu Kraft</span></div>
+        <p>
+          Creaciones artesanales personalizadas para tus momentos más especiales.
+          Cada pieza hecha con amor y atención al detalle.
+        </p>
+      </div>
+
+      <div>
+        <h4>Explora</h4>
+        <nav class="lk-footer__links">
+          <a href="#momentos">Momentos</a>
+          <a href="#proceso">Proceso</a>
+          <a href="#productos">Productos</a>
+          <a href="#personaliza">Personaliza</a>
+          <a href="#testimonios">Testimonios</a>
+        </nav>
+      </div>
+
+      <div>
+        <h4>Contacto</h4>
+        <div class="lk-footer__contact">
+          <p>WhatsApp: Escríbenos directo</p>
+          <p>Instagram: @valukraft</p>
+          <p>Email: hola@valukraft.com</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="lk-footer__bottom">
+      <small>© 2026 Valu Kraft. Todos los derechos reservados.</small>
+      <small>Hecho con ♥ en cada detalle</small>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .lk-footer { border-top: 1px solid rgba(228,218,213,.65); background: rgba(255,255,255,.62); }
+  .lk-footer__container { max-width: 1180px; margin: 0 auto; padding: 54px 20px 26px; }
+  .lk-footer__grid { display: grid; gap: 30px; }
+  .lk-footer__brand { display: inline-flex; align-items: center; gap: 8px; color: hsl(42 65% 55%); font-weight: 700; }
+  .lk-footer__brand span { color: #2f1f28; font-family: 'Playfair Display', Georgia, serif; font-size: 1.24rem; }
+  .lk-footer p { margin: 12px 0 0; color: #6f5b65; line-height: 1.6; max-width: 320px; }
+  .lk-footer h4 { margin: 0; color: #3f2f39; font-size: .97rem; }
+  .lk-footer__links { margin-top: 10px; display: grid; gap: 8px; }
+  .lk-footer__links a { text-decoration: none; color: #6f5b65; font-size: .93rem; }
+  .lk-footer__contact { margin-top: 10px; display: grid; gap: 8px; }
+  .lk-footer__contact p { margin: 0; color: #6f5b65; font-size: .93rem; }
+  .lk-footer__bottom { margin-top: 34px; padding-top: 14px; border-top: 1px solid rgba(228,218,213,.65); display: flex; flex-direction: column; gap: 8px; color: #8a7780; font-size: .78rem; }
+
+  @media (min-width: 900px) {
+    .lk-footer__grid { grid-template-columns: 1.2fr .8fr .9fr; gap: 42px; }
+    .lk-footer__bottom { flex-direction: row; justify-content: space-between; align-items: center; }
+  }
+</style>

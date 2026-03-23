@@ -1,0 +1,198 @@
+---
+const steps = [
+  {
+    icon: '💬',
+    title: 'Cuéntanos tu idea',
+    description: 'Escríbenos con los detalles de lo que imaginas: tema, colores, estilo y fecha del evento.'
+  },
+  {
+    icon: '🎨',
+    title: 'Diseñamos juntos',
+    description: 'Te enviamos una propuesta personalizada. Tú apruebas o ajustamos hasta que sea perfecto.'
+  },
+  {
+    icon: '📦',
+    title: 'Lo creamos a mano',
+    description: 'Con materiales premium y técnicas artesanales, damos vida a tu pieza única.'
+  },
+  {
+    icon: '🎉',
+    title: '¡Listo para brillar!',
+    description: 'Tu creación llega empacada con cariño, lista para hacer tu momento inolvidable.'
+  }
+];
+---
+
+<section id="personaliza" class="lk-personaliza">
+  <div class="lk-personaliza__container">
+    <header class="lk-personaliza__head">
+      <span>Pedidos personalizados</span>
+      <h2>Personaliza tu idea</h2>
+      <p>En 4 simples pasos, convertimos tu visión en realidad</p>
+    </header>
+
+    <div class="lk-personaliza__grid">
+      {steps.map((step, index) => (
+        <article class="lk-pe-step">
+          {index < steps.length - 1 && <i class="lk-pe-step__connector" aria-hidden="true"></i>}
+
+          <div class="lk-pe-step__bubble">{step.icon}</div>
+          <span class="lk-pe-step__num">{index + 1}</span>
+
+          <h3>{step.title}</h3>
+          <p>{step.description}</p>
+        </article>
+      ))}
+    </div>
+
+    <div class="lk-personaliza__ctaWrap">
+      <a href="https://wa.me/" target="_blank" rel="noopener noreferrer" class="lk-personaliza__cta">Empieza tu pedido →</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .lk-personaliza {
+    padding: 100px 0 120px;
+    background: rgba(245,240,236,.55);
+    position: relative;
+    overflow: hidden;
+  }
+  .lk-personaliza::before {
+    content: '';
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    background: hsla(350,40%,90%,.42);
+    filter: blur(44px);
+  }
+  .lk-personaliza::after {
+    content: '';
+    position: absolute;
+    right: -40px;
+    bottom: -60px;
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    background: hsla(160,30%,85%,.28);
+    filter: blur(40px);
+  }
+
+  .lk-personaliza__container {
+    position: relative;
+    z-index: 1;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .lk-personaliza__head {
+    text-align: center;
+    margin-bottom: 54px;
+  }
+  .lk-personaliza__head span {
+    color: hsl(42 65% 55%);
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    font-size: .78rem;
+    font-weight: 700;
+  }
+  .lk-personaliza__head h2 {
+    margin: 12px 0 0;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(2rem, 4.4vw, 3.2rem);
+    color: #2f1f28;
+  }
+  .lk-personaliza__head p {
+    margin: 14px 0 0;
+    color: #726069;
+    font-size: 1.03rem;
+  }
+
+  .lk-personaliza__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 24px 16px;
+  }
+
+  .lk-pe-step {
+    position: relative;
+    text-align: center;
+  }
+
+  .lk-pe-step__bubble {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 14px;
+    border-radius: 18px;
+    display: grid;
+    place-items: center;
+    font-size: 1.45rem;
+    background: #fff;
+    border: 1px solid rgba(225,214,208,.75);
+    box-shadow: 0 6px 16px rgba(0,0,0,.06);
+  }
+
+  .lk-pe-step__num {
+    position: absolute;
+    top: -8px;
+    right: calc(50% - 34px);
+    width: 22px;
+    height: 22px;
+    border-radius: 999px;
+    background: hsla(42,65%,65%,.28);
+    display: grid;
+    place-items: center;
+    font-size: .72rem;
+    font-weight: 700;
+    color: #7b5f1d;
+  }
+
+  .lk-pe-step h3 {
+    margin: 0;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.1rem;
+    color: #2f1f28;
+  }
+  .lk-pe-step p {
+    margin: 8px 0 0;
+    color: #6f5b65;
+    font-size: .9rem;
+    line-height: 1.5;
+    padding: 0 8px;
+  }
+
+  .lk-pe-step__connector { display: none; }
+
+  .lk-personaliza__ctaWrap { text-align: center; margin-top: 44px; }
+  .lk-personaliza__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    border-radius: 999px;
+    padding: 13px 24px;
+    font-weight: 600;
+    background: hsl(160 30% 45%);
+    color: #fff;
+  }
+
+  @media (min-width: 1024px) {
+    .lk-personaliza__grid {
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 22px;
+    }
+    .lk-pe-step__connector {
+      display: block;
+      position: absolute;
+      top: 30px;
+      left: calc(50% + 38px);
+      width: calc(100% - 76px);
+      border-top: 2px dashed rgba(196,177,167,.75);
+    }
+  }
+</style>

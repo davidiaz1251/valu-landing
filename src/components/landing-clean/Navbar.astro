@@ -1,0 +1,85 @@
+---
+const navLinks = [
+  { label: 'Momentos', href: '#momentos' },
+  { label: 'Proceso', href: '#proceso' },
+  { label: 'Productos', href: '#productos' },
+  { label: 'Personaliza', href: '#personaliza' },
+  { label: 'Testimonios', href: '#testimonios' }
+];
+---
+
+<nav class="lk-nav" id="lkNav">
+  <div class="lk-nav__container">
+    <div class="lk-nav__row">
+      <a href="#" class="lk-brand">
+        <span class="lk-brand__spark">✦</span>
+        <span class="lk-brand__text">Valu Kraft</span>
+      </a>
+
+      <div class="lk-nav__links">
+        {navLinks.map((link) => (
+          <a href={link.href} class="lk-nav__link">{link.label}</a>
+        ))}
+      </div>
+
+      <a href="#personaliza" class="lk-nav__cta">Haz tu pedido</a>
+
+      <button class="lk-nav__menu" id="lkNavMenuBtn" aria-label="Abrir menú">☰</button>
+    </div>
+
+    <div class="lk-mobile" id="lkMobileMenu" hidden>
+      {navLinks.map((link) => (
+        <a href={link.href} class="lk-mobile__link">{link.label}</a>
+      ))}
+      <a href="#personaliza" class="lk-mobile__cta">Haz tu pedido</a>
+    </div>
+  </div>
+</nav>
+
+<script is:inline>
+  const nav = document.getElementById('lkNav');
+  const btn = document.getElementById('lkNavMenuBtn');
+  const mobile = document.getElementById('lkMobileMenu');
+
+  const onScroll = () => {
+    if (!nav) return;
+    nav.classList.toggle('is-scrolled', window.scrollY > 40);
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll);
+
+  btn?.addEventListener('click', () => {
+    if (!mobile) return;
+    const open = mobile.hasAttribute('hidden');
+    if (open) mobile.removeAttribute('hidden');
+    else mobile.setAttribute('hidden', '');
+  });
+
+  mobile?.querySelectorAll('a').forEach((a) => {
+    a.addEventListener('click', () => mobile.setAttribute('hidden', ''));
+  });
+</script>
+
+<style>
+  .lk-nav { position: fixed; inset: 0 0 auto 0; z-index: 50; transition: all .45s ease; }
+  .lk-nav.is-scrolled { background: rgba(252,249,246,.8); backdrop-filter: blur(14px); border-bottom: 1px solid rgba(226,215,208,.6); box-shadow: 0 4px 20px rgba(0,0,0,.04); }
+  .lk-nav__container { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+  .lk-nav__row { height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+  .lk-brand { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
+  .lk-brand__spark { color: hsl(42 65% 65%); }
+  .lk-brand__text { font-family: 'Playfair Display', Georgia, serif; font-weight: 600; font-size: 1.35rem; color: #3b2731; }
+  .lk-nav__links { display: none; gap: 28px; }
+  .lk-nav__link { color: #765f6a; text-decoration: none; font-size: .93rem; font-weight: 500; }
+  .lk-nav__cta { display: none; text-decoration: none; border-radius: 999px; background: hsl(160 30% 45%); color: #fff; padding: 10px 18px; font-weight: 600; font-size: .9rem; }
+  .lk-nav__menu { border: 0; background: transparent; font-size: 1.1rem; color: #3b2731; }
+  .lk-mobile { border-top: 1px solid rgba(226,215,208,.7); background: rgba(252,249,246,.96); backdrop-filter: blur(10px); padding: 10px 0 14px; display: grid; gap: 8px; }
+  .lk-mobile__link { color: #6e5a64; text-decoration: none; padding: 7px 0; font-weight: 500; }
+  .lk-mobile__cta { margin-top: 6px; display: inline-flex; width: max-content; text-decoration: none; border-radius: 999px; background: hsl(160 30% 45%); color: #fff; padding: 10px 18px; font-weight: 600; font-size: .9rem; }
+
+  @media (min-width: 900px) {
+    .lk-nav__row { height: 80px; }
+    .lk-nav__links { display: flex; }
+    .lk-nav__cta { display: inline-flex; }
+    .lk-nav__menu, .lk-mobile { display: none; }
+  }
+</style>
