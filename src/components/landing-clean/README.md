@@ -2,7 +2,6 @@ Landing clean migration (Astro native)
 
 Goal:
 - Replicate Base44 design in Astro components
-- Remove dependency on public/assets/index-DEgNbQEQ.js
 
 Planned sections:
 1. Navbar
