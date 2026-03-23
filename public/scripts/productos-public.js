@@ -11,9 +11,7 @@ init();
 
 async function init() {
   try {
-    if (!hasSupabaseConfig() || !supabase) {
-      throw new Error('No hay conexión con Supabase.');
-    }
+    if (!hasSupabaseConfig() || !supabase) throw new Error('No hay conexión con Supabase.');
 
     const [catRes, prodRes] = await Promise.all([
       supabase.from('products_categories').select('*').eq('is_active', true).order('sort_order', { ascending: true }),
@@ -44,11 +42,7 @@ async function hydrateSignedImages(products) {
       return;
     }
     const { data, error } = await supabase.storage.from('templates').createSignedUrl(path, 3600);
-    if (!error && data?.signedUrl) {
-      p._image = data.signedUrl;
-    } else {
-      p._image = p.image_url || p.image || null;
-    }
+    p._image = !error && data?.signedUrl ? data.signedUrl : (p.image_url || p.image || null);
   }));
 }
 
@@ -70,23 +64,22 @@ function render(categories, products) {
   rootEl.innerHTML = visibleCategories
     .map((category) => {
       const cards = category.products.map((product) => {
-        const message = encodeURIComponent(`Hola, quiero info de ${product.name}. ¿Me puedes indicar opciones de personalización y tiempo de entrega?`);
-        const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
+        const text = encodeURIComponent(`Hola, quiero info de ${product.name}. ¿Me puedes indicar opciones de personalización y tiempo de entrega?`);
+        const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${text}`;
         const igLink = `https://instagram.com/${INSTAGRAM_USERNAME}`;
         const image = product._image || null;
 
         return `
           <article class="product-card">
             <div class="product-card__media">
-              ${image ? `<img src="${safe(image)}" alt="${safe(product.name)}" loading="lazy" />` : `<div class="product-card__placeholder">${safe(category.icon || 'Valu Kraft')}</div>`}
+              ${image ? `<img src="${safe(image)}" alt="${safe(product.name)}" loading="lazy" />` : `<div class="product-card__placeholder">${safe(category.icon || '✨')}</div>`}
             </div>
             <div class="product-card__body">
-              <h3>${safe(product.name)}</h3>
-              <p>${safe(product.description || '')}</p>
-              <span class="product-badge">Personalizable</span>
+              <h3 class="product-card__title">${safe(product.name)}</h3>
+              <p class="product-card__description">${safe(product.description || '')}</p>
               <div class="product-card__actions">
-                <a href="${waLink}" class="btn btn--primary" target="_blank" rel="noopener noreferrer">Pedir por WhatsApp</a>
-                <a href="${igLink}" class="btn btn--secondary" target="_blank" rel="noopener noreferrer">Pedir por Instagram</a>
+                <a href="${waLink}" class="btn btn--primary" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+                <a href="${igLink}" class="btn btn--secondary" target="_blank" rel="noopener noreferrer">Instagram</a>
               </div>
             </div>
           </article>
@@ -94,13 +87,18 @@ function render(categories, products) {
       }).join('');
 
       return `
-        <section class="section" id="${safe(category.id)}">
-          <div class="container">
-            <h2>${safe(category.title)}</h2>
-            <p class="section__description">${safe(category.description || '')}</p>
-            <div class="product-grid">${cards}</div>
-          </div>
-        </section>
+        <div class="container">
+          <section class="catalog-category" id="${safe(category.id)}">
+            <div class="catalog-category__head">
+              <div class="catalog-category__emoji">${safe(category.icon || '✨')}</div>
+              <div>
+                <h2>${safe(category.title)}</h2>
+                <p>${safe(category.description || '')}</p>
+              </div>
+            </div>
+            <div class="catalog-grid">${cards}</div>
+          </section>
+        </div>
       `;
     }).join('');
 }
