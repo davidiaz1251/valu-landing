@@ -71,8 +71,8 @@ const steps = [
   .lk-proceso__container { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 0 20px; }
   .lk-proceso__head { text-align: center; margin-bottom: 56px; }
   .lk-proceso__head span { color: hsl(42 65% 55%); text-transform: uppercase; letter-spacing: .14em; font-size: .78rem; font-weight: 700; }
-  .lk-proceso__head h2 { margin: 12px 0 0; font-family: 'Playfair Display', Georgia, serif; font-size: clamp(2rem, 4.4vw, 3.2rem); color: #2f1f28; }
-  .lk-proceso__head p { margin: 14px 0 0; color: #726069; font-size: 1.03rem; }
+  .lk-proceso__head h2 { margin: 12px 0 0; font-family: 'Playfair Display', Georgia, serif; font-size: clamp(1.9rem, 4.2vw, 3rem); font-weight: 600; color: #2f1f28; }
+  .lk-proceso__head p { margin: 16px auto 0; color: #726069; font-size: 1.06rem; max-width: 36rem; }
 
   .lk-proceso__grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 20px; }
   .lk-p-wrap { position: relative; }
@@ -100,13 +100,14 @@ const steps = [
 
   .lk-p-card__body { margin-top: -30px; position: relative; padding: 20px 20px 22px; }
   .lk-p-card__icon { width: 44px; height: 44px; border-radius: 12px; background: hsla(160,30%,45%,.1); border: 1px solid hsla(160,30%,45%,.14); display: grid; place-items: center; font-size: 1.1rem; margin-bottom: 10px; }
-  .lk-p-card h3 { margin: 0; font-family: 'Playfair Display', Georgia, serif; color: #2f1f28; font-size: 1.25rem; }
-  .lk-p-card p { margin: 8px 0 0; color: #6f5b65; font-size: .9rem; line-height: 1.55; }
+  .lk-p-card h3 { margin: 0; font-family: 'Playfair Display', Georgia, serif; color: #2f1f28; font-size: 1.25rem; font-weight: 600; }
+  .lk-p-card p { margin: 8px 0 0; color: #6f5b65; font-size: .9rem; line-height: 1.6; }
 
   .lk-p-card__connector { display: none; }
 
   @media (min-width: 1024px) {
     .lk-proceso__head { margin-bottom: 80px; }
+    .lk-proceso__head h2 { font-size: 3rem; }
     .lk-proceso__grid { grid-template-columns: repeat(4, minmax(0,1fr)); gap: 24px; }
     .lk-p-card.is-offset { margin-top: 48px; }
     .lk-p-card__connector {
