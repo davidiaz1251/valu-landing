@@ -56,11 +56,12 @@ function render(categories, products) {
         const message = encodeURIComponent(`Hola, quiero info de ${product.name}. ¿Me puedes indicar opciones de personalización y tiempo de entrega?`);
         const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
         const igLink = `https://instagram.com/${INSTAGRAM_USERNAME}`;
+        const image = product.image_url || product.image_path || product.image || '';
 
         return `
           <article class="product-card">
             <div class="product-card__media">
-              <div class="product-card__placeholder">${safe(category.icon || 'Valu Kraft')}</div>
+              ${image ? `<img src="${safe(image)}" alt="${safe(product.name)}" loading="lazy" />` : `<div class="product-card__placeholder">${safe(category.icon || 'Valu Kraft')}</div>`}
             </div>
             <div class="product-card__body">
               <h3>${safe(product.name)}</h3>
