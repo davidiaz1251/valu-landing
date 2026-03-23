@@ -26,6 +26,7 @@ async function init() {
     const categories = Array.isArray(catRes.data) ? catRes.data : [];
     const products = Array.isArray(prodRes.data) ? prodRes.data : [];
 
+    await hydrateSignedImages(products);
     render(categories, products);
     statusEl.textContent = categories.length ? '' : 'No hay categorías activas todavía.';
   } catch (err) {
@@ -33,6 +34,22 @@ async function init() {
     tabsEl.innerHTML = '';
     rootEl.innerHTML = '';
   }
+}
+
+async function hydrateSignedImages(products) {
+  await Promise.all(products.map(async (p) => {
+    const path = p.image_path || null;
+    if (!path) {
+      p._image = p.image_url || p.image || null;
+      return;
+    }
+    const { data, error } = await supabase.storage.from('templates').createSignedUrl(path, 3600);
+    if (!error && data?.signedUrl) {
+      p._image = data.signedUrl;
+    } else {
+      p._image = p.image_url || p.image || null;
+    }
+  }));
 }
 
 function render(categories, products) {
@@ -56,7 +73,7 @@ function render(categories, products) {
         const message = encodeURIComponent(`Hola, quiero info de ${product.name}. ¿Me puedes indicar opciones de personalización y tiempo de entrega?`);
         const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
         const igLink = `https://instagram.com/${INSTAGRAM_USERNAME}`;
-        const image = product.image_url || product.image_path || product.image || '';
+        const image = product._image || null;
 
         return `
           <article class="product-card">

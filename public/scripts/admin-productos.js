@@ -114,8 +114,7 @@ async function uploadProductImage(file) {
   const path = `products/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
   const { error } = await supabase.storage.from('templates').upload(path, file, { upsert: true });
   if (error) throw new Error(`No se pudo subir imagen: ${error.message}`);
-  const { data } = supabase.storage.from('templates').getPublicUrl(path);
-  return data?.publicUrl || '';
+  return path;
 }
 
 function renderCategoryOptions() {
@@ -226,20 +225,22 @@ async function onProductSubmit(e) {
   const data = new FormData(productForm);
   const existingId = String(data.get('id') || '').trim();
 
-  let imageUrl = '';
+  let imagePath = null;
   if (productImageFile?.files?.[0]) {
     try {
-      imageUrl = await uploadProductImage(productImageFile.files[0]);
+      imagePath = await uploadProductImage(productImageFile.files[0]);
     } catch (err) {
       return alert(err.message || 'No se pudo subir imagen');
     }
   }
 
+  const current = existingId ? products.find((p) => p.id === existingId) : null;
   const payload = {
     category_id: String(data.get('category_id') || '').trim(),
     name: String(data.get('name') || '').trim(),
     description: String(data.get('description') || '').trim() || null,
-    image_url: imageUrl || null,
+    image_path: imagePath || current?.image_path || null,
+    image_url: null,
     sort_order: Number(data.get('sort_order') || 100),
     is_active: productForm.is_active.checked
   };
@@ -248,8 +249,8 @@ async function onProductSubmit(e) {
     ? await supabase.from('products_catalog').update(payload).eq('id', existingId)
     : await supabase.from('products_catalog').insert(payload);
 
-  if (error && /image_url/i.test(error.message || '')) {
-    return alert("Falta columna image_url en products_catalog. SQL: alter table public.products_catalog add column if not exists image_url text;");
+  if (error && /image_url|image_path/i.test(error.message || '')) {
+    return alert("Falta columna image_path/image_url en products_catalog. SQL: alter table public.products_catalog add column if not exists image_path text;");
   }
   if (error) return alert(`No se pudo guardar producto: ${error.message}`);
 
