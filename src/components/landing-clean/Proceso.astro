@@ -41,20 +41,22 @@ const steps = [
 
     <div class="lk-proceso__grid">
       {steps.map((step, index) => (
-        <article class={`lk-p-card ${index % 2 ? 'is-offset' : ''}`}>
-          <div class="lk-p-card__media">
-            <img src={step.image} alt={step.title} />
-            <div class="lk-p-card__fade"></div>
-            <span class="lk-p-card__num">{step.num}</span>
-          </div>
-
-          <div class="lk-p-card__body">
-            <div class="lk-p-card__icon">{step.icon}</div>
-            <h3>{step.title}</h3>
-            <p>{step.description}</p>
-          </div>
-
+        <article class="lk-p-wrap group">
           {index < steps.length - 1 && <i class="lk-p-card__connector" aria-hidden="true"></i>}
+
+          <div class={`lk-p-card ${index % 2 ? 'is-offset' : ''}`}>
+            <div class="lk-p-card__media">
+              <img src={step.image} alt={step.title} />
+              <div class="lk-p-card__fade"></div>
+              <span class="lk-p-card__num">{step.num}</span>
+            </div>
+
+            <div class="lk-p-card__body">
+              <div class="lk-p-card__icon">{step.icon}</div>
+              <h3>{step.title}</h3>
+              <p>{step.description}</p>
+            </div>
+          </div>
         </article>
       ))}
     </div>
@@ -62,35 +64,59 @@ const steps = [
 </section>
 
 <style>
-  .lk-proceso { padding: 100px 0 120px; background: rgba(245,240,236,.55); position: relative; overflow: hidden; }
-  .lk-proceso::before { content: ''; position: absolute; top: 90px; right: 40px; width: 170px; height: 170px; border-radius: 50%; background: hsla(42,65%,65%,.12); filter: blur(28px); }
-  .lk-proceso::after { content: ''; position: absolute; bottom: 70px; left: 20px; width: 220px; height: 220px; border-radius: 50%; background: hsla(350,40%,90%,.65); filter: blur(36px); }
+  .lk-proceso { padding: 96px 0 128px; background: rgba(245,240,236,.55); position: relative; overflow: hidden; }
+  .lk-proceso::before { content: ''; position: absolute; top: 80px; right: 40px; width: 160px; height: 160px; border-radius: 50%; background: hsla(42,65%,65%,.12); filter: blur(28px); }
+  .lk-proceso::after { content: ''; position: absolute; bottom: 70px; left: 20px; width: 240px; height: 240px; border-radius: 50%; background: hsla(350,40%,90%,.6); filter: blur(40px); }
 
-  .lk-proceso__container { position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; padding: 0 20px; }
-  .lk-proceso__head { text-align: center; margin-bottom: 54px; }
+  .lk-proceso__container { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 0 20px; }
+  .lk-proceso__head { text-align: center; margin-bottom: 56px; }
   .lk-proceso__head span { color: hsl(42 65% 55%); text-transform: uppercase; letter-spacing: .14em; font-size: .78rem; font-weight: 700; }
   .lk-proceso__head h2 { margin: 12px 0 0; font-family: 'Playfair Display', Georgia, serif; font-size: clamp(2rem, 4.4vw, 3.2rem); color: #2f1f28; }
   .lk-proceso__head p { margin: 14px 0 0; color: #726069; font-size: 1.03rem; }
 
-  .lk-proceso__grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
-  .lk-p-card { position: relative; background: #fdfaf8; border: 1px solid rgba(228,218,213,.52); border-radius: 18px; overflow: hidden; }
+  .lk-proceso__grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 20px; }
+  .lk-p-wrap { position: relative; }
+
+  .lk-p-card {
+    background: rgba(255,255,255,.9);
+    border: 1px solid rgba(228,218,213,.65);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all .5s ease;
+  }
+  .group:hover .lk-p-card { border-color: hsla(42,65%,65%,.35); box-shadow: 0 18px 38px rgba(109,84,98,.09); }
+
   .lk-p-card__media { position: relative; aspect-ratio: 1 / 1; overflow: hidden; }
   .lk-p-card__media img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s ease; }
-  .lk-p-card:hover .lk-p-card__media img { transform: scale(1.05); }
-  .lk-p-card__fade { position: absolute; inset: 0; background: linear-gradient(to top, rgba(252,249,246,.96) 0%, rgba(252,249,246,.78) 18%, rgba(252,249,246,.35) 34%, rgba(252,249,246,0) 56%); }
-  .lk-p-card__fade::after { content: ''; position: absolute; left: -8%; right: -8%; bottom: -18px; height: 78px; background: radial-gradient(ellipse at center, rgba(252,249,246,.92) 0%, rgba(252,249,246,.72) 36%, rgba(252,249,246,0) 74%); filter: blur(9px); }
-  .lk-p-card__num { position: absolute; top: 14px; left: 14px; font-family: 'Playfair Display', Georgia, serif; font-size: 2.25rem; line-height: 1; color: rgba(255,255,255,.36); font-weight: 700; }
+  .group:hover .lk-p-card__media img { transform: scale(1.05); }
 
-  .lk-p-card__body { margin-top: -30px; position: relative; padding: 0 16px 18px; }
-  .lk-p-card__icon { width: 42px; height: 42px; border-radius: 12px; background: hsla(160,30%,45%,.1); border: 1px solid hsla(160,30%,45%,.18); display: grid; place-items: center; font-size: 1.1rem; }
-  .lk-p-card h3 { margin: 10px 0 0; font-family: 'Playfair Display', Georgia, serif; color: #2f1f28; font-size: 1.26rem; }
-  .lk-p-card p { margin: 8px 0 0; color: #6f5b65; font-size: .92rem; line-height: 1.5; }
+  .lk-p-card__fade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(252,249,246,.9) 0%, rgba(252,249,246,.45) 26%, rgba(252,249,246,0) 62%);
+  }
+
+  .lk-p-card__num { position: absolute; top: 16px; left: 16px; font-family: 'Playfair Display', Georgia, serif; font-size: 2.25rem; font-weight: 700; line-height: 1; color: rgba(255,255,255,.3); }
+
+  .lk-p-card__body { margin-top: -30px; position: relative; padding: 20px 20px 22px; }
+  .lk-p-card__icon { width: 44px; height: 44px; border-radius: 12px; background: hsla(160,30%,45%,.1); border: 1px solid hsla(160,30%,45%,.14); display: grid; place-items: center; font-size: 1.1rem; margin-bottom: 10px; }
+  .lk-p-card h3 { margin: 0; font-family: 'Playfair Display', Georgia, serif; color: #2f1f28; font-size: 1.25rem; }
+  .lk-p-card p { margin: 8px 0 0; color: #6f5b65; font-size: .9rem; line-height: 1.55; }
 
   .lk-p-card__connector { display: none; }
 
   @media (min-width: 1024px) {
-    .lk-proceso__grid { grid-template-columns: repeat(4, minmax(0,1fr)); gap: 18px; }
-    .lk-p-card.is-offset { margin-top: 44px; }
-    .lk-p-card__connector { display: block; position: absolute; top: 50%; right: -12px; width: 20px; border-top: 2px dashed rgba(196,177,167,.8); z-index: 2; }
+    .lk-proceso__head { margin-bottom: 80px; }
+    .lk-proceso__grid { grid-template-columns: repeat(4, minmax(0,1fr)); gap: 24px; }
+    .lk-p-card.is-offset { margin-top: 48px; }
+    .lk-p-card__connector {
+      display: block;
+      position: absolute;
+      top: 50%;
+      right: -12px;
+      width: 24px;
+      border-top: 2px dashed rgba(196,177,167,.8);
+      z-index: 2;
+    }
   }
 </style>
