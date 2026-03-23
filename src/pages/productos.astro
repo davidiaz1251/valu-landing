@@ -5,7 +5,6 @@ import Layout from '../layouts/Layout.astro';
 <Layout title="Productos | Valu Kraft" description="Catálogo de productos de Valu Kraft. Pedidos por WhatsApp e Instagram.">
   <section class="products-hero section section--sm">
     <div class="container">
-      <span class="section__badge">Catálogo</span>
       <h1>Productos hechos para momentos especiales</h1>
       <p class="section__description">
         Descubre nuestras categorías, mira ejemplos reales y pide tu versión personalizada por WhatsApp o Instagram.
@@ -29,6 +28,7 @@ import Layout from '../layouts/Layout.astro';
 
 <style>
   .products-hero { padding-bottom: var(--space-6); }
+  :global(.products-hero h1) { font-size: clamp(2rem, 4.8vw, 3.2rem); line-height: 1.05; letter-spacing: -0.01em; margin-bottom: .55rem; }
   .catalog-status { margin-top: .6rem; color: var(--color-gray-600); }
 
   .products-tabs-wrap { position: sticky; top: 72px; z-index: 20; padding-top: 0; padding-bottom: var(--space-6); }
