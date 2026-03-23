@@ -1,24 +1,31 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { catalogCategories, catalogProducts } from '../../data/products';
 ---
 
-<Layout title="Admin Productos | Valu Kraft" description="Panel simple para gestionar el catálogo de productos.">
+<Layout title="Admin Productos | Valu Kraft" description="Panel para gestionar categorías y productos del catálogo.">
   <section class="section section--lg">
     <div class="container admin-header">
-      <h1>Panel admin · Productos</h1>
-      <p>Catálogo sin precios ni stock. Gestiona nombre, categoría, descripción, imagen y estado.</p>
+      <h1>Panel admin · Catálogo</h1>
+      <p>Gestiona categorías y productos en Supabase.</p>
+      <p id="adminProductsStatus" class="admin-sub">Comprobando acceso…</p>
     </div>
   </section>
 
   <section class="section">
-    <div class="container">
+    <div class="container admin-grid" id="adminProductsApp" hidden>
+      <main class="admin-card">
+        <div class="list-header">
+          <h2>Categorías</h2>
+          <button class="btn btn--primary" type="button" id="new-category-btn">Nueva categoría</button>
+        </div>
+        <div id="category-list"></div>
+      </main>
+
       <main class="admin-card">
         <div class="list-header">
           <h2>Productos</h2>
           <div class="admin-actions">
             <button class="btn btn--primary" type="button" id="new-product-btn">Nuevo producto</button>
-            <button class="btn btn--secondary" type="button" id="restore-defaults">Restaurar catálogo base</button>
             <a href="/productos" class="btn btn--secondary" target="_blank">Ver catálogo público</a>
           </div>
         </div>
@@ -27,222 +34,89 @@ import { catalogCategories, catalogProducts } from '../../data/products';
     </div>
   </section>
 
-  <div id="productModal" class="modal" hidden>
-    <div class="modal__backdrop" data-close-modal></div>
+  <div id="categoryModal" class="modal" hidden>
+    <div class="modal__backdrop" data-close-category-modal></div>
     <div class="modal__card">
-      <h3 id="modal-title">Nuevo producto</h3>
-      <form id="product-form" class="admin-form">
+      <h3 id="category-modal-title">Nueva categoría</h3>
+      <form id="category-form" class="admin-form">
         <input type="hidden" name="id" />
-
-        <label>Nombre
-          <input type="text" name="name" required />
+        <label>ID (slug)
+          <input type="text" name="slug" placeholder="papeleria" />
         </label>
-
-        <label>Categoría
-          <select name="categoryId" required>
-            {catalogCategories.map((c) => <option value={c.id}>{c.title}</option>)}
-          </select>
+        <label>Título
+          <input type="text" name="title" required />
         </label>
-
         <label>Descripción
-          <textarea name="description" rows="4" required></textarea>
+          <textarea name="description" rows="3"></textarea>
         </label>
-
-        <label>Imagen (URL)
-          <input type="url" name="image" placeholder="https://..." />
+        <label>Ícono
+          <input type="text" name="icon" placeholder="🎁" maxlength="4" />
         </label>
-
         <label>Orden
-          <input type="number" name="order" min="1" step="1" value="1" />
+          <input type="number" name="sort_order" min="1" step="1" value="1" />
         </label>
-
         <label class="checkline">
-          <input type="checkbox" name="customizable" /> Personalizable
+          <input type="checkbox" name="is_active" checked /> Activa
         </label>
-
-        <label class="checkline">
-          <input type="checkbox" name="active" /> Activo
-        </label>
-
         <div class="admin-actions admin-actions--end">
-          <button class="btn btn--secondary" type="button" data-close-modal>Cancelar</button>
-          <button class="btn btn--primary" type="submit" id="save-btn">Guardar producto</button>
+          <button class="btn btn--secondary" type="button" data-close-category-modal>Cancelar</button>
+          <button class="btn btn--primary" type="submit">Guardar categoría</button>
         </div>
       </form>
     </div>
   </div>
 
-  <script is:inline define:vars={{ catalogProducts }}>
-    (() => {
-      const KEY = 'valu_catalog_products_v1';
-      const form = document.getElementById('product-form');
-      const list = document.getElementById('product-list');
-      const restoreBtn = document.getElementById('restore-defaults');
-      const newBtn = document.getElementById('new-product-btn');
-      const modal = document.getElementById('productModal');
-      const modalTitle = document.getElementById('modal-title');
-      const saveBtn = document.getElementById('save-btn');
+  <div id="productModal" class="modal" hidden>
+    <div class="modal__backdrop" data-close-product-modal></div>
+    <div class="modal__card">
+      <h3 id="product-modal-title">Nuevo producto</h3>
+      <form id="product-form" class="admin-form">
+        <input type="hidden" name="id" />
+        <label>Nombre
+          <input type="text" name="name" required />
+        </label>
+        <label>Categoría
+          <select name="category_id" required id="product-category-select"></select>
+        </label>
+        <label>Descripción
+          <textarea name="description" rows="4"></textarea>
+        </label>
+        <label>Orden
+          <input type="number" name="sort_order" min="1" step="1" value="1" />
+        </label>
+        <label class="checkline">
+          <input type="checkbox" name="is_active" checked /> Activo
+        </label>
+        <div class="admin-actions admin-actions--end">
+          <button class="btn btn--secondary" type="button" data-close-product-modal>Cancelar</button>
+          <button class="btn btn--primary" type="submit">Guardar producto</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-      let mode = 'create';
-      let products = JSON.parse(localStorage.getItem(KEY) || 'null');
-      if (!Array.isArray(products)) {
-        products = structuredClone(catalogProducts);
-        localStorage.setItem(KEY, JSON.stringify(products));
-      }
-
-      const safe = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
-      const persist = () => { localStorage.setItem(KEY, JSON.stringify(products)); render(); };
-
-      const emptyProduct = () => ({
-        id: '',
-        name: '',
-        categoryId: form.categoryId?.options?.[0]?.value || 'papeleria',
-        description: '',
-        images: [],
-        order: 1,
-        customizable: true,
-        active: true
-      });
-
-      const fillForm = (product) => {
-        form.id.value = product.id || '';
-        form.name.value = product.name || '';
-        form.categoryId.value = product.categoryId || form.categoryId.options[0].value;
-        form.description.value = product.description || '';
-        form.image.value = product.images?.[0] || '';
-        form.order.value = String(product.order ?? 1);
-        form.customizable.checked = product.customizable ?? true;
-        form.active.checked = product.active ?? true;
-      };
-
-      const formToPayload = () => {
-        const data = new FormData(form);
-        return {
-          id: String(data.get('id') || '').trim() || `prod-${Date.now()}`,
-          name: String(data.get('name') || '').trim(),
-          categoryId: String(data.get('categoryId') || '').trim(),
-          description: String(data.get('description') || '').trim(),
-          images: String(data.get('image') || '').trim() ? [String(data.get('image')).trim()] : [],
-          order: Number(data.get('order') || 999),
-          customizable: form.customizable.checked,
-          active: form.active.checked
-        };
-      };
-
-      const openModal = (nextMode, product) => {
-        mode = nextMode;
-        if (mode === 'create') {
-          modalTitle.textContent = 'Nuevo producto';
-          saveBtn.textContent = 'Guardar producto';
-          fillForm(emptyProduct());
-        } else {
-          modalTitle.textContent = `Editar: ${product?.name || 'producto'}`;
-          saveBtn.textContent = 'Guardar cambios';
-          fillForm(product);
-        }
-        modal.hidden = false;
-        document.body.style.overflow = 'hidden';
-      };
-
-      const closeModal = () => {
-        modal.hidden = true;
-        document.body.style.overflow = '';
-      };
-
-      const render = () => {
-        const ordered = [...products].sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
-        list.innerHTML = ordered.length ? ordered.map((p) => `
-          <article class="list-item">
-            <div>
-              <h3>${safe(p.name)}</h3>
-              <p>${safe(p.description)}</p>
-              <small>Categoría: <strong>${safe(p.categoryId)}</strong> · ${p.customizable ? 'Personalizable' : 'No personalizable'} · ${p.active ? 'Activo' : 'Oculto'}</small>
-            </div>
-            <div class="item-actions">
-              <button class="btn btn--secondary" type="button" data-edit="${safe(p.id)}">Editar</button>
-              <button class="btn btn--secondary" type="button" data-toggle="${safe(p.id)}">${p.active ? 'Ocultar' : 'Activar'}</button>
-              <button class="btn btn--secondary" type="button" data-delete="${safe(p.id)}">Eliminar</button>
-            </div>
-          </article>
-        `).join('') : '<p>No hay productos aún.</p>';
-      };
-
-      newBtn?.addEventListener('click', () => openModal('create'));
-
-      form?.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const payload = formToPayload();
-        if (mode === 'create') {
-          products.push(payload);
-        } else {
-          const idx = products.findIndex((p) => p.id === payload.id);
-          if (idx >= 0) products[idx] = payload;
-        }
-        persist();
-        closeModal();
-      });
-
-      restoreBtn?.addEventListener('click', () => {
-        if (!confirm('¿Restaurar catálogo base? Esto sobrescribe cambios locales de este navegador.')) return;
-        products = structuredClone(catalogProducts);
-        persist();
-      });
-
-      list?.addEventListener('click', (e) => {
-        const target = e.target;
-        if (!(target instanceof HTMLElement)) return;
-
-        const editId = target.getAttribute('data-edit');
-        if (editId) {
-          const product = products.find((p) => p.id === editId);
-          if (product) openModal('edit', product);
-          return;
-        }
-
-        const toggleId = target.getAttribute('data-toggle');
-        if (toggleId) {
-          products = products.map((p) => p.id === toggleId ? { ...p, active: !p.active } : p);
-          persist();
-          return;
-        }
-
-        const delId = target.getAttribute('data-delete');
-        if (delId && confirm('¿Eliminar este producto?')) {
-          products = products.filter((p) => p.id !== delId);
-          persist();
-        }
-      });
-
-      modal?.addEventListener('click', (e) => {
-        const target = e.target;
-        if (target instanceof HTMLElement && target.hasAttribute('data-close-modal')) closeModal();
-      });
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal && !modal.hidden) closeModal();
-      });
-
-      render();
-    })();
-  </script>
+  <script type="module" src="/scripts/admin-productos.js"></script>
 </Layout>
 
 <style>
-  .admin-card { background: #fff; border: 1px solid #ececec; border-radius: 1rem; padding: 1rem; }
-  .admin-form { display: grid; gap: .65rem; }
-  .admin-form input, .admin-form select, .admin-form textarea { width: 100%; border: 1px solid #ddd; border-radius: .6rem; padding: .55rem .65rem; }
-  .checkline { display: flex; gap: .5rem; align-items: center; }
-  .checkline input { width: auto; }
-  .admin-actions { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: .45rem; }
-  .admin-actions--end { justify-content: flex-end; }
-  .list-header { display: flex; justify-content: space-between; align-items: center; gap: .75rem; margin-bottom: .75rem; flex-wrap: wrap; }
+  .admin-grid { display:grid; gap:14px; }
+  .admin-card { background:#fff; border:1px solid #ececec; border-radius:1rem; padding:1rem; }
+  .admin-form { display:grid; gap:.65rem; }
+  .admin-form input, .admin-form select, .admin-form textarea { width:100%; border:1px solid #ddd; border-radius:.6rem; padding:.55rem .65rem; }
+  .checkline { display:flex; gap:.5rem; align-items:center; }
+  .checkline input { width:auto; }
+  .admin-actions { display:flex; flex-wrap:wrap; gap:.55rem; margin-top:.45rem; }
+  .admin-actions--end { justify-content:flex-end; }
+  .list-header { display:flex; justify-content:space-between; align-items:center; gap:.75rem; margin-bottom:.75rem; flex-wrap:wrap; }
+  .admin-sub { color:#666; }
 
-  :global(.list-item) { display: flex; justify-content: space-between; gap: .75rem; border: 1px solid #ececec; border-radius: .8rem; padding: .8rem; margin-bottom: .7rem; }
-  :global(.list-item h3) { margin: 0 0 .25rem; }
-  :global(.list-item p) { margin: 0 0 .25rem; color: var(--color-gray-600); }
-  :global(.item-actions) { display: grid; gap: .4rem; align-content: start; }
+  :global(.list-item) { display:flex; justify-content:space-between; gap:.75rem; border:1px solid #ececec; border-radius:.8rem; padding:.8rem; margin-bottom:.7rem; }
+  :global(.list-item h3) { margin:0 0 .25rem; }
+  :global(.list-item p) { margin:0 0 .25rem; color:var(--color-gray-600); }
+  :global(.item-actions) { display:grid; gap:.4rem; align-content:start; }
 
   .modal[hidden] { display:none; }
   .modal { position: fixed; inset: 0; z-index: 2000; }
   .modal__backdrop { position:absolute; inset:0; background:rgba(20,20,20,.45); }
-  .modal__card { position:relative; max-width: 620px; margin: 6vh auto 0; background:#fff; border:1px solid #ececec; border-radius: 14px; padding: 1rem; box-shadow: 0 24px 48px rgba(0,0,0,.2); }
+  .modal__card { position:relative; max-width:620px; margin:6vh auto 0; background:#fff; border:1px solid #ececec; border-radius:14px; padding:1rem; box-shadow:0 24px 48px rgba(0,0,0,.2); }
 </style>
