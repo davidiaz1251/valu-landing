@@ -73,11 +73,12 @@ const steps = [
   .lk-proceso__head p { margin: 14px 0 0; color: #726069; font-size: 1.03rem; }
 
   .lk-proceso__grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
-  .lk-p-card { position: relative; background: #fff; border: 1px solid rgba(228,218,213,.65); border-radius: 18px; overflow: hidden; }
+  .lk-p-card { position: relative; background: #fdfaf8; border: 1px solid rgba(228,218,213,.52); border-radius: 18px; overflow: hidden; }
   .lk-p-card__media { position: relative; aspect-ratio: 1 / 1; overflow: hidden; }
   .lk-p-card__media img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s ease; }
   .lk-p-card:hover .lk-p-card__media img { transform: scale(1.05); }
-  .lk-p-card__fade { position: absolute; inset: 0; background: linear-gradient(to top, rgba(255,255,255,.75), transparent 58%); }
+  .lk-p-card__fade { position: absolute; inset: 0; background: linear-gradient(to top, rgba(252,249,246,.96) 0%, rgba(252,249,246,.78) 18%, rgba(252,249,246,.35) 34%, rgba(252,249,246,0) 56%); }
+  .lk-p-card__fade::after { content: ''; position: absolute; left: -8%; right: -8%; bottom: -18px; height: 78px; background: radial-gradient(ellipse at center, rgba(252,249,246,.92) 0%, rgba(252,249,246,.72) 36%, rgba(252,249,246,0) 74%); filter: blur(9px); }
   .lk-p-card__num { position: absolute; top: 14px; left: 14px; font-family: 'Playfair Display', Georgia, serif; font-size: 2.25rem; line-height: 1; color: rgba(255,255,255,.36); font-weight: 700; }
 
   .lk-p-card__body { margin-top: -30px; position: relative; padding: 0 16px 18px; }
