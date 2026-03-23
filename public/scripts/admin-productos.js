@@ -175,7 +175,6 @@ function openProductModal(mode, product = null) {
     productForm.reset();
     productForm.id.value = '';
     productForm.is_active.checked = true;
-    productForm.image_url.value = '';
     if (productImageFile) productImageFile.value = '';
     productCategorySelect.value = categories.find((c) => c.is_active !== false)?.id || '';
   } else if (product) {
@@ -184,7 +183,6 @@ function openProductModal(mode, product = null) {
     productForm.name.value = product.name || '';
     productForm.category_id.value = product.category_id || '';
     productForm.description.value = product.description || '';
-    productForm.image_url.value = product.image_url || product.image_path || product.image || '';
     if (productImageFile) productImageFile.value = '';
     productForm.sort_order.value = String(product.sort_order ?? 100);
     productForm.is_active.checked = product.is_active !== false;
@@ -228,7 +226,7 @@ async function onProductSubmit(e) {
   const data = new FormData(productForm);
   const existingId = String(data.get('id') || '').trim();
 
-  let imageUrl = String(data.get('image_url') || '').trim();
+  let imageUrl = '';
   if (productImageFile?.files?.[0]) {
     try {
       imageUrl = await uploadProductImage(productImageFile.files[0]);
