@@ -98,7 +98,7 @@ async function refreshData() {
 
   renderCategoryOptions();
   renderCategories();
-  renderProducts();
+  await renderProducts();
 }
 
 function safe(v) {
@@ -107,6 +107,13 @@ function safe(v) {
 
 function slugify(value = '') {
   return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').replace(/-{2,}/g, '-');
+}
+
+async function signedImage(path) {
+  if (!path) return '';
+  const { data, error } = await supabase.storage.from('templates').createSignedUrl(path, 3600);
+  if (error || !data?.signedUrl) return '';
+  return data.signedUrl;
 }
 
 async function uploadProductImage(file) {
@@ -134,14 +141,20 @@ function renderCategories() {
     : '<p>No hay categorías creadas.</p>';
 }
 
-function renderProducts() {
-  productList.innerHTML = products.length
-    ? products.map((p) => {
-      const category = categories.find((c) => c.id === p.category_id);
-      const image = p.image_url || p.image_path || p.image || '';
-      return `<article class="list-item"><div><h3>${safe(p.name)}</h3><p>${safe(p.description || '')}</p><small>Categoría: <strong>${safe(category?.title || p.category_id)}</strong> · Orden: ${safe(p.sort_order)} · ${p.is_active ? 'Activo' : 'Oculto'}</small>${image ? `<br/><small>Imagen: ${safe(image)}</small>` : ''}</div><div class="item-actions"><button class="btn btn--secondary" type="button" data-edit-product="${safe(p.id)}">Editar</button><button class="btn btn--secondary" type="button" data-toggle-product="${safe(p.id)}">${p.is_active ? 'Ocultar' : 'Activar'}</button><button class="btn btn--secondary" type="button" data-delete-product="${safe(p.id)}">Eliminar</button></div></article>`;
-    }).join('')
-    : '<p>No hay productos creados.</p>';
+async function renderProducts() {
+  if (!products.length) {
+    productList.innerHTML = '<p>No hay productos creados.</p>';
+    return;
+  }
+
+  const rows = await Promise.all(products.map(async (p) => {
+    const category = categories.find((c) => c.id === p.category_id);
+    const preview = await signedImage(p.image_path || '');
+    return { p, category, preview };
+  }));
+
+  productList.innerHTML = rows.map(({ p, category, preview }) =>     `<div class="admin-file">      <div style="display:flex; gap:10px; align-items:center;">        <img src="${safe(preview)}" class="admin-file__thumb" ${preview ? '' : 'style="display:none"'} alt="preview" />        <div>          <div class="admin-file__name">${safe(p.name)}</div>          <span class="admin-file__path">Categoría: ${safe(category?.title || p.category_id)} · Orden: ${safe(p.sort_order)} · ${p.is_active ? 'Activo' : 'Oculto'}</span>        </div>      </div>      <div class="admin-actions">        <button class="btn-mini" type="button" data-edit-product="${safe(p.id)}">Editar</button>        <button class="btn-mini" type="button" data-toggle-product="${safe(p.id)}">${p.is_active ? 'Ocultar' : 'Activar'}</button>        <button class="btn-mini danger" type="button" data-delete-product="${safe(p.id)}">Eliminar</button>      </div>    </div>`
+  ).join('');
 }
 
 function openCategoryModal(mode, category = null) {
