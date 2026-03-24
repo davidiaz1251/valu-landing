@@ -1,0 +1,200 @@
+---
+import Navbar from '../components/landing-clean/Navbar.astro';
+import Footer from '../components/landing-clean/Footer.astro';
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/media/7170738c9_logo.png" />
+    <title>Detalle de producto | Valu Kraft</title>
+  </head>
+  <body>
+    <Navbar />
+
+    <main class="pd-main">
+      <section class="pd-breadcrumb wrap">
+        <nav>
+          <a href="/">Inicio</a>
+          <span>›</span>
+          <a href="/#productos">Productos</a>
+          <span>›</span>
+          <strong data-product-title>Toppers Personalizados</strong>
+        </nav>
+      </section>
+
+      <section class="pd-hero wrap">
+        <div class="pd-grid">
+          <div class="pd-gallery">
+            <div class="pd-gallery__main">
+              <div class="pd-gallery__paper pd-gallery__paper--a"></div>
+              <div class="pd-gallery__paper pd-gallery__paper--b"></div>
+              <img id="pdMainImage" src="" alt="Producto" />
+              <button id="pdPrev" class="pd-gallery__arrow">‹</button>
+              <button id="pdNext" class="pd-gallery__arrow is-right">›</button>
+              <div id="pdDots" class="pd-gallery__dots"></div>
+            </div>
+            <div id="pdThumbs" class="pd-gallery__thumbs"></div>
+          </div>
+
+          <aside class="pd-info">
+            <div class="pd-top">
+              <div class="pd-tags">
+                <span id="pdTag" class="pd-tag"></span>
+                <span class="pd-tag is-hand">Hecho a mano</span>
+              </div>
+              <button id="pdLike" class="pd-like">♡</button>
+            </div>
+
+            <h1 data-product-title>Toppers Personalizados</h1>
+            <p id="pdTagline" class="pd-tagline"></p>
+
+            <div class="pd-rating">
+              <span>★★★★★</span>
+              <small id="pdReviews"></small>
+            </div>
+
+            <div class="pd-divider"></div>
+
+            <div class="pd-options">
+              <div>
+                <label>Estilo: <b id="pdStyleCurrent"></b></label>
+                <div id="pdStyles" class="pd-chips"></div>
+              </div>
+              <div>
+                <label>Ocasión: <b id="pdOccasionCurrent"></b></label>
+                <div id="pdOccasions" class="pd-chips"></div>
+              </div>
+              <div>
+                <label>Cantidad <small id="pdMinOrder"></small></label>
+                <div class="pd-qty">
+                  <button id="pdMinus">−</button>
+                  <b id="pdQtyValue">1</b>
+                  <button id="pdPlus">+</button>
+                </div>
+              </div>
+            </div>
+
+            <div id="pdIncludes" class="pd-includes"></div>
+            <p class="pd-delivery">⏱ Tiempo de entrega: <b id="pdDelivery"></b></p>
+
+            <div class="pd-cta">
+              <a href="https://wa.me/" target="_blank" rel="noopener noreferrer" class="is-primary">Pedir por WhatsApp</a>
+              <a href="https://wa.me/" target="_blank" rel="noopener noreferrer" class="is-ghost">Personalizar</a>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="pd-features">
+        <div class="wrap">
+          <h2>¿Por qué elegir Valu Kraft?</h2>
+          <div class="pd-features__grid">
+            <article><h3>Diseño 100% personalizado</h3><p>Trabajamos contigo en cada detalle del diseño. Tu visión, nuestra magia.</p></article>
+            <article><h3>Materiales premium</h3><p>Cartulina glitter, acrílico, papel de alta gramaje. Solo lo mejor para tu momento.</p></article>
+            <article><h3>Apruebas antes de producir</h3><p>Te enviamos la prueba digital y solo procedemos cuando estás 100% feliz.</p></article>
+            <article><h3>Empaque de regalo</h3><p>Cada pedido llega protegido y empacado con cariño, listo para sorprender.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="pd-related wrap">
+        <h2>También te puede gustar</h2>
+        <div id="pdRelated" class="pd-related__grid"></div>
+      </section>
+    </main>
+
+    <Footer />
+
+    <script is:inline>
+      const PRODUCTS_DATA = {
+        toppers:{id:"toppers",title:"Toppers Personalizados",tag:"Más popular",rating:5,reviewCount:134,tagline:"El detalle que convierte un pastel en un momento",images:["https://media.base44.com/images/public/69c11d14bba13990f133d6d0/444014269_generated_image.png","https://media.base44.com/images/public/69c11d14bba13990f133d6d0/375ef7cc7_generated_image.png","https://media.base44.com/images/public/69c11d14bba13990f133d6d0/d3446ddef_generated_image.png","https://media.base44.com/images/public/69c11d14bba13990f133d6d0/ebddf5bd0_generated_image.png"],styles:["Glitter Dorado","Glitter Rosa","Acrílico Transparente","Papel Premium"],occasions:["Bodas","Cumpleaños","Baby Shower","Aniversario","Graduación"],includes:["Diseño personalizado incluido","Palillo de soporte dorado incluido","Empaque de regalo","Envío en caja protegida"],deliveryDays:"3–5 días hábiles",minOrder:1},
+        invitaciones:{id:"invitaciones",title:"Invitaciones Premium",tag:"Nuevo diseño",rating:5,reviewCount:89,tagline:"La primera impresión de tu celebración",images:["https://media.base44.com/images/public/69c11d14bba13990f133d6d0/857462f94_generated_dffdc014.png","https://media.base44.com/images/public/69c11d14bba13990f133d6d0/296b37a14_generated_5a63a946.png"],styles:["Foil Dorado","Corte Láser","Acuarela","Minimalista"],occasions:["Bodas","XV Años","Baby Shower","Cumpleaños","Corporativo"],includes:["Diseño personalizado incluido","Sobres a juego","Set mínimo de 20 piezas","Prueba digital antes de imprimir"],deliveryDays:"5–7 días hábiles",minOrder:20},
+        cajas:{id:"cajas",title:"Cajas y Packaging",tag:null,rating:5,reviewCount:61,tagline:"Porque la presentación también es parte del regalo",images:["https://media.base44.com/images/public/69c11d14bba13990f133d6d0/c10e70a5b_generated_c64166fd.png","https://media.base44.com/images/public/69c11d14bba13990f133d6d0/ebddf5bd0_generated_image.png"],styles:["Kraft Natural","Blanco Premium","Pastel Personalizado","Negro Elegante"],occasions:["Bodas","Baby Shower","Cumpleaños","Empresarial","San Valentín"],includes:["Diseño exterior personalizado","Papel tissue interior incluido","Cinta decorativa","Tarjeta de mensaje"],deliveryDays:"4–6 días hábiles",minOrder:5},
+        regalos:{id:"regalos",title:"Regalos Personalizados",tag:"Exclusivo",rating:5,reviewCount:48,tagline:"Un regalo que nadie más podría dar",images:["https://media.base44.com/images/public/69c11d14bba13990f133d6d0/296d97e84_generated_a3db9b95.png"],styles:["Kit Completo","Pieza Única","Set de Papelería","Caja Curada"],occasions:["Cumpleaños","Aniversario","Baby Shower","San Valentín","Navidad"],includes:["Personalización total incluida","Caja de regalo premium","Tarjeta de mensaje manuscrita","Foto del producto antes de enviar"],deliveryDays:"5–8 días hábiles",minOrder:1}
+      };
+
+      const productId = new URLSearchParams(window.location.search).get('id') || 'toppers';
+      const product = PRODUCTS_DATA[productId] || PRODUCTS_DATA.toppers;
+      let selectedImage = 0, quantity = product.minOrder;
+      let style = product.styles[0], occasion = product.occasions[0];
+
+      document.querySelectorAll('[data-product-title]').forEach(el=>el.textContent=product.title);
+      document.getElementById('pdTagline').textContent = product.tagline;
+      document.getElementById('pdReviews').textContent = `${product.rating}.0 (${product.reviewCount} reseñas)`;
+      document.getElementById('pdDelivery').textContent = product.deliveryDays;
+      document.getElementById('pdMinOrder').textContent = product.minOrder>1?`(mínimo ${product.minOrder} piezas)`:'';
+      document.getElementById('pdQtyValue').textContent = quantity;
+
+      const tag = document.getElementById('pdTag');
+      if(product.tag){ tag.textContent = `✦ ${product.tag}`; } else tag.style.display='none';
+
+      const includes = document.getElementById('pdIncludes');
+      includes.innerHTML = product.includes.map(i=>`<div>✓ ${i}</div>`).join('');
+
+      const renderButtons=(items,containerId,current,setter)=>{
+        const c=document.getElementById(containerId); c.innerHTML='';
+        items.forEach(v=>{const b=document.createElement('button'); b.textContent=v; b.className=v===current?'is-active':''; b.onclick=()=>setter(v); c.appendChild(b);});
+      };
+      const refreshSelections=()=>{
+        document.getElementById('pdStyleCurrent').textContent=style;
+        document.getElementById('pdOccasionCurrent').textContent=occasion;
+        renderButtons(product.styles,'pdStyles',style,v=>{style=v;refreshSelections();});
+        renderButtons(product.occasions,'pdOccasions',occasion,v=>{occasion=v;refreshSelections();});
+      };
+      refreshSelections();
+
+      document.getElementById('pdMinus').onclick=()=>{ quantity=Math.max(product.minOrder, quantity-(product.minOrder>1?5:1)); document.getElementById('pdQtyValue').textContent=quantity; };
+      document.getElementById('pdPlus').onclick=()=>{ quantity += (product.minOrder>1?5:1); document.getElementById('pdQtyValue').textContent=quantity; };
+
+      const main=document.getElementById('pdMainImage'), thumbs=document.getElementById('pdThumbs'), dots=document.getElementById('pdDots');
+      const renderGallery=()=>{
+        main.src=product.images[selectedImage]; main.alt=`${product.title} - vista ${selectedImage+1}`;
+        thumbs.innerHTML=''; dots.innerHTML='';
+        product.images.forEach((img,i)=>{
+          const t=document.createElement('button'); t.className=i===selectedImage?'is-active':''; t.innerHTML=`<img src="${img}" alt="Vista ${i+1}">`; t.onclick=()=>{selectedImage=i;renderGallery();}; thumbs.appendChild(t);
+          const d=document.createElement('button'); d.className=i===selectedImage?'is-active':''; d.onclick=()=>{selectedImage=i;renderGallery();}; dots.appendChild(d);
+        });
+      };
+      document.getElementById('pdPrev').onclick=()=>{selectedImage=(selectedImage-1+product.images.length)%product.images.length;renderGallery();};
+      document.getElementById('pdNext').onclick=()=>{selectedImage=(selectedImage+1)%product.images.length;renderGallery();};
+      if(product.images.length<=1){ document.getElementById('pdPrev').style.display='none'; document.getElementById('pdNext').style.display='none'; }
+      renderGallery();
+
+      const like=document.getElementById('pdLike'); let liked=false; like.onclick=()=>{liked=!liked; like.textContent=liked?'♥':'♡';};
+
+      const related = Object.values(PRODUCTS_DATA).filter(p=>p.id!==product.id).slice(0,3);
+      document.getElementById('pdRelated').innerHTML = related.map(p=>`
+        <a href="/producto?id=${p.id}" class="pd-r-card">
+          <img src="${p.images[0]}" alt="${p.title}" />
+          <div class="overlay"></div>
+          ${p.tag?`<span class="tag">${p.tag}</span>`:''}
+          <h3>${p.title}</h3>
+        </a>`).join('');
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  .wrap{max-width:1280px;margin:0 auto;padding:0 20px}
+  .pd-main{padding-top:84px;background:hsl(30 33% 98%);color:#2f1f28;font-family:'DM Sans',system-ui,sans-serif}
+  .pd-breadcrumb{padding:22px 20px 8px}.pd-breadcrumb nav{display:flex;gap:8px;align-items:center;font-size:.9rem;color:#7a6871}.pd-breadcrumb a{text-decoration:none;color:#7a6871}
+  .pd-grid{display:grid;gap:36px}.pd-gallery__main{position:relative;border-radius:24px;overflow:hidden;aspect-ratio:1/1;background:#f5f0ec}
+  .pd-gallery__paper{position:absolute;inset:-8px;border-radius:24px}.pd-gallery__paper--a{background:hsla(350,40%,90%,.45);transform:rotate(1deg)}.pd-gallery__paper--b{background:hsla(160,30%,85%,.25);transform:rotate(-1deg)}
+  #pdMainImage{position:relative;width:100%;height:100%;object-fit:cover;border-radius:18px}
+  .pd-gallery__arrow{position:absolute;top:50%;transform:translateY(-50%);left:12px;width:40px;height:40px;border-radius:999px;border:1px solid rgba(228,218,213,.8);background:rgba(252,249,246,.8)}.pd-gallery__arrow.is-right{left:auto;right:12px}
+  .pd-gallery__dots{position:absolute;left:50%;transform:translateX(-50%);bottom:14px;display:flex;gap:6px}.pd-gallery__dots button{width:6px;height:6px;border-radius:999px;border:0;background:rgba(255,255,255,.5)}.pd-gallery__dots .is-active{width:18px;background:#fff}
+  .pd-gallery__thumbs{margin-top:12px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.pd-gallery__thumbs button{border:2px solid transparent;border-radius:12px;padding:0;overflow:hidden}.pd-gallery__thumbs .is-active{border-color:hsl(160 30% 45%)}.pd-gallery__thumbs img{width:100%;aspect-ratio:1/1;object-fit:cover}
+  .pd-info h1{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.9rem,4vw,2.8rem);margin:0}.pd-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.pd-tags{display:flex;gap:8px;flex-wrap:wrap}.pd-tag{padding:6px 10px;border-radius:999px;background:hsla(42,65%,65%,.25);font-size:.74rem;font-weight:600}.pd-tag.is-hand{background:hsla(160,30%,45%,.12);color:hsl(160 30% 35%)}
+  .pd-like{width:36px;height:36px;border-radius:999px;border:1px solid rgba(228,218,213,.8);background:#fff}
+  .pd-tagline{margin:4px 0 0;color:#6f5b65}.pd-rating{margin-top:10px;display:flex;gap:8px;align-items:center}.pd-rating span{color:hsl(42 65% 65%)}.pd-rating small{color:#7a6871}
+  .pd-divider{margin:18px 0;border-top:1px solid rgba(228,218,213,.7)}
+  .pd-options{display:grid;gap:16px}.pd-options label{display:block;font-size:.9rem;font-weight:500;margin-bottom:8px}.pd-options small{font-weight:400;color:#7a6871}.pd-chips{display:flex;flex-wrap:wrap;gap:8px}.pd-chips button{padding:8px 12px;border-radius:999px;border:1px solid rgba(228,218,213,.8);background:#fff}.pd-chips .is-active{background:hsl(160 30% 45%);color:#fff;border-color:hsl(160 30% 45%)}
+  .pd-qty{display:inline-flex;gap:10px;align-items:center;background:rgba(245,240,236,.7);padding:4px 8px;border-radius:999px}.pd-qty button{width:34px;height:34px;border-radius:999px;border:1px solid rgba(228,218,213,.8);background:#fff}
+  .pd-includes{margin-top:16px;background:rgba(245,240,236,.55);border-radius:16px;padding:14px;display:grid;gap:8px;font-size:.93rem}
+  .pd-delivery{font-size:.92rem;color:#6f5b65}.pd-cta{display:flex;gap:10px;flex-direction:column}.pd-cta a{text-decoration:none;border-radius:999px;padding:14px 16px;text-align:center;font-weight:600}.pd-cta .is-primary{background:hsl(160 30% 45%);color:#fff}.pd-cta .is-ghost{border:2px solid rgba(228,218,213,.9);color:#3f2f39}
+  .pd-features{background:rgba(245,240,236,.45);padding:64px 0}.pd-features h2{text-align:center;font-family:'Playfair Display',Georgia,serif}.pd-features__grid{margin-top:22px;display:grid;gap:14px}.pd-features__grid article{background:hsl(30 30% 97%);border:1px solid rgba(228,218,213,.6);border-radius:14px;padding:16px;text-align:center}.pd-features__grid h3{margin:0 0 8px;font-size:.95rem}.pd-features__grid p{margin:0;color:#6f5b65;font-size:.85rem}
+  .pd-related{padding:62px 20px 90px}.pd-related h2{font-family:'Playfair Display',Georgia,serif}.pd-related__grid{margin-top:16px;display:grid;gap:14px}.pd-r-card{position:relative;border-radius:16px;overflow:hidden;aspect-ratio:4/5;text-decoration:none}.pd-r-card img{width:100%;height:100%;object-fit:cover}.pd-r-card .overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(34,23,30,.6),transparent)}.pd-r-card .tag{position:absolute;top:10px;left:10px;font-size:.72rem;padding:4px 9px;border-radius:999px;background:hsla(42,65%,65%,.9);color:#fff}.pd-r-card h3{position:absolute;left:14px;bottom:14px;margin:0;color:#fff;font-family:'Playfair Display',Georgia,serif}
+  @media(min-width:1024px){.pd-grid{grid-template-columns:1fr 1fr;gap:56px}.pd-features__grid{grid-template-columns:repeat(4,1fr)}.pd-related__grid{grid-template-columns:repeat(3,1fr)}.pd-cta{flex-direction:row}}
+</style>
