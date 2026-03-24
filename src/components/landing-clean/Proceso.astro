@@ -64,21 +64,23 @@ const steps = [
 </section>
 
 <script is:inline>
-  const revealEls = document.querySelectorAll('#proceso [data-reveal]');
+  (() => {
+    const procesoRevealEls = document.querySelectorAll('#proceso [data-reveal]');
 
-  if ('IntersectionObserver' in window && revealEls.length) {
-    const io = new IntersectionObserver((entries, obs) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add('is-visible');
-        obs.unobserve(entry.target);
-      });
-    }, { threshold: 0.16, rootMargin: '0px 0px -40px 0px' });
+    if ('IntersectionObserver' in window && procesoRevealEls.length) {
+      const procesoIO = new IntersectionObserver((entries, obs) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-visible');
+          obs.unobserve(entry.target);
+        });
+      }, { threshold: 0.16, rootMargin: '0px 0px -40px 0px' });
 
-    revealEls.forEach((el) => io.observe(el));
-  } else {
-    revealEls.forEach((el) => el.classList.add('is-visible'));
-  }
+      procesoRevealEls.forEach((el) => procesoIO.observe(el));
+    } else {
+      procesoRevealEls.forEach((el) => el.classList.add('is-visible'));
+    }
+  })();
 </script>
 
 <style>
