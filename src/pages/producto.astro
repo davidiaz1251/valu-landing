@@ -94,14 +94,14 @@ import { Heart, Share2, MessageCircle, Palette, Sparkles, Clock3, Layers, Wand2,
 
       <section class="pd-features pd-reveal pd-reveal--up" style="--d:.15s">
         <div class="wrap">
-          <div class="pd-features__head pd-reveal pd-reveal--up" style="--d:.05s">
+          <div class="pd-features__head pd-reveal pd-reveal--up" style="--d:0s;--dur:.6s">
             <h2>¿Por qué elegir Valu Kraft?</h2>
           </div>
           <div class="pd-features__grid">
-            <article class="pd-feature-card pd-reveal pd-reveal--up" style="--d:.1s"><div class="pd-feature-icon"><Wand2 size={20} /></div><h3>Diseño 100% personalizado</h3><p>Trabajamos contigo en cada detalle del diseño. Tu visión, nuestra magia.</p></article>
-            <article class="pd-feature-card pd-reveal pd-reveal--up" style="--d:.2s"><div class="pd-feature-icon"><Layers size={20} /></div><h3>Materiales premium</h3><p>Cartulina glitter, acrílico, papel de alta gramaje. Solo lo mejor para tu momento.</p></article>
-            <article class="pd-feature-card pd-reveal pd-reveal--up" style="--d:.3s"><div class="pd-feature-icon"><BadgeCheck size={20} /></div><h3>Apruebas antes de producir</h3><p>Te enviamos la prueba digital y solo procedemos cuando estás 100% feliz.</p></article>
-            <article class="pd-feature-card pd-reveal pd-reveal--up" style="--d:.4s"><div class="pd-feature-icon"><Package size={20} /></div><h3>Empaque de regalo</h3><p>Cada pedido llega protegido y empacado con cariño, listo para sorprender.</p></article>
+            <article class="pd-feature-card pd-reveal pd-reveal--up" style="--d:.1s;--dur:.5s"><div class="pd-feature-icon"><Wand2 size={20} /></div><h3>Diseño 100% personalizado</h3><p>Trabajamos contigo en cada detalle del diseño. Tu visión, nuestra magia.</p></article>
+            <article class="pd-feature-card pd-reveal pd-reveal--up" style="--d:.2s;--dur:.5s"><div class="pd-feature-icon"><Layers size={20} /></div><h3>Materiales premium</h3><p>Cartulina glitter, acrílico, papel de alta gramaje. Solo lo mejor para tu momento.</p></article>
+            <article class="pd-feature-card pd-reveal pd-reveal--up" style="--d:.3s;--dur:.5s"><div class="pd-feature-icon"><BadgeCheck size={20} /></div><h3>Apruebas antes de producir</h3><p>Te enviamos la prueba digital y solo procedemos cuando estás 100% feliz.</p></article>
+            <article class="pd-feature-card pd-reveal pd-reveal--up" style="--d:.4s;--dur:.5s"><div class="pd-feature-icon"><Package size={20} /></div><h3>Empaque de regalo</h3><p>Cada pedido llega protegido y empacado con cariño, listo para sorprender.</p></article>
           </div>
         </div>
       </section>
@@ -197,7 +197,7 @@ import { Heart, Share2, MessageCircle, Palette, Sparkles, Clock3, Layers, Wand2,
             entry.target.classList.add('is-visible');
             obs.unobserve(entry.target);
           });
-        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
         ioEls.forEach((el) => io.observe(el));
       } else {
         ioEls.forEach((el) => el.classList.add('is-visible'));
@@ -212,7 +212,7 @@ import { Heart, Share2, MessageCircle, Palette, Sparkles, Clock3, Layers, Wand2,
   .pd-reveal--up{transform:translateY(20px)}
   .pd-reveal--left{transform:translateX(-20px)}
   .pd-reveal--right{transform:translateX(20px)}
-  .pd-reveal.is-visible{animation:pdIn .6s ease-out var(--d,0s) forwards}
+  .pd-reveal.is-visible{animation:pdIn var(--dur,.6s) ease-out var(--d,0s) forwards}
   @keyframes pdIn{from{opacity:0}to{opacity:1;transform:translate(0,0)}}
 
 
