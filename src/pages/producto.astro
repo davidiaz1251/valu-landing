@@ -132,7 +132,7 @@ import Footer from '../components/landing-clean/Footer.astro';
       if(product.tag){ tag.textContent = `✦ ${product.tag}`; } else tag.style.display='none';
 
       const includes = document.getElementById('pdIncludes');
-      includes.innerHTML = product.includes.map(i=>`<div class="pd-inc-item"><span class="pd-inc-icon">✓</span><span>${i}</span></div>`).join('');
+      includes.innerHTML = product.includes.map(i=>`<div class="pd-inc-item"><span class="pd-inc-icon"></span><span>${i}</span></div>`).join('');
 
       const renderButtons=(items,containerId,current,setter)=>{
         const c=document.getElementById(containerId); c.innerHTML='';
