@@ -126,6 +126,8 @@ const dots = Array.from({ length: 6 }, (_, i) => ({
     display: flex;
     gap: 10px;
     align-items: center;
+    animation: lkBadgeFloat 4.8s ease-in-out infinite;
+    will-change: transform;
   }
   .lk-badge__icon { width: 40px; height: 40px; border-radius: 999px; background: hsla(42,65%,65%,.2); display: grid; place-items: center; color: hsl(42 65% 55%); }
   .lk-badge small { display: block; color: #8b7a82; font-size: .72rem; }
@@ -135,8 +137,18 @@ const dots = Array.from({ length: 6 }, (_, i) => ({
     .lk-hero__grid { grid-template-columns: 1fr 1fr; gap: 64px; }
   }
 
+  @keyframes lkBadgeFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
   @keyframes lkDot {
     0%,100% { opacity: 0; transform: scale(.5); }
     50% { opacity: 1; transform: scale(1.2); }
   }
+  @media (prefers-reduced-motion: reduce) {
+    .lk-badge,
+    .lk-dot { animation: none; }
+  }
+
 </style>
