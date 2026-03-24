@@ -1,3 +1,7 @@
+---
+import { AtSign, Globe, Music2 } from '@lucide/astro';
+---
+
 <footer class="lk-footer">
   <div class="lk-footer__container">
     <div class="lk-footer__grid">
@@ -27,7 +31,11 @@
         <h4>Contacto</h4>
         <div class="lk-footer__contact">
           <p>WhatsApp: Escríbenos directo</p>
-          <p>Instagram: @valukraft</p>
+          <div class="lk-footer__socials">
+            <a href="https://instagram.com/valu_kraft" target="_blank" rel="noopener noreferrer" aria-label="Instagram Valu Kraft"><AtSign size={16} /><span>Instagram @valu_kraft</span></a>
+            <a href="#" aria-label="Facebook Valu Kraft (pendiente)"><Globe size={16} /><span>Facebook (pendiente)</span></a>
+            <a href="https://www.tiktok.com/@valu_kraft" target="_blank" rel="noopener noreferrer" aria-label="TikTok Valu Kraft"><Music2 size={16} /><span>@valu_kraft</span></a>
+          </div>
           <p>Email: hola@valukraft.com</p>
         </div>
       </div>
@@ -94,6 +102,10 @@
     display: grid;
     gap: 10px;
   }
+
+  .lk-footer__socials { display: grid; gap: 10px; margin-bottom: 2px; }
+  .lk-footer__socials a { text-decoration: none; color: hsl(340 10% 45%); display: inline-flex; align-items: center; gap: 8px; font-size: .875rem; font-family: 'DM Sans', system-ui, sans-serif; }
+  .lk-footer__socials a:hover { color: hsl(340 20% 15%); }
 
   .lk-footer__links a,
   .lk-footer__contact p {
