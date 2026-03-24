@@ -1,7 +1,7 @@
 ---
 import Navbar from '../components/landing-clean/Navbar.astro';
 import Footer from '../components/landing-clean/Footer.astro';
-import { Heart, Share2, MessageCircle, Palette, Sparkles, Clock3 } from '@lucide/astro';
+import { Heart, Share2, MessageCircle, Palette, Sparkles, Clock3, Layers, Wand2, Package, BadgeCheck } from '@lucide/astro';
 ---
 
 <html lang="es">
@@ -94,12 +94,14 @@ import { Heart, Share2, MessageCircle, Palette, Sparkles, Clock3 } from '@lucide
 
       <section class="pd-features pd-reveal pd-reveal--up" style="--d:.15s">
         <div class="wrap">
-          <h2>¿Por qué elegir Valu Kraft?</h2>
+          <div class="pd-features__head pd-reveal pd-reveal--up" style="--d:.05s">
+            <h2>¿Por qué elegir Valu Kraft?</h2>
+          </div>
           <div class="pd-features__grid">
-            <article class="pd-reveal pd-reveal--up" style="--d:.1s"><h3>Diseño 100% personalizado</h3><p>Trabajamos contigo en cada detalle del diseño. Tu visión, nuestra magia.</p></article>
-            <article class="pd-reveal pd-reveal--up" style="--d:.2s"><h3>Materiales premium</h3><p>Cartulina glitter, acrílico, papel de alta gramaje. Solo lo mejor para tu momento.</p></article>
-            <article class="pd-reveal pd-reveal--up" style="--d:.3s"><h3>Apruebas antes de producir</h3><p>Te enviamos la prueba digital y solo procedemos cuando estás 100% feliz.</p></article>
-            <article class="pd-reveal pd-reveal--up" style="--d:.4s"><h3>Empaque de regalo</h3><p>Cada pedido llega protegido y empacado con cariño, listo para sorprender.</p></article>
+            <article class="pd-feature-card pd-reveal pd-reveal--up" style="--d:.1s"><div class="pd-feature-icon"><Wand2 size={20} /></div><h3>Diseño 100% personalizado</h3><p>Trabajamos contigo en cada detalle del diseño. Tu visión, nuestra magia.</p></article>
+            <article class="pd-feature-card pd-reveal pd-reveal--up" style="--d:.2s"><div class="pd-feature-icon"><Layers size={20} /></div><h3>Materiales premium</h3><p>Cartulina glitter, acrílico, papel de alta gramaje. Solo lo mejor para tu momento.</p></article>
+            <article class="pd-feature-card pd-reveal pd-reveal--up" style="--d:.3s"><div class="pd-feature-icon"><BadgeCheck size={20} /></div><h3>Apruebas antes de producir</h3><p>Te enviamos la prueba digital y solo procedemos cuando estás 100% feliz.</p></article>
+            <article class="pd-feature-card pd-reveal pd-reveal--up" style="--d:.4s"><div class="pd-feature-icon"><Package size={20} /></div><h3>Empaque de regalo</h3><p>Cada pedido llega protegido y empacado con cariño, listo para sorprender.</p></article>
           </div>
         </div>
       </section>
@@ -288,12 +290,12 @@ import { Heart, Share2, MessageCircle, Palette, Sparkles, Clock3 } from '@lucide
   .pd-trust svg{color:hsl(42 65% 65%)}
 
   .pd-features{background:hsla(30,20%,94%,.5);padding:64px 0}
-  .pd-features h2{text-align:center;font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.7rem,3vw,2.2rem);margin:0}
-  .pd-features__grid{margin-top:24px;display:grid;gap:16px}
-  .pd-features__grid article{background:hsl(30 30% 97%);border:1px solid hsla(30,20%,88%,.55);border-radius:16px;padding:20px;text-align:center;transition:.2s}
-  .pd-features__grid article:hover{border-color:hsla(42,65%,65%,.35);box-shadow:0 12px 24px rgba(47,31,40,.06)}
-  .pd-features__grid h3{margin:0 0 8px;font-size:.95rem;color:hsl(340 20% 15%)}
-  .pd-features__grid p{margin:0;color:hsl(340 10% 45%);font-size:.82rem;line-height:1.55}
+  .pd-features__head{text-align:center;margin-bottom:40px}.pd-features h2{text-align:center;font-family:'Playfair Display',Georgia,serif;font-size:1.5rem;line-height:1.2;font-weight:600;margin:0;color:hsl(340 20% 15%)}
+  .pd-features__grid{display:grid;gap:24px}
+  .pd-feature-card{background:hsl(30 30% 97%);border:1px solid hsla(30,20%,88%,.55);border-radius:16px;padding:20px;text-align:center;transition:.3s}
+  .pd-feature-card:hover{border-color:hsla(42,65%,65%,.35);box-shadow:0 10px 22px rgba(47,31,40,.08)}
+  .pd-feature-icon{width:48px;height:48px;border-radius:12px;background:hsla(160,30%,45%,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:hsl(160 30% 45%)} .pd-feature-icon svg{width:20px;height:20px} .pd-features__grid h3{margin:0;font-size:.875rem;font-weight:600;color:hsl(340 20% 15%)}
+  .pd-features__grid p{margin:8px 0 0;color:hsl(340 10% 45%);font-size:.75rem;line-height:1.65}
 
   .pd-related{padding:64px 20px 92px}
   .pd-related h2{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.7rem,3vw,2.2rem);margin:0}
@@ -307,6 +309,6 @@ import { Heart, Share2, MessageCircle, Palette, Sparkles, Clock3 } from '@lucide
 
   @media(min-width:768px){.pd-cta{flex-direction:row}.pd-cta a{flex:1}}
   @media (prefers-reduced-motion: reduce){.pd-reveal{opacity:1;transform:none;animation:none !important}}
-  @media(min-width:768px){.pd-info h1{font-size:2.25rem}}
+  @media(min-width:768px){.pd-info h1{font-size:2.25rem}.pd-features h2{font-size:1.875rem}.pd-features{padding:80px 0}}
   @media(min-width:1024px){.pd-grid{grid-template-columns:1fr 1fr;gap:64px}.pd-info{position:sticky;top:112px}.pd-features__grid{grid-template-columns:repeat(4,1fr)}.pd-related__grid{grid-template-columns:repeat(3,1fr)}}
 </style>
