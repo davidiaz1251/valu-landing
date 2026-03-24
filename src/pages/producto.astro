@@ -216,7 +216,11 @@ import { Heart, Share2, MessageCircle, Palette, Sparkles, Clock3 } from '@lucide
   .pd-tags{display:flex;gap:8px;flex-wrap:wrap}
   .pd-tag{padding:6px 10px;border-radius:999px;background:hsla(42,65%,65%,.2);color:hsl(42 50% 20%);border:1px solid hsla(42,65%,65%,.3);font-size:.75rem;font-weight:500}
   .pd-tag.is-hand{background:hsla(160,30%,45%,.1);border-color:hsla(160,30%,45%,.2);color:hsl(160 30% 35%)}
-  .pd-actions{display:flex;gap:8px;align-items:center}.pd-like{width:36px;height:36px;border-radius:999px;border:1px solid hsla(30,20%,88%,1);background:hsl(30 30% 97%);cursor:pointer;display:grid;place-items:center;color:hsl(340 10% 45%)}\n  .pd-like svg{width:16px;height:16px;stroke:currentColor}\n  .pd-like.is-liked{color:#f87171;border-color:#fecaca;background:#fff5f5}\n  .pd-like.is-liked svg{fill:currentColor}\n  .pd-like.is-copied{color:hsl(160 30% 45%);border-color:hsla(160,30%,45%,.35)}
+  .pd-actions{display:flex;gap:8px;align-items:center}.pd-like{width:36px;height:36px;border-radius:999px;border:1px solid hsla(30,20%,88%,1);background:hsl(30 30% 97%);cursor:pointer;display:grid;place-items:center;color:hsl(340 10% 45%)}
+  .pd-like svg{width:16px;height:16px;stroke:currentColor}
+  .pd-like.is-liked{color:#f87171;border-color:#fecaca;background:#fff5f5}
+  .pd-like.is-liked svg{fill:currentColor}
+  .pd-like.is-copied{color:hsl(160 30% 45%);border-color:hsla(160,30%,45%,.35)}
   .pd-tagline{margin:4px 0 0;color:hsl(340 10% 45%);font-size:1rem}
   .pd-rating{margin-top:12px;display:flex;gap:8px;align-items:center}
   .pd-rating span{color:hsl(42 65% 65%);letter-spacing:.5px}
@@ -239,7 +243,10 @@ import { Heart, Share2, MessageCircle, Palette, Sparkles, Clock3 } from '@lucide
   .pd-qty button{width:36px;height:36px;border-radius:999px;border:1px solid hsla(30,20%,88%,1);background:hsl(30 30% 97%);cursor:pointer}
   .pd-qty b{width:28px;text-align:center;font-size:1.1rem}
 
-  .pd-includes{margin-top:20px;background:hsla(30,20%,94%,.6);border-radius:16px;padding:16px;display:grid;gap:10px;font-size:.92rem;color:hsl(340 20% 15%)}\n  .pd-inc-item{display:flex;align-items:flex-start;gap:10px}\n  .pd-inc-icon{width:20px;height:20px;border-radius:999px;background:hsla(160,30%,45%,.15);color:hsl(160 30% 45%);display:grid;place-items:center;font-size:.72rem;line-height:1;margin-top:1px;flex:0 0 20px}
+  .pd-includes{margin-top:20px;background:hsla(30,20%,94%,.6);border-radius:16px;padding:16px;display:grid;gap:10px;font-size:.92rem;color:hsl(340 20% 15%)}
+  .pd-inc-item{display:flex;align-items:flex-start;gap:10px}
+  .pd-inc-icon{width:20px;height:20px;border-radius:999px;background:hsla(160,30%,45%,.15);color:hsl(160 30% 45%);display:grid;place-items:center;font-size:.72rem;line-height:1;margin-top:1px;flex:0 0 20px}
+  .pd-inc-icon::before{content:"✓";font-size:12px;font-weight:700;line-height:1}
   .pd-delivery{margin-top:14px;font-size:.92rem;color:hsl(340 10% 45%);display:flex;align-items:center;gap:8px}
   .pd-delivery b{color:hsl(340 20% 15%)}
 
@@ -248,7 +255,9 @@ import { Heart, Share2, MessageCircle, Palette, Sparkles, Clock3 } from '@lucide
   .pd-cta .is-primary{background:hsl(160 30% 45%);color:#fff}
   .pd-cta .is-primary:hover{background:hsl(160 30% 42%);box-shadow:0 14px 30px rgba(50,130,105,.2)}
   .pd-cta .is-ghost{border:2px solid hsla(30,20%,88%,1);color:hsl(340 20% 15%)}
-  .pd-cta .is-ghost:hover{background:hsla(350,40%,90%,.35)}\n  .pd-trust{margin-top:12px;text-align:center;font-size:.76rem;color:hsl(340 10% 45%);display:flex;align-items:center;justify-content:center;gap:6px}\n  .pd-trust svg{color:hsl(42 65% 65%)}
+  .pd-cta .is-ghost:hover{background:hsla(350,40%,90%,.35)}
+  .pd-trust{margin-top:12px;text-align:center;font-size:.76rem;color:hsl(340 10% 45%);display:flex;align-items:center;justify-content:center;gap:6px}
+  .pd-trust svg{color:hsl(42 65% 65%)}
 
   .pd-features{background:hsla(30,20%,94%,.5);padding:64px 0}
   .pd-features h2{text-align:center;font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.7rem,3vw,2.2rem);margin:0}
