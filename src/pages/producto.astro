@@ -186,7 +186,7 @@ import { Heart, Share2, MessageCircle, Palette, Sparkles, Clock3, Layers, Wand2,
 
       const related = Object.values(PRODUCTS_DATA).filter(p=>p.id!==product.id).slice(0,3);
       document.getElementById('pdRelated').innerHTML = related.map((p,index)=>`
-        <a href="/producto?id=${p.id}" class="pd-r-card pd-reveal pd-reveal--up" style="--d:${'${(index*0.1).toFixed(1)}'}s;--dur:.5s">
+        <a href="/producto?id=${p.id}" class="pd-r-card pd-reveal pd-reveal--up" style="--d:${(index*0.1).toFixed(1)}s;--dur:.5s">
           <img src="${p.images[0]}" alt="${p.title}" />
           <div class="overlay"></div>
           ${p.tag?`<span class="tag">${p.tag}</span>`:''}
