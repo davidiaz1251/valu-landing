@@ -1,30 +1,31 @@
 ---
+import { Heart, Cake, Baby, Star } from '@lucide/astro';
 const categories = [
   {
     title: 'Bodas',
     description: 'Invitaciones, toppers y detalles que hacen mágico tu gran día',
-    icon: '♡',
+    icon: 'heart',
     image: '/media/images_public_69c11d14bba13990f133d6d0_296b37a14_generated_5a63a946.png',
     color: 'var(--lk-secondary)'
   },
   {
     title: 'Cumpleaños',
     description: 'Decoraciones únicas para celebrar cada año de vida',
-    icon: '✦',
+    icon: 'cake',
     image: '/media/images_public_69c11d14bba13990f133d6d0_e09c2d23f_generated_2175fea1.png',
     color: 'var(--lk-mint)'
   },
   {
     title: 'Baby Showers',
     description: 'Detalles tiernos para dar la bienvenida al bebé',
-    icon: '◌',
+    icon: 'baby',
     image: '/media/images_public_69c11d14bba13990f133d6d0_de5f491dc_generated_d6523004.png',
     color: 'hsla(42,65%,65%,.22)'
   },
   {
     title: 'Eventos Especiales',
     description: 'Graduaciones, aniversarios y todo lo que merece ser celebrado',
-    icon: '★',
+    icon: 'star',
     image: '/media/images_public_69c11d14bba13990f133d6d0_4ed3bd86b_generated_6d0099b4.png',
     color: 'hsla(350,40%,90%,.7)'
   }
@@ -49,7 +50,7 @@ const categories = [
           <div class="lk-m-card__overlay"></div>
 
           <div class="lk-m-card__content">
-            <div class="lk-m-card__icon">{item.icon}</div>
+            <div class="lk-m-card__icon">{item.icon === 'heart' ? <Heart size={16} /> : item.icon === 'cake' ? <Cake size={16} /> : item.icon === 'baby' ? <Baby size={16} /> : <Star size={16} />}</div>
             <h3>{item.title}</h3>
             <p>{item.description}</p>
           </div>
@@ -88,6 +89,13 @@ const categories = [
   .lk-momentos { padding: 96px 0 128px; position: relative; }
   .lk-momentos__topfade { position: absolute; inset: 0 0 auto 0; height: 96px; background: linear-gradient(to bottom, rgba(252,249,246,.95), transparent); pointer-events: none; }
   .lk-momentos__container { max-width: 1280px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
+
+  @media (min-width: 768px) {
+    .lk-momentos__container { padding: 0 32px; }
+  }
+
+  @media (min-width: 768px) {
+     position: relative; z-index: 1; }
 
   .lk-momentos__head { text-align: center; margin-bottom: 56px; opacity: 0; transform: translateY(20px); }
   .lk-momentos__head.is-visible { animation: lkMomentHeadIn .6s ease-out forwards; }

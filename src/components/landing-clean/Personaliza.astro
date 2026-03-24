@@ -1,22 +1,23 @@
 ---
+import { MessageCircle, Palette, Package, PartyPopper, ArrowRight } from '@lucide/astro';
 const steps = [
   {
-    icon: '💬',
+    icon: 'message',
     title: 'Cuéntanos tu idea',
     description: 'Escríbenos con los detalles de lo que imaginas: tema, colores, estilo y fecha del evento.'
   },
   {
-    icon: '🎨',
+    icon: 'palette',
     title: 'Diseñamos juntos',
     description: 'Te enviamos una propuesta personalizada. Tú apruebas o ajustamos hasta que sea perfecto.'
   },
   {
-    icon: '📦',
+    icon: 'package',
     title: 'Lo creamos a mano',
     description: 'Con materiales premium y técnicas artesanales, damos vida a tu pieza única.'
   },
   {
-    icon: '🎉',
+    icon: 'party',
     title: '¡Listo para brillar!',
     description: 'Tu creación llega empacada con cariño, lista para hacer tu momento inolvidable.'
   }
@@ -36,7 +37,7 @@ const steps = [
         <article class="lk-pe-step" data-reveal style={`--delay:${index * 0.12}s;`}>
           {index < steps.length - 1 && <i class="lk-pe-step__connector" aria-hidden="true"></i>}
 
-          <div class="lk-pe-step__bubble">{step.icon}</div>
+          <div class="lk-pe-step__bubble">{step.icon === 'message' ? <MessageCircle size={22} /> : step.icon === 'palette' ? <Palette size={22} /> : step.icon === 'package' ? <Package size={22} /> : <PartyPopper size={22} />}</div>
           <span class="lk-pe-step__num">{index + 1}</span>
 
           <h3>{step.title}</h3>
@@ -46,7 +47,7 @@ const steps = [
     </div>
 
     <div class="lk-personaliza__ctaWrap" data-reveal style="--delay:.4s;">
-      <a href="https://wa.me/" target="_blank" rel="noopener noreferrer" class="lk-personaliza__cta">Empieza tu pedido <span>→</span></a>
+      <a href="https://wa.me/" target="_blank" rel="noopener noreferrer" class="lk-personaliza__cta">Empieza tu pedido <ArrowRight size={16} /></a>
     </div>
   </div>
 </section>
@@ -112,6 +113,11 @@ const steps = [
     padding: 0 20px;
   }
 
+  @media (min-width: 768px) {
+    .lk-personaliza__container { padding: 0 32px; }
+  }
+
+  
   .lk-personaliza__head {
     text-align: center;
     margin-bottom: 56px;

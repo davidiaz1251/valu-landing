@@ -1,4 +1,5 @@
 ---
+import { Sparkles, Menu } from '@lucide/astro';
 const navLinks = [
   { label: 'Momentos', href: '#momentos' },
   { label: 'Proceso', href: '#proceso' },
@@ -12,7 +13,7 @@ const navLinks = [
   <div class="lk-nav__container">
     <div class="lk-nav__row">
       <a href="#" class="lk-brand">
-        <span class="lk-brand__spark">✦</span>
+        <span class="lk-brand__spark"><Sparkles size={20} /></span>
         <span class="lk-brand__text">Valu Kraft</span>
       </a>
 
@@ -30,7 +31,7 @@ const navLinks = [
         <a href="#personaliza" class="lk-nav__cta">Haz tu pedido</a>
       </div>
 
-      <button class="lk-nav__menu" id="lkNavMenuBtn" aria-label="Abrir menú" aria-expanded="false">☰</button>
+      <button class="lk-nav__menu" id="lkNavMenuBtn" aria-label="Abrir menú" aria-expanded="false"><Menu size={20} /></button>
     </div>
   </div>
 

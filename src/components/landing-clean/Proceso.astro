@@ -1,31 +1,32 @@
 ---
+import { PenTool, Scissors, Hand, Gift } from '@lucide/astro';
 const steps = [
   {
     num: '01',
     title: 'Diseño',
     description: 'Creamos un diseño personalizado basado en tu visión y estilo',
-    icon: '✎',
+    icon: 'pen',
     image: '/media/images_public_69c11d14bba13990f133d6d0_d18e9f2af_generated_ae86e30b.png'
   },
   {
     num: '02',
     title: 'Corte',
     description: 'Utilizamos tecnología de precisión para cortes perfectos en cada detalle',
-    icon: '✂',
+    icon: 'scissors',
     image: '/media/images_public_69c11d14bba13990f133d6d0_cd65a895f_generated_cc7704cd.png'
   },
   {
     num: '03',
     title: 'Ensamblaje',
     description: 'Cada capa se une a mano con cuidado y materiales premium',
-    icon: '✋',
+    icon: 'hand',
     image: '/media/images_public_69c11d14bba13990f133d6d0_b23bafa5f_generated_4b856256.png'
   },
   {
     num: '04',
     title: 'Entrega',
     description: 'Tu creación llega lista para brillar en tu momento especial',
-    icon: '🎁',
+    icon: 'gift',
     image: '/media/images_public_69c11d14bba13990f133d6d0_5b93f955f_generated_49441a7f.png'
   }
 ];
@@ -52,7 +53,7 @@ const steps = [
             </div>
 
             <div class="lk-p-card__body">
-              <div class="lk-p-card__icon">{step.icon}</div>
+              <div class="lk-p-card__icon">{step.icon === 'pen' ? <PenTool size={18} /> : step.icon === 'scissors' ? <Scissors size={18} /> : step.icon === 'hand' ? <Hand size={18} /> : <Gift size={18} />}</div>
               <h3>{step.title}</h3>
               <p>{step.description}</p>
             </div>
@@ -90,6 +91,11 @@ const steps = [
 
   .lk-proceso__container { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 0 20px; }
 
+  @media (min-width: 768px) {
+    .lk-proceso__container { padding: 0 32px; }
+  }
+
+  
   .lk-proceso__head { text-align: center; margin-bottom: 56px; opacity: 0; transform: translateY(20px); }
   .lk-proceso__head.is-visible { animation: lkProcessHeadIn .6s ease-out forwards; }
   .lk-proceso__head span { color: hsl(42 65% 65%); text-transform: uppercase; letter-spacing: .1em; font-size: .875rem; line-height: 1.25rem; font-weight: 500; }

@@ -1,4 +1,5 @@
 ---
+import { Sparkles, ArrowRight } from '@lucide/astro';
 const heroImg = '/media/images_public_69c11d14bba13990f133d6d0_a2d451895_generated_d22ed13b.png';
 const dots = Array.from({ length: 6 }, (_, i) => ({
   top: 15 + i * 14,
@@ -21,7 +22,7 @@ const dots = Array.from({ length: 6 }, (_, i) => ({
   <div class="lk-hero__container">
     <div class="lk-hero__grid">
       <div class="lk-hero__content">
-        <div class="lk-pill">✦ <span>Hecho a mano con amor</span></div>
+        <div class="lk-pill"><Sparkles size={14} /> <span>Hecho a mano con amor</span></div>
 
         <h1>
           Creamos <span class="lk-underline">momentos
@@ -38,7 +39,7 @@ const dots = Array.from({ length: 6 }, (_, i) => ({
         </p>
 
         <div class="lk-hero__actions">
-          <a href="#personaliza" class="lk-btn lk-btn--primary">Diseña el tuyo →</a>
+          <a href="#personaliza" class="lk-btn lk-btn--primary">Diseña el tuyo <ArrowRight size={16} /></a>
           <a href="#productos" class="lk-btn lk-btn--ghost">Ver catálogo</a>
         </div>
 
@@ -58,7 +59,7 @@ const dots = Array.from({ length: 6 }, (_, i) => ({
         </div>
 
         <div class="lk-badge">
-          <span class="lk-badge__icon">✦</span>
+          <span class="lk-badge__icon"><Sparkles size={18} /></span>
           <div>
             <small>Calidad</small>
             <strong>Premium</strong>
@@ -81,7 +82,12 @@ const dots = Array.from({ length: 6 }, (_, i) => ({
   .lk-dot { position: absolute; width: 6px; height: 6px; border-radius: 999px; background: hsla(42,65%,65%,.6); animation: lkDot 3s infinite; }
 
   .lk-hero__container { position: relative; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 20px; }
-  .lk-hero__grid { display: grid; gap: 48px; align-items: center; }
+
+  @media (min-width: 768px) {
+    .lk-hero__container { padding: 0 32px; }
+  }
+
+    .lk-hero__grid { display: grid; gap: 48px; align-items: center; }
 
   .lk-pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; border-radius: 999px; background: hsla(350,40%,90%,.6); border: 1px solid hsla(350,40%,85%,.8); margin-bottom: 24px; animation: lkFadeUp .6s .2s ease-out both; }
   .lk-pill span { color: #5f4a54; font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
