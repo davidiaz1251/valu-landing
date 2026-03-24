@@ -44,7 +44,7 @@ import Footer from '../components/landing-clean/Footer.astro';
                 <span id="pdTag" class="pd-tag"></span>
                 <span class="pd-tag is-hand">Hecho a mano</span>
               </div>
-              <button id="pdLike" class="pd-like">♡</button>
+              <div class="pd-actions"><button id="pdLike" class="pd-like">♡</button><button id="pdShare" class="pd-like" aria-label="Compartir">↗</button></div>
             </div>
 
             <h1 data-product-title>Toppers Personalizados</h1>
@@ -83,6 +83,7 @@ import Footer from '../components/landing-clean/Footer.astro';
               <a href="https://wa.me/" target="_blank" rel="noopener noreferrer" class="is-primary">Pedir por WhatsApp</a>
               <a href="https://wa.me/" target="_blank" rel="noopener noreferrer" class="is-ghost">Personalizar</a>
             </div>
+            <p class="pd-trust">✦ Diseño personalizado sin costo adicional · Apruebas antes de producir</p>
           </aside>
         </div>
       </section>
@@ -131,7 +132,7 @@ import Footer from '../components/landing-clean/Footer.astro';
       if(product.tag){ tag.textContent = `✦ ${product.tag}`; } else tag.style.display='none';
 
       const includes = document.getElementById('pdIncludes');
-      includes.innerHTML = product.includes.map(i=>`<div>✓ ${i}</div>`).join('');
+      includes.innerHTML = product.includes.map(i=>`<div class="pd-inc-item"><span class="pd-inc-icon">✓</span><span>${i}</span></div>`).join('');
 
       const renderButtons=(items,containerId,current,setter)=>{
         const c=document.getElementById(containerId); c.innerHTML='';
@@ -163,6 +164,14 @@ import Footer from '../components/landing-clean/Footer.astro';
       renderGallery();
 
       const like=document.getElementById('pdLike'); let liked=false; like.onclick=()=>{liked=!liked; like.textContent=liked?'♥':'♡';};
+      const share=document.getElementById('pdShare');
+      share.onclick=async()=>{
+        const url=window.location.href;
+        try {
+          if (navigator.share) await navigator.share({title: product.title, url});
+          else { await navigator.clipboard.writeText(url); share.textContent='✓'; setTimeout(()=>share.textContent='↗',1200); }
+        } catch {}
+      };
 
       const related = Object.values(PRODUCTS_DATA).filter(p=>p.id!==product.id).slice(0,3);
       document.getElementById('pdRelated').innerHTML = related.map(p=>`
@@ -201,12 +210,12 @@ import Footer from '../components/landing-clean/Footer.astro';
   .pd-gallery__thumbs .is-active{border-color:hsl(160 30% 45%);box-shadow:0 6px 16px rgba(50,130,105,.2)}
   .pd-gallery__thumbs img{width:100%;aspect-ratio:1/1;object-fit:cover}
 
-  .pd-info h1{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.875rem,3.6vw,2.25rem);line-height:1.2;margin:0;color:hsl(340 20% 15%)}
+  .pd-info h1{font-family:'Playfair Display',Georgia,serif;font-size:clamp(2.1rem,4vw,3rem);line-height:1.15;margin:0;color:hsl(340 20% 15%);font-weight:600}
   .pd-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
   .pd-tags{display:flex;gap:8px;flex-wrap:wrap}
   .pd-tag{padding:6px 10px;border-radius:999px;background:hsla(42,65%,65%,.2);color:hsl(42 50% 20%);border:1px solid hsla(42,65%,65%,.3);font-size:.75rem;font-weight:500}
   .pd-tag.is-hand{background:hsla(160,30%,45%,.1);border-color:hsla(160,30%,45%,.2);color:hsl(160 30% 35%)}
-  .pd-like{width:36px;height:36px;border-radius:999px;border:1px solid hsla(30,20%,88%,1);background:hsl(30 30% 97%);cursor:pointer}
+  .pd-actions{display:flex;gap:8px;align-items:center}.pd-like{width:36px;height:36px;border-radius:999px;border:1px solid hsla(30,20%,88%,1);background:hsl(30 30% 97%);cursor:pointer}
   .pd-tagline{margin:4px 0 0;color:hsl(340 10% 45%);font-size:1rem}
   .pd-rating{margin-top:12px;display:flex;gap:8px;align-items:center}
   .pd-rating span{color:hsl(42 65% 65%);letter-spacing:.5px}
@@ -216,7 +225,7 @@ import Footer from '../components/landing-clean/Footer.astro';
   .pd-options{display:grid;gap:18px}
   .pd-options label{display:block;font-size:.9rem;font-weight:500;margin-bottom:10px;color:hsl(340 20% 15%)}
   .pd-options label b{color:hsl(160 30% 45%)}
-  #pdOccasionCurrent{color:hsl(340 20% 45%)}
+  #pdOccasionCurrent{color:hsl(160 30% 45%)}
   .pd-options small{font-weight:400;color:hsl(340 10% 45%)}
   .pd-chips{display:flex;flex-wrap:wrap;gap:8px}
   .pd-chips button{padding:8px 14px;border-radius:999px;border:1px solid hsl(30 20% 88%);background:hsl(30 30% 97%);color:hsl(340 10% 45%);cursor:pointer;transition:.2s;font-size:.875rem;font-weight:500}
@@ -229,7 +238,7 @@ import Footer from '../components/landing-clean/Footer.astro';
   .pd-qty button{width:36px;height:36px;border-radius:999px;border:1px solid hsla(30,20%,88%,1);background:hsl(30 30% 97%);cursor:pointer}
   .pd-qty b{width:28px;text-align:center;font-size:1.1rem}
 
-  .pd-includes{margin-top:20px;background:hsla(30,20%,94%,.6);border-radius:16px;padding:16px;display:grid;gap:10px;font-size:.92rem;color:hsl(340 20% 15%)}
+  .pd-includes{margin-top:20px;background:hsla(30,20%,94%,.6);border-radius:16px;padding:16px;display:grid;gap:10px;font-size:.92rem;color:hsl(340 20% 15%)}\n  .pd-inc-item{display:flex;align-items:flex-start;gap:10px}\n  .pd-inc-icon{width:20px;height:20px;border-radius:999px;background:hsla(160,30%,45%,.15);color:hsl(160 30% 45%);display:grid;place-items:center;font-size:.72rem;line-height:1;margin-top:1px;flex:0 0 20px}
   .pd-delivery{margin-top:14px;font-size:.92rem;color:hsl(340 10% 45%)}
   .pd-delivery b{color:hsl(340 20% 15%)}
 
@@ -238,7 +247,7 @@ import Footer from '../components/landing-clean/Footer.astro';
   .pd-cta .is-primary{background:hsl(160 30% 45%);color:#fff}
   .pd-cta .is-primary:hover{background:hsl(160 30% 42%);box-shadow:0 14px 30px rgba(50,130,105,.2)}
   .pd-cta .is-ghost{border:2px solid hsla(30,20%,88%,1);color:hsl(340 20% 15%)}
-  .pd-cta .is-ghost:hover{background:hsla(350,40%,90%,.35)}
+  .pd-cta .is-ghost:hover{background:hsla(350,40%,90%,.35)}\n  .pd-trust{margin-top:12px;text-align:center;font-size:.76rem;color:hsl(340 10% 45%)}
 
   .pd-features{background:hsla(30,20%,94%,.5);padding:64px 0}
   .pd-features h2{text-align:center;font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.7rem,3vw,2.2rem);margin:0}
