@@ -2,8 +2,11 @@
   <div class="lk-footer__container">
     <div class="lk-footer__grid">
       <div>
-        <div class="lk-footer__brand">✦ <span>Valu Kraft</span></div>
-        <p>
+        <div class="lk-footer__brand">
+          <span class="lk-footer__spark">✦</span>
+          <span class="lk-footer__brandText">Valu Kraft</span>
+        </div>
+        <p class="lk-footer__desc">
           Creaciones artesanales personalizadas para tus momentos más especiales.
           Cada pieza hecha con amor y atención al detalle.
         </p>
@@ -31,32 +34,101 @@
     </div>
 
     <div class="lk-footer__bottom">
-      <small>© 2026 Valu Kraft. Todos los derechos reservados.</small>
-      <small>Hecho con ♥ en cada detalle</small>
+      <p>© 2026 Valu Kraft. Todos los derechos reservados.</p>
+      <p>Hecho con <span class="lk-footer__heart">♥</span> en cada detalle</p>
     </div>
   </div>
 </footer>
 
 <style>
-  .lk-footer { border-top: 1px solid hsla(30,20%,88%,.5); background: hsla(30,30%,97%,.5); }
-  .lk-footer__container { max-width: 1280px; margin: 0 auto; padding: 48px 20px 24px; }
-  .lk-footer__grid { display: grid; gap: 30px; }
-  .lk-footer__brand { display: inline-flex; align-items: center; gap: 8px; color: hsl(42 65% 55%); font-weight: 700; }
-  .lk-footer__brand span { color: #2f1f28; font-family: 'Playfair Display', Georgia, serif; font-size: 1.24rem; }
-  .lk-footer p { margin: 12px 0 0; color: #6f5b65; line-height: 1.6; max-width: 320px; }
-  .lk-footer h4 { margin: 0; color: #3f2f39; font-size: .97rem; }
-  .lk-footer__links { margin-top: 10px; display: grid; gap: 8px; }
-  .lk-footer__links a { text-decoration: none; color: #6f5b65; font-size: .93rem; }
-  .lk-footer__contact { margin-top: 10px; display: grid; gap: 8px; }
-  .lk-footer__contact p { margin: 0; color: #6f5b65; font-size: .93rem; }
-  .lk-footer__bottom { margin-top: 34px; padding-top: 14px; border-top: 1px solid rgba(228,218,213,.65); display: flex; flex-direction: column; gap: 8px; color: #8a7780; font-size: .78rem; }
-
-  @media (min-width: 768px) {
-    .lk-footer__container { padding: 64px 32px 24px; }
+  .lk-footer {
+    border-top: 1px solid hsla(30,20%,88%,.5);
+    background: hsla(30,30%,97%,.5);
   }
 
-  @media (min-width: 900px) {
-    .lk-footer__grid { grid-template-columns: 1.2fr .8fr .9fr; gap: 42px; }
-    .lk-footer__bottom { flex-direction: row; justify-content: space-between; align-items: center; }
+  .lk-footer__container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 48px 20px 64px;
+  }
+
+  .lk-footer__grid {
+    display: grid;
+    gap: 40px;
+  }
+
+  .lk-footer__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .lk-footer__spark { color: hsl(42 65% 65%); }
+
+  .lk-footer__brandText {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: hsl(340 20% 15%);
+  }
+
+  .lk-footer__desc {
+    margin: 0;
+    max-width: 300px;
+    font-size: .875rem;
+    line-height: 1.7;
+    color: hsl(340 10% 45%);
+  }
+
+  .lk-footer h4 {
+    margin: 0 0 16px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: hsl(340 20% 15%);
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+
+  .lk-footer__links,
+  .lk-footer__contact {
+    display: grid;
+    gap: 10px;
+  }
+
+  .lk-footer__links a,
+  .lk-footer__contact p {
+    margin: 0;
+    text-decoration: none;
+    font-size: .875rem;
+    color: hsl(340 10% 45%);
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+
+  .lk-footer__links a:hover { color: hsl(340 20% 15%); }
+
+  .lk-footer__bottom {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid hsla(30,20%,88%,.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .lk-footer__bottom p {
+    margin: 0;
+    font-size: .75rem;
+    color: hsl(340 10% 45%);
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+
+  .lk-footer__heart { color: hsl(340 20% 25%); }
+
+  @media (min-width: 768px) {
+    .lk-footer__container { padding: 64px 32px; }
+    .lk-footer__grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+    .lk-footer__bottom { flex-direction: row; }
   }
 </style>
