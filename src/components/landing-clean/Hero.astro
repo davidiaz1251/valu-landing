@@ -74,38 +74,38 @@ const dots = Array.from({ length: 6 }, (_, i) => ({
   .lk-hero__bg { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
 
   .lk-blob { position: absolute; border-radius: 999px; filter: blur(56px); }
-  .lk-blob--1 { top: -80px; right: -80px; width: 384px; height: 384px; background: hsla(350,40%,90%,.4); }
-  .lk-blob--2 { bottom: -128px; left: -80px; width: 320px; height: 320px; background: hsla(160,30%,85%,.3); }
-  .lk-blob--3 { top: 33%; right: 25%; width: 256px; height: 256px; background: hsla(42,65%,65%,.15); }
+  .lk-blob--1 { top: -80px; right: -80px; width: 384px; height: 384px; background: hsla(350,40%,90%,.4); animation: lkPaperIn .8s .2s ease-out both; }
+  .lk-blob--2 { bottom: -128px; left: -80px; width: 320px; height: 320px; background: hsla(160,30%,85%,.3); animation: lkPaperIn .8s .4s ease-out both; }
+  .lk-blob--3 { top: 33%; right: 25%; width: 256px; height: 256px; background: hsla(42,65%,65%,.15); animation: lkPaperIn .8s .6s ease-out both; }
 
   .lk-dot { position: absolute; width: 6px; height: 6px; border-radius: 999px; background: hsla(42,65%,65%,.6); animation: lkDot 3s infinite; }
 
   .lk-hero__container { position: relative; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 20px; }
   .lk-hero__grid { display: grid; gap: 48px; align-items: center; }
 
-  .lk-pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; border-radius: 999px; background: hsla(350,40%,90%,.6); border: 1px solid hsla(350,40%,85%,.8); margin-bottom: 24px; }
+  .lk-pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; border-radius: 999px; background: hsla(350,40%,90%,.6); border: 1px solid hsla(350,40%,85%,.8); margin-bottom: 24px; animation: lkFadeUp .6s .2s ease-out both; }
   .lk-pill span { color: #5f4a54; font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
 
-  .lk-hero h1 { margin: 0; font-family: 'Playfair Display', Georgia, serif; font-size: clamp(2.25rem, 7vw, 4.5rem); line-height: 1.05; font-weight: 600; color: #2f1f28; }
+  .lk-hero h1 { margin: 0; font-family: 'Playfair Display', Georgia, serif; font-size: clamp(2.25rem, 7vw, 4.5rem); line-height: 1.05; font-weight: 600; color: #2f1f28; animation: lkFadeUp .7s .3s ease-out both; }
   .lk-hero h1 em { color: hsl(160 30% 45%); font-style: normal; }
   .lk-underline { position: relative; display: inline-block; }
   .lk-underline .lk-underline-svg { position: absolute; left: 0; bottom: -8px; width: 100%; height: auto; overflow: visible; }
   .lk-underline .lk-underline-svg path { stroke: hsl(42 65% 65%); stroke-width: 3; stroke-linecap: round; fill: none; }
 
-  .lk-hero p { margin: 24px 0 0; max-width: 540px; color: #6b5963; font-size: clamp(1.02rem, 1.6vw, 1.22rem); line-height: 1.65; }
+  .lk-hero p { margin: 24px 0 0; max-width: 540px; color: #6b5963; font-size: clamp(1.02rem, 1.6vw, 1.22rem); line-height: 1.65; animation: lkFadeUp .6s .5s ease-out both; }
 
-  .lk-hero__actions { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 14px; }
+  .lk-hero__actions { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 14px; animation: lkFadeUp .6s .7s ease-out both; }
   .lk-btn { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; border-radius: 999px; padding: 14px 28px; font-weight: 600; font-size: 1rem; }
   .lk-btn--primary { background: hsl(160 30% 45%); color: #fff; box-shadow: 0 16px 36px rgba(50,130,105,.2); }
   .lk-btn--ghost { border: 2px solid rgba(220,206,198,.9); color: #3d2d37; }
 
-  .lk-trust { margin-top: 40px; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; color: #7a6871; font-size: .92rem; }
+  .lk-trust { margin-top: 40px; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; color: #7a6871; font-size: .92rem; animation: lkFadeIn .6s .9s ease-out both; }
   .lk-trust span { display: inline-flex; align-items: center; gap: 8px; }
   .lk-trust i { width: 8px; height: 8px; border-radius: 999px; display: inline-block; }
   .lk-trust i.is-primary { background: hsl(160 30% 45%); }
   .lk-trust i.is-accent { background: hsl(42 65% 65%); }
 
-  .lk-hero__media { position: relative; }
+  .lk-hero__media { position: relative; animation: lkMediaIn .8s .4s ease-out both; }
   .lk-paper { position: absolute; inset: -16px; border-radius: 24px; }
   .lk-paper--a { background: hsla(350,40%,90%,.5); transform: rotate(3deg); }
   .lk-paper--b { background: hsla(160,30%,85%,.4); transform: rotate(-2deg); }
@@ -141,6 +141,26 @@ const dots = Array.from({ length: 6 }, (_, i) => ({
     .lk-hero__grid { grid-template-columns: 1fr 1fr; gap: 64px; }
   }
 
+  @keyframes lkFadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes lkFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes lkMediaIn {
+    from { opacity: 0; transform: scale(.9) rotate(2deg); }
+    to { opacity: 1; transform: scale(1) rotate(0deg); }
+  }
+
+  @keyframes lkPaperIn {
+    from { opacity: 0; transform: translateY(30px) rotate(-2deg); }
+    to { opacity: 1; transform: translateY(0) rotate(0deg); }
+  }
+
   @keyframes lkBadgeFloat {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-8px); }
@@ -152,7 +172,14 @@ const dots = Array.from({ length: 6 }, (_, i) => ({
   }
   @media (prefers-reduced-motion: reduce) {
     .lk-badge,
-    .lk-dot { animation: none; }
+    .lk-dot,
+    .lk-blob,
+    .lk-pill,
+    .lk-hero h1,
+    .lk-hero p,
+    .lk-hero__actions,
+    .lk-trust,
+    .lk-hero__media { animation: none; }
   }
 
 </style>
