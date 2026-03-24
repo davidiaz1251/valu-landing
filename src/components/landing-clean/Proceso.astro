@@ -33,7 +33,7 @@ const steps = [
 
 <section id="proceso" class="lk-proceso">
   <div class="lk-proceso__container">
-    <header class="lk-proceso__head">
+    <header class="lk-proceso__head" data-reveal>
       <span>Nuestro proceso</span>
       <h2>Hecho a mano con detalle</h2>
       <p>Del concepto a la realidad, cada paso importa</p>
@@ -41,7 +41,7 @@ const steps = [
 
     <div class="lk-proceso__grid">
       {steps.map((step, index) => (
-        <article class="lk-p-wrap group">
+        <article class="lk-p-wrap group" data-reveal style={`--delay:${index * 0.15}s;`}>
           {index < steps.length - 1 && <i class="lk-p-card__connector" aria-hidden="true"></i>}
 
           <div class={`lk-p-card ${index % 2 ? 'is-offset' : ''}`}>
@@ -63,52 +63,74 @@ const steps = [
   </div>
 </section>
 
+<script is:inline>
+  const revealEls = document.querySelectorAll('#proceso [data-reveal]');
+
+  if ('IntersectionObserver' in window && revealEls.length) {
+    const io = new IntersectionObserver((entries, obs) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        obs.unobserve(entry.target);
+      });
+    }, { threshold: 0.16, rootMargin: '0px 0px -40px 0px' });
+
+    revealEls.forEach((el) => io.observe(el));
+  } else {
+    revealEls.forEach((el) => el.classList.add('is-visible'));
+  }
+</script>
+
 <style>
   .lk-proceso { padding: 96px 0 128px; background: rgba(245,240,236,.55); position: relative; overflow: hidden; }
   .lk-proceso::before { content: ''; position: absolute; top: 80px; right: 40px; width: 160px; height: 160px; border-radius: 50%; background: hsla(42,65%,65%,.12); filter: blur(28px); }
   .lk-proceso::after { content: ''; position: absolute; bottom: 70px; left: 20px; width: 240px; height: 240px; border-radius: 50%; background: hsla(350,40%,90%,.6); filter: blur(40px); }
 
   .lk-proceso__container { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 0 20px; }
-  .lk-proceso__head { text-align: center; margin-bottom: 56px; }
-  .lk-proceso__head span { color: hsl(42 65% 55%); text-transform: uppercase; letter-spacing: .14em; font-size: .78rem; font-weight: 700; }
-  .lk-proceso__head h2 { margin: 12px 0 0; font-family: 'Playfair Display', Georgia, serif; font-size: clamp(1.9rem, 4.2vw, 3rem); font-weight: 600; color: #2f1f28; }
-  .lk-proceso__head p { margin: 16px auto 0; color: #726069; font-size: 1.06rem; max-width: 36rem; }
+
+  .lk-proceso__head { text-align: center; margin-bottom: 56px; opacity: 0; transform: translateY(20px); }
+  .lk-proceso__head.is-visible { animation: lkProcessHeadIn .6s ease-out forwards; }
+  .lk-proceso__head span { color: hsl(42 65% 65%); text-transform: uppercase; letter-spacing: .1em; font-size: .875rem; line-height: 1.25rem; font-weight: 500; }
+  .lk-proceso__head h2 { margin: 12px 0 0; font-family: 'Playfair Display', Georgia, serif; font-size: clamp(1.9rem, 5vw, 3rem); font-weight: 600; color: #2f1f28; }
+  .lk-proceso__head p { margin: 16px auto 0; color: #726069; font-size: clamp(1rem, 1.7vw, 1.125rem); max-width: 36rem; }
 
   .lk-proceso__grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 20px; }
-  .lk-p-wrap { position: relative; }
+
+  .lk-p-wrap { position: relative; opacity: 0; transform: translateY(30px); }
+  .lk-p-wrap.is-visible { animation: lkProcessCardIn .6s ease-out var(--delay, 0s) forwards; }
 
   .lk-p-card {
-    background: rgba(255,255,255,.9);
+    background: rgba(252,249,246,.95);
     border: 1px solid rgba(228,218,213,.65);
     border-radius: 16px;
     overflow: hidden;
     transition: all .5s ease;
   }
-  .group:hover .lk-p-card { border-color: hsla(42,65%,65%,.35); box-shadow: 0 18px 38px rgba(109,84,98,.09); }
+  .group:hover .lk-p-card { border-color: hsla(42,65%,65%,.3); box-shadow: 0 18px 38px rgba(109,84,98,.08); }
 
   .lk-p-card__media { position: relative; aspect-ratio: 1 / 1; overflow: hidden; }
   .lk-p-card__media img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s ease; }
   .group:hover .lk-p-card__media img { transform: scale(1.05); }
 
-  .lk-p-card__fade {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(252,249,246,.9) 0%, rgba(252,249,246,.45) 26%, rgba(252,249,246,0) 62%);
-  }
+  .lk-p-card__fade { position: absolute; inset: 0; background: linear-gradient(to top, rgba(252,249,246,.92), rgba(252,249,246,.45) 26%, rgba(252,249,246,0) 62%); }
+  .lk-p-card__num { position: absolute; top: 16px; left: 16px; font-family: 'Playfair Display', Georgia, serif; font-size: 2.25rem; font-weight: 700; line-height: 1; color: rgba(255,255,255,.22); }
 
-  .lk-p-card__num { position: absolute; top: 16px; left: 16px; font-family: 'Playfair Display', Georgia, serif; font-size: 2.25rem; font-weight: 700; line-height: 1; color: rgba(255,255,255,.3); }
-
-  .lk-p-card__body { margin-top: -30px; position: relative; padding: 20px 20px 22px; }
-  .lk-p-card__icon { width: 44px; height: 44px; border-radius: 12px; background: hsla(160,30%,45%,.1); border: 1px solid hsla(160,30%,45%,.14); display: grid; place-items: center; font-size: 1.1rem; margin-bottom: 10px; }
+  .lk-p-card__body { margin-top: -32px; position: relative; padding: 20px 20px 22px; }
+  .lk-p-card__icon { width: 44px; height: 44px; border-radius: 12px; background: hsla(160,30%,45%,.1); border: 1px solid hsla(160,30%,45%,.1); display: grid; place-items: center; font-size: 1.1rem; margin-bottom: 10px; }
   .lk-p-card h3 { margin: 0; font-family: 'Playfair Display', Georgia, serif; color: #2f1f28; font-size: 1.25rem; font-weight: 600; }
   .lk-p-card p { margin: 8px 0 0; color: #6f5b65; font-size: .9rem; line-height: 1.6; }
 
   .lk-p-card__connector { display: none; }
 
-  @media (min-width: 1024px) {
+  @media (min-width: 768px) {
+    .lk-proceso { padding: 128px 0; }
     .lk-proceso__head { margin-bottom: 80px; }
-    .lk-proceso__head h2 { font-size: 3rem; }
-    .lk-proceso__grid { grid-template-columns: repeat(4, minmax(0,1fr)); gap: 24px; }
+    .lk-proceso__grid { gap: 24px; }
+    .lk-p-card__body { padding: 24px; }
+  }
+
+  @media (min-width: 1024px) {
+    .lk-proceso__grid { grid-template-columns: repeat(4, minmax(0,1fr)); }
     .lk-p-card.is-offset { margin-top: 48px; }
     .lk-p-card__connector {
       display: block;
@@ -119,5 +141,22 @@ const steps = [
       border-top: 2px dashed rgba(196,177,167,.8);
       z-index: 2;
     }
+  }
+
+  @keyframes lkProcessHeadIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes lkProcessCardIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lk-proceso__head,
+    .lk-p-wrap { opacity: 1; transform: none; animation: none !important; }
+    .lk-p-card,
+    .lk-p-card__media img { transition: none; }
   }
 </style>
