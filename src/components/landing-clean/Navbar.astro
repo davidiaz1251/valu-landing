@@ -73,22 +73,29 @@ const navLinks = [
   .lk-nav__container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
   .lk-nav__row { height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 14px; }
 
-  .lk-brand { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
+  .lk-brand { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; opacity: 0; transform: translateY(-14px); animation: lkNavDrop .55s .12s ease-out forwards; }
   .lk-brand__spark { color: hsl(42 65% 65%); transition: transform .25s ease; }
   .lk-brand:hover .lk-brand__spark { transform: rotate(12deg); }
   .lk-brand__text { font-family: 'Playfair Display', Georgia, serif; font-size: 1.3rem; font-weight: 600; color: #2f1f28; }
 
   .lk-nav__links { display: none; align-items: center; gap: 32px; }
-  .lk-nav__link { position: relative; text-decoration: none; color: #7a6871; font-size: .9rem; font-weight: 500; }
+  .lk-nav__link { position: relative; text-decoration: none; color: #7a6871; font-size: .9rem; font-weight: 500; opacity: 0; transform: translateY(-12px); animation: lkNavDrop .5s ease-out forwards; }
   .lk-nav__line { position: absolute; left: 0; bottom: -4px; width: 0; height: 2px; border-radius: 999px; background: hsl(42 65% 65%); transition: width .25s ease; }
   .lk-nav__link:hover { color: #2f1f28; }
   .lk-nav__link:hover .lk-nav__line { width: 100%; }
 
-  .lk-nav__actions { display: none; align-items: center; gap: 10px; }
+  .lk-nav__actions { display: none; align-items: center; gap: 10px; opacity: 0; transform: translateY(-12px); animation: lkNavDrop .55s .42s ease-out forwards; }
   .lk-nav__login { text-decoration: none; border-radius: 999px; border: 1px solid rgba(228,218,213,.9); padding: 10px 14px; font-size: .84rem; font-weight: 600; color: #5f4a54; background: rgba(255,255,255,.7); }
   .lk-nav__cta { text-decoration: none; border-radius: 999px; background: hsl(160 30% 45%); color: #fff; padding: 10px 18px; font-size: .88rem; font-weight: 600; box-shadow: 0 10px 20px rgba(50,130,105,.15); }
 
-  .lk-nav__menu { border: 0; background: transparent; color: #2f1f28; font-size: 1.1rem; padding: 6px; }
+  .lk-nav__menu { border: 0; background: transparent; color: #2f1f28; font-size: 1.1rem; padding: 6px; opacity: 0; transform: translateY(-10px); animation: lkNavDrop .45s .28s ease-out forwards; }
+
+
+  .lk-nav__link:nth-child(1) { animation-delay: .22s; }
+  .lk-nav__link:nth-child(2) { animation-delay: .26s; }
+  .lk-nav__link:nth-child(3) { animation-delay: .30s; }
+  .lk-nav__link:nth-child(4) { animation-delay: .34s; }
+  .lk-nav__link:nth-child(5) { animation-delay: .38s; }
 
   .lk-mobile { background: rgba(252,249,246,.95); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(228,218,213,.6); overflow: hidden; }
   .lk-mobile__inner { max-width: 1280px; margin: 0 auto; padding: 14px 20px 16px; display: grid; gap: 6px; }
@@ -103,4 +110,20 @@ const navLinks = [
     .lk-nav__menu, .lk-mobile { display: none; }
     .lk-brand__text { font-size: 1.5rem; }
   }
+  @keyframes lkNavDrop {
+    from { opacity: 0; transform: translateY(-12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lk-brand,
+    .lk-nav__link,
+    .lk-nav__actions,
+    .lk-nav__menu {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+
 </style>
