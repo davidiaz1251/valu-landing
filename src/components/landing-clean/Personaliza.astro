@@ -25,7 +25,7 @@ const steps = [
 
 <section id="personaliza" class="lk-personaliza">
   <div class="lk-personaliza__container">
-    <header class="lk-personaliza__head">
+    <header class="lk-personaliza__head" data-reveal>
       <span>Pedidos personalizados</span>
       <h2>Personaliza tu idea</h2>
       <p>En 4 simples pasos, convertimos tu visión en realidad</p>
@@ -33,7 +33,7 @@ const steps = [
 
     <div class="lk-personaliza__grid">
       {steps.map((step, index) => (
-        <article class="lk-pe-step">
+        <article class="lk-pe-step" data-reveal style={`--delay:${index * 0.12}s;`}>
           {index < steps.length - 1 && <i class="lk-pe-step__connector" aria-hidden="true"></i>}
 
           <div class="lk-pe-step__bubble">{step.icon}</div>
@@ -45,72 +45,103 @@ const steps = [
       ))}
     </div>
 
-    <div class="lk-personaliza__ctaWrap">
-      <a href="https://wa.me/" target="_blank" rel="noopener noreferrer" class="lk-personaliza__cta">Empieza tu pedido →</a>
+    <div class="lk-personaliza__ctaWrap" data-reveal style="--delay:.4s;">
+      <a href="https://wa.me/" target="_blank" rel="noopener noreferrer" class="lk-personaliza__cta">Empieza tu pedido <span>→</span></a>
     </div>
   </div>
 </section>
 
+<script is:inline>
+  (() => {
+    const personalizaRevealEls = document.querySelectorAll('#personaliza [data-reveal]');
+
+    if ('IntersectionObserver' in window && personalizaRevealEls.length) {
+      const personalizaIO = new IntersectionObserver((entries, obs) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-visible');
+          obs.unobserve(entry.target);
+        });
+      }, { threshold: 0.16, rootMargin: '0px 0px -40px 0px' });
+
+      personalizaRevealEls.forEach((el) => personalizaIO.observe(el));
+    } else {
+      personalizaRevealEls.forEach((el) => el.classList.add('is-visible'));
+    }
+  })();
+</script>
+
 <style>
   .lk-personaliza {
-    padding: 100px 0 120px;
+    padding: 96px 0 128px;
     background: rgba(245,240,236,.55);
     position: relative;
     overflow: hidden;
   }
+
   .lk-personaliza::before {
     content: '';
     position: absolute;
-    top: -60px;
+    top: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 420px;
-    height: 420px;
+    width: 384px;
+    height: 384px;
     border-radius: 50%;
-    background: hsla(350,40%,90%,.42);
-    filter: blur(44px);
+    background: hsla(350,40%,90%,.2);
+    filter: blur(48px);
   }
+
   .lk-personaliza::after {
     content: '';
     position: absolute;
-    right: -40px;
-    bottom: -60px;
-    width: 320px;
-    height: 320px;
+    right: 0;
+    bottom: 0;
+    width: 288px;
+    height: 288px;
     border-radius: 50%;
-    background: hsla(160,30%,85%,.28);
-    filter: blur(40px);
+    background: hsla(160,30%,85%,.2);
+    filter: blur(48px);
   }
 
   .lk-personaliza__container {
     position: relative;
     z-index: 1;
-    max-width: 1180px;
+    max-width: 1280px;
     margin: 0 auto;
     padding: 0 20px;
   }
 
   .lk-personaliza__head {
     text-align: center;
-    margin-bottom: 54px;
+    margin-bottom: 56px;
+    opacity: 0;
+    transform: translateY(20px);
   }
+  .lk-personaliza__head.is-visible { animation: lkPersonalizaHeadIn .6s ease-out forwards; }
+
   .lk-personaliza__head span {
-    color: hsl(42 65% 55%);
+    color: hsl(42 65% 65%);
     text-transform: uppercase;
-    letter-spacing: .14em;
-    font-size: .78rem;
-    font-weight: 700;
+    letter-spacing: .1em;
+    font-size: .875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
   }
+
   .lk-personaliza__head h2 {
     margin: 12px 0 0;
     font-family: 'Playfair Display', Georgia, serif;
-    font-size: clamp(2rem, 4.4vw, 3.2rem);
+    font-size: clamp(1.9rem, 5vw, 3rem);
+    font-weight: 600;
     color: #2f1f28;
   }
+
   .lk-personaliza__head p {
-    margin: 14px 0 0;
+    margin: 16px auto 0;
     color: #726069;
-    font-size: 1.03rem;
+    font-size: clamp(1rem, 1.7vw, 1.125rem);
+    max-width: 560px;
   }
 
   .lk-personaliza__grid {
@@ -122,77 +153,124 @@ const steps = [
   .lk-pe-step {
     position: relative;
     text-align: center;
+    opacity: 0;
+    transform: translateY(30px);
   }
+  .lk-pe-step.is-visible { animation: lkPersonalizaStepIn .5s ease-out var(--delay, 0s) forwards; }
 
   .lk-pe-step__bubble {
     width: 64px;
     height: 64px;
     margin: 0 auto 14px;
-    border-radius: 18px;
+    border-radius: 16px;
     display: grid;
     place-items: center;
     font-size: 1.45rem;
-    background: #fff;
-    border: 1px solid rgba(225,214,208,.75);
-    box-shadow: 0 6px 16px rgba(0,0,0,.06);
+    background: rgba(252,249,246,.98);
+    border: 1px solid rgba(228,218,213,.5);
+    box-shadow: 0 2px 8px rgba(47,31,40,.06);
+    transition: all .3s ease;
+  }
+  .lk-pe-step:hover .lk-pe-step__bubble {
+    box-shadow: 0 16px 28px rgba(47,31,40,.08);
+    border-color: hsla(42,65%,65%,.3);
   }
 
   .lk-pe-step__num {
     position: absolute;
     top: -8px;
     right: calc(50% - 34px);
-    width: 22px;
-    height: 22px;
+    width: 24px;
+    height: 24px;
     border-radius: 999px;
-    background: hsla(42,65%,65%,.28);
+    background: hsla(42,65%,65%,.2);
     display: grid;
     place-items: center;
     font-size: .72rem;
     font-weight: 700;
-    color: #7b5f1d;
+    color: #6c5320;
   }
 
   .lk-pe-step h3 {
     margin: 0;
     font-family: 'Playfair Display', Georgia, serif;
-    font-size: 1.1rem;
+    font-size: 1.125rem;
+    font-weight: 600;
     color: #2f1f28;
   }
+
   .lk-pe-step p {
     margin: 8px 0 0;
     color: #6f5b65;
-    font-size: .9rem;
-    line-height: 1.5;
+    font-size: .875rem;
+    line-height: 1.6;
     padding: 0 8px;
   }
 
   .lk-pe-step__connector { display: none; }
 
-  .lk-personaliza__ctaWrap { text-align: center; margin-top: 44px; }
+  .lk-personaliza__ctaWrap {
+    text-align: center;
+    margin-top: 56px;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  .lk-personaliza__ctaWrap.is-visible { animation: lkPersonalizaHeadIn .6s ease-out var(--delay, 0s) forwards; }
+
   .lk-personaliza__cta {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 8px;
     text-decoration: none;
     border-radius: 999px;
-    padding: 13px 24px;
-    font-weight: 600;
+    padding: 16px 32px;
+    font-weight: 500;
+    font-size: 1rem;
     background: hsl(160 30% 45%);
     color: #fff;
+    transition: all .25s ease;
+  }
+
+  .lk-personaliza__cta:hover {
+    background: hsl(160 30% 42%);
+    box-shadow: 0 16px 30px rgba(50,130,105,.2);
+    gap: 12px;
+  }
+
+  @media (min-width: 768px) {
+    .lk-personaliza { padding: 128px 0; }
+    .lk-personaliza__head { margin-bottom: 80px; }
+    .lk-personaliza__grid { gap: 32px; }
   }
 
   @media (min-width: 1024px) {
-    .lk-personaliza__grid {
-      grid-template-columns: repeat(4, minmax(0,1fr));
-      gap: 22px;
-    }
+    .lk-personaliza__grid { grid-template-columns: repeat(4, minmax(0,1fr)); }
     .lk-pe-step__connector {
       display: block;
       position: absolute;
-      top: 30px;
-      left: calc(50% + 38px);
-      width: calc(100% - 76px);
+      top: 32px;
+      left: calc(50% + 32px);
+      width: calc(100% - 64px);
       border-top: 2px dashed rgba(196,177,167,.75);
     }
+  }
+
+  @keyframes lkPersonalizaHeadIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes lkPersonalizaStepIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lk-personaliza__head,
+    .lk-pe-step,
+    .lk-personaliza__ctaWrap { opacity: 1; transform: none; animation: none !important; }
+    .lk-pe-step__bubble,
+    .lk-personaliza__cta { transition: none; }
   }
 </style>
