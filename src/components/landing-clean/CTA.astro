@@ -1,11 +1,37 @@
-<section class="lk-cta">
-  <div class="lk-cta__bg"></div>
-  <div class="lk-cta__container">
-    <div class="lk-cta__badge">✦ Cada pieza es única</div>
+---
+const sparkles = [
+  { top: 12, left: 8, delay: 0, duration: 3.1 },
+  { top: 24, left: 22, delay: 0.4, duration: 3.6 },
+  { top: 38, left: 38, delay: 0.8, duration: 3.4 },
+  { top: 52, left: 54, delay: 1.2, duration: 4.1 },
+  { top: 66, left: 70, delay: 1.6, duration: 3.3 },
+  { top: 78, left: 84, delay: 2.0, duration: 4.4 },
+  { top: 30, left: 90, delay: 2.4, duration: 3.7 },
+  { top: 86, left: 16, delay: 2.8, duration: 3.2 }
+];
+---
+
+<section class="lk-cta" id="cta">
+  <div class="lk-cta__bg" aria-hidden="true"></div>
+  <div class="lk-cta__blob lk-cta__blob--a" aria-hidden="true"></div>
+  <div class="lk-cta__blob lk-cta__blob--b" aria-hidden="true"></div>
+
+  <div class="lk-cta__sparkles" aria-hidden="true">
+    {sparkles.map((s) => (
+      <span style={`top:${s.top}%;left:${s.left}%;--delay:${s.delay}s;--duration:${s.duration}s;`}></span>
+    ))}
+  </div>
+
+  <div class="lk-cta__container" data-reveal>
+    <div class="lk-cta__badge">✦ <span>Cada pieza es única</span></div>
 
     <h2>
       ¿Listo para crear algo
-      <span class="lk-cta__underline">inolvidable</span>?
+      <span class="lk-cta__underline">inolvidable
+        <svg viewBox="0 0 300 12" fill="none" aria-hidden="true">
+          <path d="M2 8C60 2 160 2 298 8" />
+        </svg>
+      </span>?
     </h2>
 
     <p>
@@ -14,85 +40,106 @@
     </p>
 
     <div class="lk-cta__actions">
-      <a href="https://wa.me/" target="_blank" rel="noopener noreferrer" class="lk-cta__btn lk-cta__btn--primary">Haz tu pedido →</a>
+      <a href="https://wa.me/" target="_blank" rel="noopener noreferrer" class="lk-cta__btn lk-cta__btn--primary">Haz tu pedido <span>→</span></a>
       <a href="#productos" class="lk-cta__btn lk-cta__btn--ghost">Ver productos</a>
     </div>
   </div>
 </section>
 
+<script is:inline>
+  (() => {
+    const cta = document.querySelector('#cta [data-reveal]');
+    if (!cta) return;
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries, obs) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-visible');
+          obs.unobserve(entry.target);
+        });
+      }, { threshold: 0.2, rootMargin: '0px 0px -40px 0px' });
+      io.observe(cta);
+    } else {
+      cta.classList.add('is-visible');
+    }
+  })();
+</script>
+
 <style>
-  .lk-cta {
-    position: relative;
-    overflow: hidden;
-    padding: 110px 0 120px;
-  }
+  .lk-cta { position: relative; overflow: hidden; padding: 96px 0 128px; }
+
   .lk-cta__bg {
     position: absolute;
     inset: 0;
-    background:
-      radial-gradient(circle at 22% 16%, hsla(42,65%,65%,.15), transparent 36%),
-      radial-gradient(circle at 78% 82%, hsla(350,40%,90%,.6), transparent 44%),
-      linear-gradient(135deg, hsla(160,30%,45%,.05), hsla(350,40%,90%,.36) 45%, hsla(160,30%,85%,.3));
+    background: linear-gradient(135deg, hsla(160,30%,45%,.05), hsla(350,40%,90%,.3) 46%, hsla(160,30%,85%,.2));
+  }
+
+  .lk-cta__blob { position: absolute; border-radius: 999px; filter: blur(48px); pointer-events: none; }
+  .lk-cta__blob--a { top: 0; left: 25%; width: 288px; height: 288px; background: hsla(42,65%,65%,.1); }
+  .lk-cta__blob--b { bottom: 0; right: 25%; width: 384px; height: 384px; background: hsla(350,40%,90%,.4); }
+
+  .lk-cta__sparkles { position: absolute; inset: 0; pointer-events: none; }
+  .lk-cta__sparkles span {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: hsla(42,65%,65%,.5);
+    animation: lkCtaSparkle var(--duration, 3.2s) infinite;
+    animation-delay: var(--delay, 0s);
   }
 
   .lk-cta__container {
     position: relative;
     z-index: 1;
-    max-width: 920px;
+    max-width: 960px;
     margin: 0 auto;
     padding: 0 20px;
     text-align: center;
+    opacity: 0;
+    transform: scale(.95);
   }
+  .lk-cta__container.is-visible { animation: lkCtaIn .7s ease-out forwards; }
 
   .lk-cta__badge {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    border: 1px solid rgba(228,218,213,.75);
+    padding: 6px 16px;
     border-radius: 999px;
-    padding: 8px 14px;
-    background: rgba(255,255,255,.72);
-    color: #6a5962;
-    font-size: .86rem;
-    font-weight: 600;
-    margin-bottom: 24px;
+    background: hsl(30 30% 97%);
+    border: 1px solid hsla(30,20%,88%,.55);
+    box-shadow: 0 2px 8px rgba(47,31,40,.06);
+    margin-bottom: 32px;
   }
+  .lk-cta__badge span { color: #6a5962; font-size: .875rem; font-weight: 500; }
 
   .lk-cta h2 {
     margin: 0;
     font-family: 'Playfair Display', Georgia, serif;
-    font-size: clamp(2.3rem, 6vw, 4.9rem);
+    font-size: clamp(2.4rem, 7vw, 4.9rem);
     line-height: 1.06;
+    font-weight: 600;
     color: #2f1f28;
   }
 
-  .lk-cta__underline {
-    position: relative;
-    display: inline-block;
-  }
-  .lk-cta__underline::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -6px;
-    height: 10px;
-    background: radial-gradient(ellipse at center, hsla(42,65%,65%,.75), transparent 72%);
-  }
+  .lk-cta__underline { position: relative; display: inline-block; }
+  .lk-cta__underline svg { position: absolute; left: 0; bottom: -8px; width: 100%; height: auto; }
+  .lk-cta__underline path { stroke: hsl(42 65% 65%); stroke-width: 3; stroke-linecap: round; fill: none; }
 
   .lk-cta p {
-    margin: 22px auto 0;
+    margin: 24px auto 0;
     max-width: 760px;
     color: #6b5963;
-    font-size: 1.08rem;
+    font-size: clamp(1.06rem, 1.8vw, 1.25rem);
     line-height: 1.65;
   }
 
   .lk-cta__actions {
-    margin-top: 34px;
+    margin-top: 40px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
     align-items: center;
     justify-content: center;
   }
@@ -103,26 +150,52 @@
     justify-content: center;
     text-decoration: none;
     border-radius: 999px;
-    padding: 14px 26px;
-    font-weight: 600;
-    font-size: 1rem;
+    padding: 16px 32px;
+    font-weight: 500;
+    font-size: 1.125rem;
+    transition: all .25s ease;
   }
 
   .lk-cta__btn--primary {
+    gap: 8px;
     background: hsl(160 30% 45%);
     color: #fff;
-    box-shadow: 0 14px 30px rgba(50,130,105,.28);
+  }
+  .lk-cta__btn--primary:hover {
+    background: hsl(160 30% 42%);
+    box-shadow: 0 20px 40px rgba(50,130,105,.2);
+    gap: 12px;
   }
 
   .lk-cta__btn--ghost {
-    border: 2px solid rgba(226,215,208,.9);
+    border: 2px solid hsla(30,20%,88%,1);
     color: #3f2f39;
-    background: rgba(255,255,255,.62);
+    background: transparent;
+  }
+  .lk-cta__btn--ghost:hover { background: hsl(30 30% 97%); }
+
+  @media (min-width: 640px) {
+    .lk-cta__actions { flex-direction: row; }
   }
 
-  @media (min-width: 700px) {
-    .lk-cta__actions {
-      flex-direction: row;
-    }
+  @media (min-width: 768px) {
+    .lk-cta { padding: 128px 0; }
+  }
+
+  @keyframes lkCtaIn {
+    from { opacity: 0; transform: scale(.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes lkCtaSparkle {
+    0% { opacity: 0; transform: translateY(0) scale(0); }
+    50% { opacity: 1; transform: translateY(-20px) scale(1); }
+    100% { opacity: 0; transform: translateY(-40px) scale(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lk-cta__container { opacity: 1; transform: none; animation: none !important; }
+    .lk-cta__sparkles span { animation: none; }
+    .lk-cta__btn { transition: none; }
   }
 </style>
