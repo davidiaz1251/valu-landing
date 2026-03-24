@@ -135,7 +135,7 @@ import Footer from '../components/landing-clean/Footer.astro';
 
       const renderButtons=(items,containerId,current,setter)=>{
         const c=document.getElementById(containerId); c.innerHTML='';
-        items.forEach(v=>{const b=document.createElement('button'); b.textContent=v; b.className=v===current?'is-active':''; b.onclick=()=>setter(v); c.appendChild(b);});
+        items.forEach(v=>{const b=document.createElement('button'); b.textContent=v; b.className=v===current?`is-active ${containerId==='pdOccasions'?'is-occasion':'is-style'}`:''; b.onclick=()=>setter(v); c.appendChild(b);});
       };
       const refreshSelections=()=>{
         document.getElementById('pdStyleCurrent').textContent=style;
@@ -201,7 +201,7 @@ import Footer from '../components/landing-clean/Footer.astro';
   .pd-gallery__thumbs .is-active{border-color:hsl(160 30% 45%);box-shadow:0 6px 16px rgba(50,130,105,.2)}
   .pd-gallery__thumbs img{width:100%;aspect-ratio:1/1;object-fit:cover}
 
-  .pd-info h1{font-family:'Playfair Display',Georgia,serif;font-size:clamp(2rem,4.2vw,2.9rem);line-height:1.15;margin:0;color:hsl(340 20% 15%)}
+  .pd-info h1{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.7rem,3.4vw,2.35rem);line-height:1.15;margin:0;color:hsl(340 20% 15%)}
   .pd-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
   .pd-tags{display:flex;gap:8px;flex-wrap:wrap}
   .pd-tag{padding:6px 10px;border-radius:999px;background:hsla(42,65%,65%,.2);color:hsl(42 50% 20%);border:1px solid hsla(42,65%,65%,.3);font-size:.75rem;font-weight:500}
@@ -215,12 +215,12 @@ import Footer from '../components/landing-clean/Footer.astro';
 
   .pd-options{display:grid;gap:18px}
   .pd-options label{display:block;font-size:.9rem;font-weight:500;margin-bottom:10px;color:hsl(340 20% 15%)}
-  .pd-options label b{color:hsl(160 30% 45%)}
+  .pd-options label b{color:hsl(160 30% 45%)}\n  #pdOccasionCurrent{color:hsl(340 20% 45%)}
   .pd-options small{font-weight:400;color:hsl(340 10% 45%)}
   .pd-chips{display:flex;flex-wrap:wrap;gap:8px}
   .pd-chips button{padding:8px 14px;border-radius:999px;border:1px solid hsla(30,20%,88%,1);background:hsl(30 30% 97%);color:hsl(340 10% 45%);cursor:pointer;transition:.2s;font-size:.875rem;font-weight:500}
   .pd-chips button:hover{border-color:hsla(160,30%,45%,.35);color:hsl(340 20% 15%)}
-  .pd-chips .is-active{background:hsl(160 30% 45%);color:#fff;border-color:hsl(160 30% 45%)}
+  .pd-chips .is-active{color:#fff}\n  .pd-chips .is-active.is-style{background:hsl(160 30% 45%);border-color:hsl(160 30% 45%)}\n  .pd-chips .is-active.is-occasion{background:hsla(350,40%,90%,.9);border-color:hsla(350,25%,78%,.95);color:hsl(340 20% 35%)}
 
   .pd-qty{display:inline-flex;gap:12px;align-items:center;background:hsla(30,20%,94%,.8);padding:4px 8px;border-radius:999px}
   .pd-qty button{width:36px;height:36px;border-radius:999px;border:1px solid hsla(30,20%,88%,1);background:hsl(30 30% 97%);cursor:pointer}
