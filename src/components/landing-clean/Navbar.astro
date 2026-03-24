@@ -18,7 +18,7 @@ const navLinks = [
 
       <div class="lk-nav__links">
         {navLinks.map((link) => (
-          <a href={link.href} class="lk-nav__link">
+          <a href={`/${link.href}`} class="lk-nav__link">
             {link.label}
             <span class="lk-nav__line"></span>
           </a>
@@ -37,7 +37,7 @@ const navLinks = [
   <div class="lk-mobile" id="lkMobileMenu">
     <div class="lk-mobile__inner">
       {navLinks.map((link) => (
-        <a href={link.href} class="lk-mobile__link">{link.label}</a>
+        <a href={`/${link.href}`} class="lk-mobile__link">{link.label}</a>
       ))}
       <a href="/login" class="lk-mobile__login">Iniciar sesión</a>
       <a href="#personaliza" class="lk-mobile__cta">Haz tu pedido</a>
