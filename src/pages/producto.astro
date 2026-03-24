@@ -187,6 +187,8 @@ import { Heart, Share2, MessageCircle, Palette, Sparkles, Clock3, Layers, Wand2,
           ${p.tag?`<span class="tag">${p.tag}</span>`:''}
           <h3>${p.title}</h3>
         </a>`).join('');
+      document.querySelectorAll('#pdRelated .pd-reveal').forEach((el)=>el.classList.add('is-visible'));
+
 
 
       const ioEls = document.querySelectorAll('.pd-reveal');
@@ -297,7 +299,7 @@ import { Heart, Share2, MessageCircle, Palette, Sparkles, Clock3, Layers, Wand2,
   .pd-feature-icon{width:48px;height:48px;border-radius:12px;background:hsla(160,30%,45%,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:hsl(160 30% 45%)} .pd-feature-icon svg{width:20px;height:20px} .pd-features__grid h3{margin:0;font-size:.875rem;font-weight:600;color:hsl(340 20% 15%)}
   .pd-features__grid p{margin:8px 0 0;color:hsl(340 10% 45%);font-size:.75rem;line-height:1.65}
 
-  .pd-related{padding:64px 20px 92px}
+  .pd-related{padding:64px 20px 96px}
   .pd-related h2{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.7rem,3vw,2.2rem);margin:0}
   .pd-related__grid{margin-top:18px;display:grid;gap:16px}
   .pd-r-card{position:relative;border-radius:16px;overflow:hidden;aspect-ratio:4/5;text-decoration:none;display:block}
@@ -309,6 +311,6 @@ import { Heart, Share2, MessageCircle, Palette, Sparkles, Clock3, Layers, Wand2,
 
   @media(min-width:768px){.pd-cta{flex-direction:row}.pd-cta a{flex:1}}
   @media (prefers-reduced-motion: reduce){.pd-reveal{opacity:1;transform:none;animation:none !important}}
-  @media(min-width:768px){.pd-info h1{font-size:2.25rem}.pd-features h2{font-size:1.875rem}.pd-features{padding:80px 0}}
+  @media(min-width:768px){.pd-info h1{font-size:2.25rem}.pd-features h2{font-size:1.875rem}.pd-features{padding:80px 0}.pd-related{padding-top:96px;padding-bottom:96px}}
   @media(min-width:1024px){.pd-grid{grid-template-columns:1fr 1fr;gap:64px}.pd-info{position:sticky;top:112px}.pd-features__grid{grid-template-columns:repeat(4,1fr)}.pd-related__grid{grid-template-columns:repeat(3,1fr)}}
 </style>
