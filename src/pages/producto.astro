@@ -209,11 +209,11 @@ import { Heart, Share2, MessageCircle, Palette, Sparkles, Clock3, Layers, Wand2,
 <style is:global>
 
   .pd-reveal{opacity:0;will-change:transform,opacity}
-  .pd-reveal--up{transform:translateY(20px)}
-  .pd-reveal--left{transform:translateX(-20px)}
-  .pd-reveal--right{transform:translateX(20px)}
+  .pd-reveal--up{transform:translateY(20px);--from-y:20px}
+  .pd-reveal--left{transform:translateX(-20px);opacity:0;--from-x:-20px}
+  .pd-reveal--right{transform:translateX(20px);--from-x:20px}
   .pd-reveal.is-visible{animation:pdIn var(--dur,.6s) ease-out var(--d,0s) forwards}
-  @keyframes pdIn{from{opacity:0}to{opacity:1;transform:translate(0,0)}}
+  @keyframes pdIn{0%{opacity:0;transform:translate(var(--from-x,0),var(--from-y,0))}100%{opacity:1;transform:translate(0,0)}}
 
 
   .wrap{max-width:1280px;margin:0 auto;padding:0 20px}
