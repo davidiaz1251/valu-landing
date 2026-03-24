@@ -15,7 +15,7 @@ import { Heart, Share2, MessageCircle, Palette, Sparkles, Clock3 } from '@lucide
     <Navbar />
 
     <main class="pd-main">
-      <section class="pd-breadcrumb wrap">
+      <section class="pd-breadcrumb wrap pd-reveal pd-reveal--up">
         <nav>
           <a href="/">Inicio</a>
           <span>›</span>
@@ -27,7 +27,7 @@ import { Heart, Share2, MessageCircle, Palette, Sparkles, Clock3 } from '@lucide
 
       <section class="pd-hero wrap">
         <div class="pd-grid">
-          <div class="pd-gallery">
+          <div class="pd-gallery pd-reveal pd-reveal--left">
             <div class="pd-gallery__main">
               <div class="pd-gallery__paper pd-gallery__paper--a"></div>
               <div class="pd-gallery__paper pd-gallery__paper--b"></div>
@@ -39,7 +39,7 @@ import { Heart, Share2, MessageCircle, Palette, Sparkles, Clock3 } from '@lucide
             <div id="pdThumbs" class="pd-gallery__thumbs"></div>
           </div>
 
-          <aside class="pd-info">
+          <aside class="pd-info pd-reveal pd-reveal--right">
             <div class="pd-top">
               <div class="pd-tags">
                 <span id="pdTag" class="pd-tag"></span>
@@ -89,19 +89,19 @@ import { Heart, Share2, MessageCircle, Palette, Sparkles, Clock3 } from '@lucide
         </div>
       </section>
 
-      <section class="pd-features">
+      <section class="pd-features pd-reveal pd-reveal--up" style="--d:.15s">
         <div class="wrap">
           <h2>¿Por qué elegir Valu Kraft?</h2>
           <div class="pd-features__grid">
-            <article><h3>Diseño 100% personalizado</h3><p>Trabajamos contigo en cada detalle del diseño. Tu visión, nuestra magia.</p></article>
-            <article><h3>Materiales premium</h3><p>Cartulina glitter, acrílico, papel de alta gramaje. Solo lo mejor para tu momento.</p></article>
-            <article><h3>Apruebas antes de producir</h3><p>Te enviamos la prueba digital y solo procedemos cuando estás 100% feliz.</p></article>
-            <article><h3>Empaque de regalo</h3><p>Cada pedido llega protegido y empacado con cariño, listo para sorprender.</p></article>
+            <article class="pd-reveal pd-reveal--up" style="--d:.1s"><h3>Diseño 100% personalizado</h3><p>Trabajamos contigo en cada detalle del diseño. Tu visión, nuestra magia.</p></article>
+            <article class="pd-reveal pd-reveal--up" style="--d:.2s"><h3>Materiales premium</h3><p>Cartulina glitter, acrílico, papel de alta gramaje. Solo lo mejor para tu momento.</p></article>
+            <article class="pd-reveal pd-reveal--up" style="--d:.3s"><h3>Apruebas antes de producir</h3><p>Te enviamos la prueba digital y solo procedemos cuando estás 100% feliz.</p></article>
+            <article class="pd-reveal pd-reveal--up" style="--d:.4s"><h3>Empaque de regalo</h3><p>Cada pedido llega protegido y empacado con cariño, listo para sorprender.</p></article>
           </div>
         </div>
       </section>
 
-      <section class="pd-related wrap">
+      <section class="pd-related wrap pd-reveal pd-reveal--up" style="--d:.25s">
         <h2>También te puede gustar</h2>
         <div id="pdRelated" class="pd-related__grid"></div>
       </section>
@@ -176,18 +176,43 @@ import { Heart, Share2, MessageCircle, Palette, Sparkles, Clock3 } from '@lucide
 
       const related = Object.values(PRODUCTS_DATA).filter(p=>p.id!==product.id).slice(0,3);
       document.getElementById('pdRelated').innerHTML = related.map(p=>`
-        <a href="/producto?id=${p.id}" class="pd-r-card">
+        <a href="/producto?id=${p.id}" class="pd-r-card pd-reveal pd-reveal--up" style="--d:.12s">
           <img src="${p.images[0]}" alt="${p.title}" />
           <div class="overlay"></div>
           ${p.tag?`<span class="tag">${p.tag}</span>`:''}
           <h3>${p.title}</h3>
         </a>`).join('');
+
+
+      const ioEls = document.querySelectorAll('.pd-reveal');
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver((entries, obs) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('is-visible');
+            obs.unobserve(entry.target);
+          });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+        ioEls.forEach((el) => io.observe(el));
+      } else {
+        ioEls.forEach((el) => el.classList.add('is-visible'));
+      }
     </script>
   </body>
 </html>
 
 <style is:global>
+
+  .pd-reveal{opacity:0;will-change:transform,opacity}
+  .pd-reveal--up{transform:translateY(20px)}
+  .pd-reveal--left{transform:translateX(-20px)}
+  .pd-reveal--right{transform:translateX(20px)}
+  .pd-reveal.is-visible{animation:pdIn .6s ease-out var(--d,0s) forwards}
+  @keyframes pdIn{from{opacity:0}to{opacity:1;transform:translate(0,0)}}
+
+
   .wrap{max-width:1280px;margin:0 auto;padding:0 20px}
+  @media(min-width:768px){.wrap{padding:0 32px}}
   .pd-main{padding-top:80px;background:hsl(30 33% 98%);color:hsl(340 20% 15%);font-family:'DM Sans',system-ui,sans-serif}
   .pd-breadcrumb{padding:28px 20px 16px}
   .pd-breadcrumb nav{display:flex;gap:8px;align-items:center;font-size:.875rem;color:hsl(340 10% 45%)}
@@ -278,5 +303,6 @@ import { Heart, Share2, MessageCircle, Palette, Sparkles, Clock3 } from '@lucide
   .pd-r-card h3{position:absolute;left:14px;bottom:14px;margin:0;color:#fff;font-family:'Playfair Display',Georgia,serif;font-size:1.1rem}
 
   @media(min-width:768px){.pd-cta{flex-direction:row}.pd-cta a{flex:1}}
+  @media (prefers-reduced-motion: reduce){.pd-reveal{opacity:1;transform:none;animation:none !important}}
   @media(min-width:1024px){.pd-grid{grid-template-columns:1fr 1fr;gap:64px}.pd-info{position:sticky;top:112px}.pd-features__grid{grid-template-columns:repeat(4,1fr)}.pd-related__grid{grid-template-columns:repeat(3,1fr)}}
 </style>
