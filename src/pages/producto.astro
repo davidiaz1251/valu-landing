@@ -1,7 +1,7 @@
 ---
 import Navbar from '../components/landing-clean/Navbar.astro';
 import Footer from '../components/landing-clean/Footer.astro';
-import { Heart, Share2, MessageCircle, Palette, Sparkles, Clock3, Layers, Wand2, Package, BadgeCheck } from '@lucide/astro';
+import { Heart, Share2, MessageCircle, Palette, Sparkles, Clock3, Layers, Wand2, Package, BadgeCheck, ArrowRight } from '@lucide/astro';
 ---
 
 <html lang="es">
@@ -106,9 +106,14 @@ import { Heart, Share2, MessageCircle, Palette, Sparkles, Clock3, Layers, Wand2,
         </div>
       </section>
 
-      <section class="pd-related wrap pd-reveal pd-reveal--up" style="--d:.25s">
-        <h2>También te puede gustar</h2>
-        <div id="pdRelated" class="pd-related__grid"></div>
+      <section class="pd-related pd-reveal pd-reveal--up" style="--d:.25s">
+        <div class="wrap">
+          <div class="pd-related__head pd-reveal pd-reveal--up" style="--d:0s;--dur:.6s">
+            <h2>También te puede gustar</h2>
+            <a href="/#productos" class="pd-related__all">Ver todos <ArrowRight size={14} /></a>
+          </div>
+          <div id="pdRelated" class="pd-related__grid"></div>
+        </div>
       </section>
     </main>
 
@@ -180,8 +185,8 @@ import { Heart, Share2, MessageCircle, Palette, Sparkles, Clock3, Layers, Wand2,
       };
 
       const related = Object.values(PRODUCTS_DATA).filter(p=>p.id!==product.id).slice(0,3);
-      document.getElementById('pdRelated').innerHTML = related.map(p=>`
-        <a href="/producto?id=${p.id}" class="pd-r-card pd-reveal pd-reveal--up" style="--d:.12s">
+      document.getElementById('pdRelated').innerHTML = related.map((p,index)=>`
+        <a href="/producto?id=${p.id}" class="pd-r-card pd-reveal pd-reveal--up" style="--d:${'${(index*0.1).toFixed(1)}'}s;--dur:.5s">
           <img src="${p.images[0]}" alt="${p.title}" />
           <div class="overlay"></div>
           ${p.tag?`<span class="tag">${p.tag}</span>`:''}
@@ -299,18 +304,18 @@ import { Heart, Share2, MessageCircle, Palette, Sparkles, Clock3, Layers, Wand2,
   .pd-feature-icon{width:48px;height:48px;border-radius:12px;background:hsla(160,30%,45%,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:hsl(160 30% 45%)} .pd-feature-icon svg{width:20px;height:20px} .pd-features__grid h3{margin:0;font-size:.875rem;font-weight:600;color:hsl(340 20% 15%)}
   .pd-features__grid p{margin:8px 0 0;color:hsl(340 10% 45%);font-size:.75rem;line-height:1.65}
 
-  .pd-related{padding:64px 20px 96px}
-  .pd-related h2{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.7rem,3vw,2.2rem);margin:0}
-  .pd-related__grid{margin-top:18px;display:grid;gap:16px}
-  .pd-r-card{position:relative;border-radius:16px;overflow:hidden;aspect-ratio:4/5;text-decoration:none;display:block}
+  .pd-related{padding:64px 0}
+  .pd-related__head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:40px} .pd-related h2{font-family:'Playfair Display',Georgia,serif;font-size:1.5rem;line-height:1.2;font-weight:600;margin:0;color:hsl(340 20% 15%)} .pd-related__all{display:none;text-decoration:none;align-items:center;gap:4px;font-size:.875rem;color:hsl(160 30% 45%);font-weight:500;transition:.2s} .pd-related__all:hover{gap:8px}
+  .pd-related__grid{display:grid;gap:20px}
+  .pd-r-card{position:relative;border-radius:16px;overflow:hidden;aspect-ratio:4/5;text-decoration:none;display:block;background:hsl(30 20% 94%)}
   .pd-r-card img{width:100%;height:100%;object-fit:cover;transition:transform .7s ease}
   .pd-r-card:hover img{transform:scale(1.05)}
-  .pd-r-card .overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(34,23,30,.65),rgba(34,23,30,.15),transparent)}
-  .pd-r-card .tag{position:absolute;top:10px;left:10px;font-size:.72rem;padding:5px 10px;border-radius:999px;background:hsla(42,65%,65%,.9);color:#fff}
-  .pd-r-card h3{position:absolute;left:14px;bottom:14px;margin:0;color:#fff;font-family:'Playfair Display',Georgia,serif;font-size:1.1rem}
+  .pd-r-card .overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(34,23,30,.6),rgba(34,23,30,0),transparent)}
+  .pd-r-card .tag{position:absolute;top:12px;left:12px;font-size:.75rem;padding:4px 10px;border-radius:999px;background:hsla(42,65%,65%,.9);color:#fff;font-weight:500}
+  .pd-r-card h3{position:absolute;left:16px;right:16px;bottom:16px;margin:0;color:#fff;font-family:'Playfair Display',Georgia,serif;font-size:1.125rem;font-weight:600}
 
   @media(min-width:768px){.pd-cta{flex-direction:row}.pd-cta a{flex:1}}
   @media (prefers-reduced-motion: reduce){.pd-reveal{opacity:1;transform:none;animation:none !important}}
-  @media(min-width:768px){.pd-info h1{font-size:2.25rem}.pd-features h2{font-size:1.875rem}.pd-features{padding:80px 0}.pd-related{padding-top:96px;padding-bottom:96px}}
+  @media(min-width:768px){.pd-info h1{font-size:2.25rem}.pd-features h2{font-size:1.875rem}.pd-features{padding:80px 0}.pd-related{padding:96px 0}.pd-related h2{font-size:1.875rem}.pd-related__all{display:inline-flex}}
   @media(min-width:1024px){.pd-grid{grid-template-columns:1fr 1fr;gap:64px}.pd-info{position:sticky;top:112px}.pd-features__grid{grid-template-columns:repeat(4,1fr)}.pd-related__grid{grid-template-columns:repeat(3,1fr)}}
 </style>
