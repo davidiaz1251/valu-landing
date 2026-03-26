@@ -1,6 +1,6 @@
 import { hasSupabaseConfig, supabase, getUserProfile } from '/scripts/supabase-client.js';
 
-const authItem = document.querySelector('.nav__auth-item');
+const authItem = document.querySelector('.lk-nav__actions .nav__auth-item');
 const link = document.querySelector('[data-auth-menu]');
 const avatar = document.getElementById('authAvatar');
 const mobileLink = document.querySelector('[data-auth-menu-mobile]');
