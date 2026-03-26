@@ -30,6 +30,21 @@ const orgSchema = {
     'https://www.tiktok.com/@valu_kraft'
   ]
 };
+const localBusinessSchema = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  name: "Valu Kraft",
+  image: ogImage,
+  url: siteUrl,
+  telephone: "+34600000000",
+  email: "hola@valukraft.com",
+  address: {
+    "@type": "PostalAddress",
+    addressCountry: "ES"
+  },
+  areaServed: "ES",
+  sameAs: orgSchema.sameAs
+};
 ---
 
 <!doctype html>
@@ -62,6 +77,7 @@ const orgSchema = {
     
     <title>{title}</title>
     <script type="application/ld+json" set:html={JSON.stringify(orgSchema)}></script>
+    <script type="application/ld+json" set:html={JSON.stringify(localBusinessSchema)}></script>
     <script define:vars={{ supabaseUrl, supabaseAnonKey }}>
       window.__SUPABASE_URL = supabaseUrl || '';
       window.__SUPABASE_ANON_KEY = supabaseAnonKey || '';

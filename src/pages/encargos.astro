@@ -90,9 +90,23 @@ const faqs = [
     answer: 'Trabajamos contigo en cada paso para asegurar que el resultado sea perfecto. Si hay algún problema con la calidad, lo solucionamos sin coste adicional.'
   }
 ];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: f.answer
+    }
+  }))
+};
 ---
 
 <Layout title="Encargos personalizados paso a paso | Valu Kraft" description="Conoce el proceso de encargos personalizados de Valu Kraft: idea, diseño, aprobación y entrega de productos únicos.">
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
   <!-- Hero Section -->
   <section class="order-hero section--lg">
     <div class="order-hero__bg">
@@ -128,7 +142,7 @@ const faqs = [
     <div class="container">
       <div class="section__header text-center">
         <span class="section__badge">Paso a paso</span>
-        <h2 class="section__title">Cómo funciona</h2>
+        <h2 class="section__title">Cómo encargar productos personalizados en Valu Kraft</h2>
         <p class="section__description">
           Un proceso sencillo, transparente y colaborativo. 
           Estamos contigo en cada momento.
