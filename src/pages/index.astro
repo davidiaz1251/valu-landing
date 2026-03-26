@@ -38,6 +38,20 @@ import Footer from '../components/landing-clean/Footer.astro';
     <Proceso />
     <Productos />
     <Personaliza />
+
+    <section class="lk-reach" aria-labelledby="lkReachTitle">
+      <div class="lk-reach__container">
+        <span class="lk-reach__badge">Cobertura</span>
+        <h2 id="lkReachTitle">Trabajamos en Madrid y enviamos a toda España</h2>
+        <p>En Valu Kraft diseñamos y producimos de forma artesanal desde Madrid. Atendemos pedidos personalizados para clientes de toda España con seguimiento cercano en cada encargo.</p>
+        <div class="lk-reach__chips">
+          <span>Base operativa: Madrid</span>
+          <span>Envíos nacionales</span>
+          <span>Atención personalizada</span>
+        </div>
+      </div>
+    </section>
+
     <Testimonios />
     <CTA />
     <Footer />
@@ -59,4 +73,13 @@ import Footer from '../components/landing-clean/Footer.astro';
   }
   img { max-width: 100%; }
   a { transition: all .22s ease; }
+
+  .lk-reach { padding: 24px 0 8px; }
+  .lk-reach__container { max-width: 980px; margin: 0 auto; padding: 0 20px; }
+  .lk-reach__badge { display:inline-flex; border:1px solid #eadfdb; border-radius:999px; padding:6px 12px; font-size:.78rem; text-transform:uppercase; letter-spacing:.08em; color:#8a6f61; background:#fff; }
+  .lk-reach h2 { margin:12px 0 10px; font-family:'Playfair Display', Georgia, serif; font-size:clamp(1.5rem,4vw,2.2rem); color:#2f1f28; }
+  .lk-reach p { margin:0; color:#6a5962; line-height:1.7; }
+  .lk-reach__chips { margin-top:12px; display:flex; flex-wrap:wrap; gap:8px; }
+  .lk-reach__chips span { border:1px solid #eadfdb; border-radius:999px; padding:6px 10px; background:#fffaf7; color:#4b3842; font-size:.86rem; }
+  @media (min-width:768px){ .lk-reach__container{ padding:0 32px; } .lk-reach { padding: 28px 0 10px; } }
 </style>
