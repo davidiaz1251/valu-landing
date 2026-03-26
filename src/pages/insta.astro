@@ -92,12 +92,12 @@ const dots = Array.from({ length: 10 }, (_, i) => ({
   .bio-card {
     width: 100%;
     max-width: 620px;
-    background: rgba(255,255,255,.75);
-    border: 1px solid rgba(228,218,213,.7);
-    border-radius: 24px;
-    padding: 24px 16px;
-    box-shadow: 0 18px 42px rgba(47,31,40,.08);
-    backdrop-filter: blur(10px);
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 8px 6px;
+    box-shadow: none;
+    backdrop-filter: none;
   }
 
   .bio-head { text-align: center; margin-bottom: 16px; }
@@ -132,7 +132,7 @@ const dots = Array.from({ length: 10 }, (_, i) => ({
     border: 1px solid #e8d7d1;
     color: #2d1c23;
     font-weight: 600;
-    background: #fff;
+    background: rgba(255,255,255,.92);
     transition: all .22s ease;
   }
   .bio-link:hover { background: #fff6f2; transform: translateY(-1px); }
