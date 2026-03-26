@@ -1,5 +1,5 @@
 ---
-import { Sparkles, Menu } from '@lucide/astro';
+import { Menu } from '@lucide/astro';
 const navLinks = [
   { label: 'Momentos', href: '#momentos' },
   { label: 'Proceso', href: '#proceso' },
@@ -12,9 +12,8 @@ const navLinks = [
 <nav class="lk-nav" id="lkNav">
   <div class="lk-nav__container">
     <div class="lk-nav__row">
-      <a href="#" class="lk-brand">
-        <span class="lk-brand__spark"><Sparkles size={20} /></span>
-        <span class="lk-brand__text">Valu Kraft</span>
+      <a href="#" class="lk-brand" aria-label="Inicio Valu">
+        <img src="/images/logo-valu-round.jpg" alt="Logo Valu" class="lk-brand__logo" />
       </a>
 
       <div class="lk-nav__links">
@@ -99,10 +98,8 @@ const navLinks = [
 
     .lk-nav__row { height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 14px; }
 
-  .lk-brand { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
-  .lk-brand__spark { color: hsl(42 65% 65%); transition: transform .25s ease; }
-  .lk-brand:hover .lk-brand__spark { transform: rotate(12deg); }
-  .lk-brand__text { font-family: 'Playfair Display', Georgia, serif; font-size: 1.25rem; font-weight: 600; letter-spacing: -0.01em; color: hsl(340 20% 15%); }
+  .lk-brand { display: inline-flex; align-items: center; text-decoration: none; }
+  .lk-brand__logo { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(228,218,213,.9); box-shadow: 0 6px 16px rgba(0,0,0,.08); }
 
   .lk-nav__links { display: none; align-items: center; gap: 32px; }
   .lk-nav__link { position: relative; text-decoration: none; color: hsl(340 10% 45%); font-size: .875rem; font-weight: 500; font-family: 'DM Sans', system-ui, sans-serif; }
@@ -141,7 +138,7 @@ const navLinks = [
     .lk-nav__links { display: flex; }
     .lk-nav__actions { display: inline-flex; }
     .lk-nav__menu, .lk-mobile { display: none; }
-    .lk-brand__text { font-size: 1.5rem; }
+    .lk-brand__logo { width: 52px; height: 52px; }
   }
 
   @keyframes lkNavIn {

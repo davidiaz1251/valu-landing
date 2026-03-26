@@ -7,8 +7,7 @@ import { AtSign, Globe, Music2 } from '@lucide/astro';
     <div class="lk-footer__grid">
       <div>
         <div class="lk-footer__brand">
-          <span class="lk-footer__spark">✦</span>
-          <span class="lk-footer__brandText">Valu Kraft</span>
+          <img src="/images/logo-valu-round.jpg" alt="Logo Valu" class="lk-footer__logo" />
         </div>
         <p class="lk-footer__desc">
           Creaciones artesanales personalizadas para tus momentos más especiales.
@@ -67,17 +66,16 @@ import { AtSign, Globe, Music2 } from '@lucide/astro';
   .lk-footer__brand {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
     margin-bottom: 16px;
   }
 
-  .lk-footer__spark { color: hsl(42 65% 65%); }
-
-  .lk-footer__brandText {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: hsl(340 20% 15%);
+  .lk-footer__logo {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid rgba(228,218,213,.9);
+    box-shadow: 0 8px 20px rgba(0,0,0,.08);
   }
 
   .lk-footer__desc {
