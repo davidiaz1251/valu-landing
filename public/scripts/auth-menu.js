@@ -31,8 +31,9 @@ if (authItem && link && hasSupabaseConfig() && supabase) {
     const isAdmin = profile?.role === 'admin';
 
     const photo = session.user.user_metadata?.avatar_url || session.user.user_metadata?.picture;
-    if (avatar && photo) {
-      avatar.src = photo;
+    const fallback = 'https://ui-avatars.com/api/?background=E8D7D1&color=5F4A54&name=' + encodeURIComponent((session.user.user_metadata?.full_name || session.user.email || 'VK').slice(0, 24));
+    if (avatar) {
+      avatar.src = photo || fallback;
       avatar.hidden = false;
       avatar.style.display = 'block';
     }
