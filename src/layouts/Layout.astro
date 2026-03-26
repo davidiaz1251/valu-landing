@@ -87,7 +87,12 @@ const localBusinessSchema = {
       window.__SUPABASE_ANON_KEY = supabaseAnonKey || '';
     </script>
     <script type="text/javascript" charset="UTF-8" src="//cdn.cookie-script.com/s/406a37b1ea358f7ea88617ea8bc8c4cd.js"></script>
-    <script type="module" src="/scripts/auth-bootstrap.js"></script>
+    <script is:inline>
+      if (window.location.hash.includes('access_token=') && !window.location.pathname.startsWith('/auth/callback')) {
+        const next = encodeURIComponent('/plantillas');
+        window.location.replace('/auth/callback?next=' + next + window.location.hash);
+      }
+    </script>
   </head>
   <body>
     <Navbar />
