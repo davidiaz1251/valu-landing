@@ -92,6 +92,10 @@ const products = [
   .lk-productos { padding: 96px 0 128px; }
   .lk-productos__container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
 
+  @media (min-width: 768px) {
+    .lk-productos__container { padding: 0 32px; }
+  }
+
   .lk-productos__head { display: flex; flex-direction: column; gap: 14px; margin-bottom: 56px; opacity: 0; transform: translateY(20px); }
   .lk-productos__head.is-visible { animation: lkProductsHeadIn .6s ease-out forwards; }
   .lk-productos__head span { color: hsl(42 65% 65%); text-transform: uppercase; letter-spacing: .1em; font-size: .875rem; line-height: 1.25rem; font-weight: 500; }

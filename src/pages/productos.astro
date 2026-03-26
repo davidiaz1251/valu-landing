@@ -23,6 +23,17 @@ import Layout from '../layouts/Layout.astro';
     <div id="catalog-root" class="catalog-root"></div>
   </section>
 
+  <section class="section seo-links">
+    <div class="container">
+      <h2>Explora por tipo de encargo</h2>
+      <div class="seo-links__grid">
+        <a href="/toppers-personalizados">Toppers personalizados para tartas</a>
+        <a href="/papeleria-para-cumpleanos">Papelería personalizada para cumpleaños</a>
+        <a href="/decoracion-personalizada-bodas">Decoración personalizada para bodas</a>
+      </div>
+    </div>
+  </section>
+
   <script type="module" src="/scripts/productos-public.js"></script>
 </Layout>
 
@@ -148,4 +159,10 @@ import Layout from '../layouts/Layout.astro';
     :global(.product-card__actions) { grid-template-columns: 1fr; }
     :global(.catalog-category__head h2) { font-size: 1.1rem; }
   }
+
+  .seo-links { padding-top: 0; }
+  .seo-links h2 { margin: 0 0 .8rem; font-size: clamp(1.35rem, 3vw, 1.8rem); }
+  .seo-links__grid { display:grid; gap:.6rem; }
+  .seo-links__grid a { text-decoration:none; background:#fff; border:1px solid #eadfdb; border-radius:12px; padding:.8rem 1rem; color:#2d1c23; font-weight:600; }
+  .seo-links__grid a:hover { background:#fff7f4; }
 </style>

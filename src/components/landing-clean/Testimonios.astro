@@ -97,6 +97,10 @@ const testimonials = [
 
   .lk-testimonios__container { max-width: 1280px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
 
+  @media (min-width: 768px) {
+    .lk-testimonios__container { padding: 0 32px; }
+  }
+
   .lk-testimonios__head { text-align: center; margin-bottom: 56px; opacity: 0; transform: translateY(20px); }
   .lk-testimonios__head.is-visible { animation: lkTestiHeadIn .6s ease-out forwards; }
   .lk-testimonios__head span { color: hsl(42 65% 65%); text-transform: uppercase; letter-spacing: .1em; font-size: .875rem; line-height: 1.25rem; font-weight: 500; }
