@@ -5,13 +5,13 @@
   "icons": [
     {
       "sizes": "192x192",
-      "src": "/media/7170738c9_logo.png",
-      "type": "image/png"
+      "src": "/images/logo-valu-round.jpg",
+      "type": "image/jpeg"
     },
     {
       "sizes": "512x512",
-      "src": "/media/7170738c9_logo.png",
-      "type": "image/png"
+      "src": "/images/logo-valu-round.jpg",
+      "type": "image/jpeg"
     }
   ],
   "name": "Valu Kraft",
