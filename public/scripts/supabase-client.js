@@ -4,7 +4,7 @@ const supabaseUrl = window.__SUPABASE_URL || '';
 const supabaseAnonKey = window.__SUPABASE_ANON_KEY || '';
 
 export const hasSupabaseConfig = () => Boolean(supabaseUrl && supabaseAnonKey);
-export const supabase = hasSupabaseConfig() ? createClient(supabaseUrl, supabaseAnonKey, { auth: { flowType: 'pkce', persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } }) : null;
+export const supabase = hasSupabaseConfig() ? createClient(supabaseUrl, supabaseAnonKey) : null;
 
 export async function ensureUserProfile() {
   if (!supabase) return null;
