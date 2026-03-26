@@ -1,4 +1,9 @@
 ---
+const dots = Array.from({ length: 10 }, (_, i) => ({
+  top: 10 + (i * 8),
+  left: 6 + ((i * 17) % 88),
+  delay: (i * 0.35).toFixed(2)
+}));
 ---
 
 <!doctype html>
@@ -15,9 +20,21 @@
     <meta property="og:url" content="https://www.valukraft.com/insta" />
     <meta property="og:image" content="https://www.valukraft.com/images/logo-valu-round.jpg" />
     <meta name="twitter:card" content="summary" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   </head>
   <body>
     <section class="bio">
+      <div class="bio__bg" aria-hidden="true">
+        <div class="bio-blob bio-blob--a"></div>
+        <div class="bio-blob bio-blob--b"></div>
+        {dots.map((d) => (
+          <span class="bio-dot" style={`top:${d.top}%;left:${d.left}%;animation-delay:${d.delay}s;`}></span>
+        ))}
+      </div>
+
       <div class="bio__container">
         <article class="bio-card">
           <div class="bio-head">
@@ -26,11 +43,12 @@
             <p>🎨 Papelería creativa personalizada</p>
             <p>📦 Cajitas, toppers, recuerdos y más</p>
             <p>💌 Encargos únicos para cada ocasión</p>
-            <p>📍 Hecho con amor desde España</p>
+            <p>📍 Madrid · Envíos a toda España</p>
           </div>
 
           <div class="bio-links">
             <a class="bio-link bio-link--primary" href="https://www.valukraft.com" target="_blank" rel="noopener">Web oficial</a>
+            <a class="bio-link" href="https://www.instagram.com/valu_kraft" target="_blank" rel="noopener">Instagram</a>
             <a class="bio-link" href="https://www.facebook.com/share/1DrTnxMxss/" target="_blank" rel="noopener">Facebook</a>
             <a class="bio-link" href="https://tiktok.com/@valu_kraft" target="_blank" rel="noopener">TikTok</a>
             <a class="bio-link" href="https://www.valukraft.com/plantillas" target="_blank" rel="noopener">Plantillas</a>
@@ -42,81 +60,95 @@
 </html>
 
 <style>
-  :root { font-family: Inter, system-ui, Arial, sans-serif; }
   * { box-sizing: border-box; }
-  body { margin: 0; }
+  body { margin: 0; font-family: 'DM Sans', system-ui, sans-serif; color: #2f1f28; }
 
   .bio {
+    position: relative;
     min-height: 100dvh;
     display: flex;
     align-items: center;
-    background: linear-gradient(180deg, #fffaf7 0%, #fff 100%);
-    padding: 20px 12px;
+    background: hsl(30 33% 98%);
+    overflow: hidden;
+    padding: 24px 12px;
   }
 
-  .bio__container {
-    width: 100%;
-    display: flex;
-    justify-content: center;
+  .bio__bg { position: absolute; inset: 0; pointer-events: none; }
+  .bio-blob { position: absolute; border-radius: 999px; filter: blur(56px); }
+  .bio-blob--a { top: -100px; right: -80px; width: 320px; height: 320px; background: hsla(350,40%,90%,.45); }
+  .bio-blob--b { bottom: -110px; left: -70px; width: 280px; height: 280px; background: hsla(160,30%,85%,.30); }
+
+  .bio-dot {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: hsla(42,65%,65%,.6);
+    animation: bioDot 3s infinite;
   }
+
+  .bio__container { width: 100%; display: flex; justify-content: center; position: relative; z-index: 2; }
 
   .bio-card {
     width: 100%;
-    max-width: 560px;
-    background: transparent;
-    border: none;
-    border-radius: 0;
-    padding: 8px 6px;
-    box-shadow: none;
+    max-width: 620px;
+    background: rgba(255,255,255,.75);
+    border: 1px solid rgba(228,218,213,.7);
+    border-radius: 24px;
+    padding: 24px 16px;
+    box-shadow: 0 18px 42px rgba(47,31,40,.08);
+    backdrop-filter: blur(10px);
   }
 
-  .bio-head {
-    text-align: center;
-    margin-bottom: 16px;
-  }
-
+  .bio-head { text-align: center; margin-bottom: 16px; }
   .bio-logo {
-    width: 92px;
-    height: 92px;
-    margin: 0 auto 10px;
+    width: 96px;
+    height: 96px;
+    margin: 0 auto 12px;
     display: block;
     object-fit: cover;
     border-radius: 999px;
+    border: 1px solid rgba(228,218,213,.9);
   }
 
   .bio-head h1 {
     margin: 0 0 8px;
-    color: #2d1c23;
+    color: #2f1f28;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.8rem, 4.8vw, 2.4rem);
+    font-weight: 600;
   }
 
-  .bio-head p {
-    margin: 0;
-    color: #6b5b60;
-    line-height: 1.6;
-  }
+  .bio-head p { margin: 0; color: #6b5963; line-height: 1.62; }
 
-  .bio-links {
-    display: grid;
-    gap: 10px;
-  }
+  .bio-links { display: grid; gap: 10px; margin-top: 16px; }
 
   .bio-link {
     display: block;
     text-decoration: none;
     text-align: center;
-    padding: 12px 14px;
+    padding: 13px 14px;
     border-radius: 999px;
     border: 1px solid #e8d7d1;
     color: #2d1c23;
     font-weight: 600;
     background: #fff;
+    transition: all .22s ease;
   }
-
-  .bio-link:hover { background: #fff6f2; }
+  .bio-link:hover { background: #fff6f2; transform: translateY(-1px); }
 
   .bio-link--primary {
-    background: linear-gradient(135deg, #e8b4bc, #d08b96);
+    background: hsl(160 30% 45%);
     color: #fff;
-    border: none;
+    border-color: hsl(160 30% 45%);
+    box-shadow: 0 12px 24px rgba(50,130,105,.18);
   }
+  .bio-link--primary:hover { background: hsl(160 30% 42%); }
+
+  @keyframes bioDot {
+    0%,100% { opacity: 0; transform: scale(.5); }
+    50% { opacity: 1; transform: scale(1.2); }
+  }
+
+  @media (prefers-reduced-motion: reduce) { .bio-dot { animation: none; } }
 </style>
