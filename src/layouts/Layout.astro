@@ -18,6 +18,18 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? 'sb_publisha
 const siteUrl = (import.meta.env.PUBLIC_SITE_URL ?? 'https://www.valukraft.com').replace(/\/$/, '');
 const canonical = `${siteUrl}${Astro.url.pathname}`;
 const ogImage = `${siteUrl}/images/logo-valu-round.jpg`;
+const orgSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Valu Kraft',
+  url: siteUrl,
+  logo: ogImage,
+  sameAs: [
+    'https://instagram.com/valu_kraft',
+    'https://www.facebook.com/share/1DrTnxMxss/',
+    'https://www.tiktok.com/@valu_kraft'
+  ]
+};
 ---
 
 <!doctype html>
@@ -49,6 +61,7 @@ const ogImage = `${siteUrl}/images/logo-valu-round.jpg`;
     <link rel="icon" type="image/jpeg" href="/images/logo-valu-round.jpg" />
     
     <title>{title}</title>
+    <script type="application/ld+json" set:html={JSON.stringify(orgSchema)}></script>
     <script define:vars={{ supabaseUrl, supabaseAnonKey }}>
       window.__SUPABASE_URL = supabaseUrl || '';
       window.__SUPABASE_ANON_KEY = supabaseAnonKey || '';
