@@ -4,11 +4,13 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description?: string;
+  noindex?: boolean;
 }
 
 const { 
   title, 
-  description = "Valu Kraft - Papelería creativa y personalización artesanal. Transformamos tus ideas en productos únicos hechos con amor." 
+  description = "Valu Kraft - Papelería creativa y personalización artesanal. Transformamos tus ideas en productos únicos hechos con amor.",
+  noindex = false
 } = Astro.props;
 
 const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL ?? 'https://wshszoghxaserycscvka.supabase.co';
@@ -26,6 +28,7 @@ const ogImage = `${siteUrl}/images/logo-valu-round.jpg`;
     <meta name="description" content={description} />
     <meta name="keywords" content="papelería creativa, personalización, artesanal, regalos personalizados, invitaciones, cake toppers, decoración eventos" />
     <meta name="author" content="Valu Kraft" />
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
     <link rel="canonical" href={canonical} />
     
     <!-- Open Graph -->
