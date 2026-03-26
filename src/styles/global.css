@@ -490,3 +490,38 @@ ol {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-primary-dark);
 }
+
+
+/* GLOBAL AUTH DROPDOWN (ASTRO DYNAMIC NODE) */
+.nav__auth-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 180px;
+  background: #fff;
+  border: 1px solid rgba(228,218,213,.9);
+  border-radius: 12px;
+  box-shadow: 0 12px 26px rgba(0,0,0,.08);
+  padding: 8px;
+  display: grid;
+  gap: 4px;
+  z-index: 1000;
+}
+
+.nav__auth-dropdown-link {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  text-decoration: none;
+  color: #5f4a54;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.nav__auth-dropdown-link:hover {
+  background: rgba(232,218,213,.35);
+}
