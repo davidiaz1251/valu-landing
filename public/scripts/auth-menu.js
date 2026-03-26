@@ -25,7 +25,7 @@ function clearDropdown() {
 
 async function renderAuthMenu() {
   if (!hasSupabaseConfig() || !supabase) return;
-  const isMobile = window.matchMedia('(max-width: 900px)').matches;
+  const isMobile = window.matchMedia('(max-width: 767px)').matches;
 
   clearDropdown();
   hideAvatar(avatar);
@@ -35,6 +35,7 @@ async function renderAuthMenu() {
   const session = data?.session;
 
   if (!session?.user) {
+    document.getElementById('authLogoutMobile')?.remove();
     if (link) { link.textContent = 'Iniciar sesión'; link.setAttribute('href', '/login'); }
     if (mobileLink) { mobileLink.textContent = 'Iniciar sesión'; mobileLink.setAttribute('href', '/login'); }
     return;
@@ -55,13 +56,22 @@ async function renderAuthMenu() {
         mobileLink.textContent = 'Panel admin';
         mobileLink.setAttribute('href', '/admin/panel');
       } else {
-        mobileLink.textContent = 'Cerrar sesión';
-        mobileLink.setAttribute('href', '#');
-        mobileLink.onclick = async (e) => {
-          e.preventDefault();
+        mobileLink.textContent = 'Mis plantillas';
+        mobileLink.setAttribute('href', '/plantillas');
+      }
+      const logoutBtnMobile = document.getElementById('authLogoutMobile');
+      if (!logoutBtnMobile && mobileLink?.parentElement) {
+        const b = document.createElement('button');
+        b.id = 'authLogoutMobile';
+        b.type = 'button';
+        b.className = 'lk-mobile__login';
+        b.textContent = 'Cerrar sesión';
+        b.style.marginLeft = '6px';
+        b.addEventListener('click', async () => {
           await supabase.auth.signOut();
           window.location.href = '/';
-        };
+        });
+        mobileLink.parentElement.appendChild(b);
       }
     }
     if (link) {
