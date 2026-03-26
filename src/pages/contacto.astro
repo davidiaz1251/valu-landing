@@ -4,7 +4,7 @@ import Layout from '../layouts/Layout.astro';
 const contactFaqs = [
   { q: '¿Cuánto tardáis en responder?', a: 'Normalmente respondemos en menos de 24 horas por WhatsApp o email.' },
   { q: '¿Puedo pedir presupuesto sin compromiso?', a: 'Sí, enviamos presupuesto orientativo sin compromiso tras revisar tu idea.' },
-  { q: '¿Hacéis envíos en España?', a: 'Sí, trabajamos pedidos personalizados con envíos a España.' }
+  { q: '¿Hacéis envíos en España?', a: 'Sí, operamos desde Madrid y enviamos pedidos personalizados a toda España.' }
 ];
 
 const contactFaqSchema = {
@@ -14,7 +14,7 @@ const contactFaqSchema = {
 };
 ---
 
-<Layout title="Contacto y pedidos | Valu Kraft" description="Contacta con Valu Kraft para solicitar presupuestos y pedidos personalizados por WhatsApp, email o formulario.">
+<Layout title="Contacto y pedidos | Valu Kraft" description="Contacta con Valu Kraft en Madrid para solicitar pedidos personalizados con envíos a toda España por WhatsApp, email o formulario.">
   <script type="application/ld+json" set:html={JSON.stringify(contactFaqSchema)}></script>
   <section class="contact-hero section--lg">
     <div class="container">
@@ -83,7 +83,7 @@ const contactFaqSchema = {
               <span class="contact-info__icon">📍</span>
               <div>
                 <h4>Ubicación</h4>
-                <p>España</p>
+                <p>Madrid (base operativa) · Envíos a toda España</p>
               </div>
             </div>
           </div>
