@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+import Navbar from '../components/landing-clean/Navbar.astro';
+import Footer from '../components/landing-clean/Footer.astro';
 
 interface Props {
   title: string;
@@ -7,8 +9,8 @@ interface Props {
   noindex?: boolean;
 }
 
-const { 
-  title, 
+const {
+  title,
   description = "Valu Kraft - Papelería creativa y personalización artesanal. Transformamos tus ideas en productos únicos hechos con amor.",
   noindex = false
 } = Astro.props;
@@ -18,6 +20,7 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? 'sb_publisha
 const siteUrl = (import.meta.env.PUBLIC_SITE_URL ?? 'https://www.valukraft.com').replace(/\/$/, '');
 const canonical = `${siteUrl}${Astro.url.pathname}`;
 const ogImage = `${siteUrl}/images/logo-valu-round.jpg`;
+
 const orgSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
@@ -30,21 +33,22 @@ const orgSchema = {
     'https://www.tiktok.com/@valu_kraft'
   ]
 };
+
 const localBusinessSchema = {
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  name: "Valu Kraft",
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: 'Valu Kraft',
   image: ogImage,
   url: siteUrl,
-  telephone: "+34600000000",
-  email: "hola@valukraft.com",
+  telephone: '+34600000000',
+  email: 'hola@valukraft.com',
   address: {
-    "@type": "PostalAddress",
-    addressLocality: "Madrid",
-    addressRegion: "Comunidad de Madrid",
-    addressCountry: "ES"
+    '@type': 'PostalAddress',
+    addressLocality: 'Madrid',
+    addressRegion: 'Comunidad de Madrid',
+    addressCountry: 'ES'
   },
-  areaServed: ["Madrid", "España"],
+  areaServed: ['Madrid', 'España'],
   sameAs: orgSchema.sameAs
 };
 ---
@@ -59,8 +63,7 @@ const localBusinessSchema = {
     <meta name="author" content="Valu Kraft" />
     {noindex && <meta name="robots" content="noindex,nofollow" />}
     <link rel="canonical" href={canonical} />
-    
-    <!-- Open Graph -->
+
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
@@ -73,10 +76,9 @@ const localBusinessSchema = {
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
-    
-    <!-- Favicon -->
+
     <link rel="icon" type="image/jpeg" href="/images/logo-valu-round.jpg" />
-    
+
     <title>{title}</title>
     <script type="application/ld+json" set:html={JSON.stringify(orgSchema)}></script>
     <script type="application/ld+json" set:html={JSON.stringify(localBusinessSchema)}></script>
@@ -85,501 +87,13 @@ const localBusinessSchema = {
       window.__SUPABASE_ANON_KEY = supabaseAnonKey || '';
     </script>
     <script type="text/javascript" charset="UTF-8" src="//cdn.cookie-script.com/s/406a37b1ea358f7ea88617ea8bc8c4cd.js"></script>
-      <script type="module" src="/scripts/auth-bootstrap.js"></script>
+    <script type="module" src="/scripts/auth-bootstrap.js"></script>
   </head>
   <body>
-    <header class="header" id="header">
-      <div class="container">
-        <nav class="nav">
-          <a href="/" class="nav__logo">
-            <img src="/images/logo-valu-round.jpg" alt="Logo Valu Kraft" class="nav__logo-image" />
-          </a>
-          
-          <button class="nav__toggle" id="navToggle" aria-label="Toggle menu">
-            <span class="nav__toggle-bar"></span>
-            <span class="nav__toggle-bar"></span>
-            <span class="nav__toggle-bar"></span>
-          </button>
-          
-          <ul class="nav__menu" id="navMenu">
-            <li><a href="/" class="nav__link">Inicio</a></li>
-            <li><a href="/sobre-nosotros" class="nav__link">Sobre Nosotros</a></li>
-            <li><a href="/productos" class="nav__link">Productos</a></li>
-            <li><a href="/encargos" class="nav__link">Encargos</a></li>
-            <li><a href="/galeria" class="nav__link">Galería</a></li>
-            <li><a href="/plantillas" class="nav__link">Plantillas</a></li>
-            <li class="nav__auth-item"><img id="authAvatar" class="nav__avatar" alt="Perfil" hidden /><a href="/login" class="nav__link nav__link--login" id="authMenuLink" data-auth-menu>Iniciar sesión</a></li>
-            <li><a href="/contacto" class="nav__link nav__link--cta">Contacto</a></li>
-          </ul>
-        </nav>
-      </div>
-    </header>
-
+    <Navbar />
     <main>
       <slot />
     </main>
-
-    <footer class="footer">
-      <div class="container">
-        <div class="footer__content">
-          <div class="footer__brand">
-            <a href="/" class="footer__logo">
-              <img src="/images/logo-valu-round.jpg" alt="Logo Valu Kraft" class="footer__logo-image" />
-            </a>
-            <p class="footer__tagline">Transformamos ideas en recuerdos únicos</p>
-            <div class="footer__social">
-              <a href="https://instagram.com/valu_kraft" class="footer__social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                </svg>
-              </a>
-              <a href="https://www.facebook.com/share/1DvtccCQzt/?mibextid=wwXIfr" class="footer__social-link" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                </svg>
-              </a>
-              <a href="#" class="footer__social-link" aria-label="WhatsApp">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-                </svg>
-              </a>
-            </div>
-          </div>
-          
-          <div class="footer__links">
-            <div class="footer__column">
-              <h4 class="footer__title">Navegación</h4>
-              <ul class="footer__list">
-                <li><a href="/">Inicio</a></li>
-                <li><a href="/sobre-nosotros">Sobre Nosotros</a></li>
-                <li><a href="/productos">Productos</a></li>
-                <li><a href="/encargos">Encargos</a></li>
-                <li><a href="/plantillas">Plantillas</a></li>
-              </ul>
-            </div>
-            
-            <div class="footer__column">
-              <h4 class="footer__title">Servicios</h4>
-              <ul class="footer__list">
-                <li><a href="/productos#papeleria">Papelería Creativa</a></li>
-                <li><a href="/productos#decoracion">Decoración de Eventos</a></li>
-                <li><a href="/productos#personalizacion">Personalización</a></li>
-                <li><a href="/productos#encuadernacion">Encuadernación</a></li>
-              </ul>
-            </div>
-            
-            <div class="footer__column">
-              <h4 class="footer__title">Contacto</h4>
-              <ul class="footer__list footer__list--contact">
-                <li>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-                  </svg>
-                  <a href="mailto:hola@valukraft.com">hola@valukraft.com</a>
-                </li>
-                <li>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
-                  </svg>
-                  <a href="tel:+34600000000">+34 600 000 000</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        
-        <div class="footer__bottom">
-          <p>&copy; 2025 Valu Kraft. Todos los derechos reservados.</p>
-          <p class="footer__legal-links">
-            <a href="/terminos-servicio">Términos de Servicio</a>
-            <span>·</span>
-            <a href="/politica-privacidad">Política de Privacidad</a>
-            <span>·</span>
-            <a href="/politica-cookies">Política de Cookies</a>
-          </p>
-          <p class="footer__made">Hecho con 💕 y creatividad</p>
-        </div>
-      </div>
-    </footer>
-
-    <script>
-      // Mobile menu toggle
-      const navToggle = document.getElementById('navToggle');
-      const navMenu = document.getElementById('navMenu');
-      
-      navToggle?.addEventListener('click', () => {
-        navMenu?.classList.toggle('nav__menu--open');
-        navToggle?.classList.toggle('nav__toggle--active');
-      });
-      
-      // Header scroll effect
-      const header = document.getElementById('header');
-      
-      window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-          header?.classList.add('header--scrolled');
-        } else {
-          header?.classList.remove('header--scrolled');
-        }
-      });
-      
-      // Close menu when clicking outside
-      document.addEventListener('click', (e) => {
-        if (!navMenu?.contains(e.target as Node) && !navToggle?.contains(e.target as Node)) {
-          navMenu?.classList.remove('nav__menu--open');
-          navToggle?.classList.remove('nav__toggle--active');
-        }
-      });
-    </script>
-
-    <style>
-      /* Header Styles */
-      .header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: var(--z-fixed);
-        padding: var(--space-4) 0;
-        transition: all var(--transition-base);
-        background: transparent;
-      }
-      
-      .header--scrolled {
-        background: rgba(253, 249, 246, 0.95);
-        backdrop-filter: blur(20px);
-        box-shadow: var(--shadow-md);
-        padding: var(--space-3) 0;
-      }
-      
-      .nav {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-      
-      .nav__logo {
-        display: flex;
-        align-items: center;
-        gap: var(--space-2);
-        font-family: var(--font-display);
-        font-size: var(--text-xl);
-        font-weight: var(--font-bold);
-        color: var(--color-black);
-        text-decoration: none;
-      }
-      
-      .nav__logo-image {
-        width: 56px;
-        height: 56px;
-        object-fit: cover;
-        border-radius: 999px;
-        display: block;
-      }
-      
-      .nav__avatar { width: 28px; height: 28px; border-radius: 999px; object-fit: cover; border: 1px solid var(--color-gray-200); margin-right: 8px; display:block; }
-      .nav__avatar[hidden] { display:none !important; }
-      .nav__auth-dropdown[hidden] { display:none !important; }
-      .nav__auth-item { display:flex; align-items:center; position: relative; }
-      .nav__auth-dropdown { position:absolute; top: calc(100% + 8px); right: 0; min-width: 180px; background:#fff; border:1px solid var(--color-gray-200); border-radius: 12px; box-shadow: var(--shadow-md); padding: 8px; z-index: 1000; display:grid; gap:4px; }
-      .nav__auth-dropdown-link { display:block; width:100%; text-align:left; background:transparent; border:none; padding:8px 10px; border-radius:8px; color: var(--color-gray-700); text-decoration:none; cursor:pointer; font: inherit; }
-      .nav__auth-dropdown-link:hover { background: var(--color-secondary-light); }
-      :global(.nav__auth-dropdown) { position:absolute; top: calc(100% + 8px); right: 0; min-width: 180px; background:#fff; border:1px solid var(--color-gray-200); border-radius: 12px; box-shadow: var(--shadow-md); padding: 8px; z-index: 1000; display:grid; gap:4px; }
-      :global(.nav__auth-dropdown[hidden]) { display:none !important; }
-      :global(.nav__auth-dropdown-link) { display:block; width:100%; text-align:left; background:transparent; border:none; padding:8px 10px; border-radius:8px; color: var(--color-gray-700); text-decoration:none; cursor:pointer; font: inherit; }
-      :global(.nav__auth-dropdown-link:hover) { background: var(--color-secondary-light); }
-      @media (max-width: 900px) { .nav__auth-dropdown { display:none !important; } .nav__auth-item { width:100%; } .nav__auth-item .nav__link { width:100%; } .nav__auth-item .nav__avatar { margin-right:10px; } }
-      .nav__menu {
-        display: flex;
-        align-items: center;
-        gap: var(--space-8);
-      }
-      
-      .nav__link {
-        font-size: var(--text-sm);
-        font-weight: var(--font-medium);
-        color: var(--color-gray-600);
-        text-decoration: none;
-        transition: color var(--transition-fast);
-        position: relative;
-      }
-      
-      .nav__link::after {
-        content: '';
-        position: absolute;
-        bottom: -4px;
-        left: 0;
-        width: 0;
-        height: 2px;
-        background: linear-gradient(90deg, var(--color-primary), var(--color-lavender));
-        border-radius: var(--radius-full);
-        transition: width var(--transition-base);
-      }
-      
-      .nav__link:hover {
-        color: var(--color-primary-dark);
-      }
-      
-      .nav__link:hover::after {
-        width: 100%;
-      }
-      
-      .nav__link--cta {
-        background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
-        color: var(--color-white);
-        padding: var(--space-2) var(--space-5);
-        border-radius: var(--radius-full);
-        box-shadow: 0 4px 12px rgba(232, 180, 188, 0.3);
-      }
-      
-      .nav__link--cta:hover {
-        color: var(--color-white);
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(232, 180, 188, 0.4);
-      }
-      
-      .nav__link--cta::after {
-        display: none;
-      }
-      
-      .nav__toggle {
-        display: none;
-        flex-direction: column;
-        gap: 5px;
-        padding: var(--space-2);
-        cursor: pointer;
-      }
-      
-      .nav__toggle-bar {
-        width: 24px;
-        height: 2px;
-        background: var(--color-dark);
-        border-radius: var(--radius-full);
-        transition: all var(--transition-base);
-      }
-      
-      .nav__toggle--active .nav__toggle-bar:nth-child(1) {
-        transform: rotate(45deg) translate(5px, 5px);
-      }
-      
-      .nav__toggle--active .nav__toggle-bar:nth-child(2) {
-        opacity: 0;
-      }
-      
-      .nav__toggle--active .nav__toggle-bar:nth-child(3) {
-        transform: rotate(-45deg) translate(5px, -5px);
-      }
-      
-      /* Footer Styles */
-      .footer {
-        background: linear-gradient(180deg, var(--color-cream) 0%, var(--color-gray-100) 100%);
-        padding: var(--space-16) 0 var(--space-8);
-        margin-top: var(--space-20);
-      }
-      
-      .footer__content {
-        display: grid;
-        grid-template-columns: 1fr 2fr;
-        gap: var(--space-12);
-        padding-bottom: var(--space-12);
-        border-bottom: 1px solid var(--color-gray-200);
-      }
-      
-      .footer__brand {
-        display: flex;
-        flex-direction: column;
-        gap: var(--space-4);
-      }
-      
-      .footer__logo {
-        display: flex;
-        align-items: center;
-        gap: var(--space-2);
-        font-family: var(--font-display);
-        font-size: var(--text-xl);
-        font-weight: var(--font-bold);
-        color: var(--color-black);
-        text-decoration: none;
-      }
-      
-      .footer__logo-image {
-        width: 64px;
-        height: 64px;
-        object-fit: cover;
-        border-radius: 999px;
-        display: block;
-      }
-      
-      .footer__tagline {
-        color: var(--color-gray-500);
-        font-size: var(--text-sm);
-        margin-bottom: 0;
-      }
-      
-      .footer__social {
-        display: flex;
-        gap: var(--space-3);
-        margin-top: var(--space-2);
-      }
-      
-      .footer__social-link {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        background: var(--color-white);
-        border-radius: var(--radius-full);
-        color: var(--color-gray-500);
-        transition: all var(--transition-base);
-        box-shadow: var(--shadow-sm);
-      }
-      
-      .footer__social-link:hover {
-        background: var(--color-primary);
-        color: var(--color-white);
-        transform: translateY(-3px);
-        box-shadow: var(--shadow-md);
-      }
-      
-      .footer__links {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: var(--space-8);
-      }
-      
-      .footer__title {
-        font-family: var(--font-primary);
-        font-size: var(--text-sm);
-        font-weight: var(--font-semibold);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: var(--color-dark);
-        margin-bottom: var(--space-4);
-      }
-      
-      .footer__list {
-        display: flex;
-        flex-direction: column;
-        gap: var(--space-3);
-      }
-      
-      .footer__list a {
-        font-size: var(--text-sm);
-        color: var(--color-gray-500);
-        transition: color var(--transition-fast);
-      }
-      
-      .footer__list a:hover {
-        color: var(--color-primary-dark);
-      }
-      
-      .footer__list--contact li {
-        display: flex;
-        align-items: center;
-        gap: var(--space-2);
-      }
-      
-      .footer__list--contact svg {
-        color: var(--color-primary);
-        flex-shrink: 0;
-      }
-      
-      .footer__bottom {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding-top: var(--space-8);
-      }
-      
-      .footer__bottom p {
-        font-size: var(--text-sm);
-        color: var(--color-gray-500);
-        margin: 0;
-      }
-      
-      .footer__legal-links {
-        display: flex;
-        align-items: center;
-        gap: var(--space-2);
-        margin: 0;
-      }
-
-      .footer__legal-links a {
-        color: var(--color-gray-500);
-      }
-
-      .footer__legal-links a:hover {
-        color: var(--color-primary-dark);
-      }
-
-      .footer__made {
-        color: var(--color-primary-dark) !important;
-      }
-      
-      /* Responsive */
-      @media (max-width: 992px) {
-        .footer__content {
-          grid-template-columns: 1fr;
-          gap: var(--space-8);
-        }
-        
-        .footer__links {
-          grid-template-columns: repeat(3, 1fr);
-        }
-      }
-      
-      @media (max-width: 768px) {
-        .nav__toggle {
-          display: flex;
-        }
-        
-        .nav__menu {
-          position: fixed;
-          top: 0;
-          right: -100%;
-          width: 80%;
-          max-width: 300px;
-          height: 100vh;
-          background: var(--color-white);
-          flex-direction: column;
-          align-items: flex-start;
-          justify-content: flex-start;
-          padding: var(--space-20) var(--space-8);
-          gap: var(--space-6);
-          box-shadow: var(--shadow-xl);
-          transition: right var(--transition-base);
-        }
-        
-        .nav__menu--open {
-          right: 0;
-        }
-        
-        .nav__link {
-          font-size: var(--text-lg);
-        }
-        
-        .nav__link--cta {
-          margin-top: var(--space-4);
-        }
-        
-        .footer__links {
-          grid-template-columns: repeat(2, 1fr);
-        }
-        
-        .footer__bottom {
-          flex-direction: column;
-          gap: var(--space-2);
-          text-align: center;
-        }
-      }
-      
-      @media (max-width: 480px) {
-        .footer__links {
-          grid-template-columns: 1fr;
-        }
-      }
-    </style>
-      <script type="module" src="/scripts/auth-menu.js"></script>
+    <Footer />
   </body>
 </html>
