@@ -37,7 +37,12 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? 'sb_publisha
       window.__SUPABASE_URL = supabaseUrl || '';
       window.__SUPABASE_ANON_KEY = supabaseAnonKey || '';
     </script>
-    <script type="module" src="/scripts/auth-menu.js"></script>
+    <script is:inline>
+      if (window.location.hash.includes('access_token=') && !window.location.pathname.startsWith('/auth/callback')) {
+        const next = encodeURIComponent('/plantillas');
+        window.location.replace('/auth/callback?next=' + next + window.location.hash);
+      }
+    </script>
 </head>
   <body>
     <Navbar />
@@ -49,6 +54,7 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? 'sb_publisha
     <Testimonios />
     <CTA />
     <Footer />
+    <script type="module" src="/scripts/auth-menu.js"></script>
   </body>
 </html>
 
