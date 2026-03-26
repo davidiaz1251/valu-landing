@@ -1,26 +1,83 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+const topperFaqs = [
+  { q: '¿Qué tipo de toppers personalizados hacéis?', a: 'Creamos toppers personalizados para cumpleaños, bodas, bautizos y eventos temáticos (anime, infantil, elegante y más).' },
+  { q: '¿Con cuánto tiempo debo pedir mi topper personalizado?', a: 'Recomendamos hacer el pedido con 1 a 3 semanas de antelación según diseño y volumen.' },
+  { q: '¿Hacéis envíos de toppers personalizados en España?', a: 'Sí, trabajamos desde Madrid y hacemos envíos de toppers personalizados a toda España.' },
+  { q: '¿Puedo elegir nombre, edad y colores?', a: 'Sí. Personalizamos nombre, edad, temática, colores y tamaño para que combine con tu tarta o celebración.' }
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: topperFaqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } }))
+};
+
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'Toppers personalizados',
+  provider: { '@type': 'Organization', name: 'Valu Kraft', url: 'https://www.valukraft.com' },
+  areaServed: 'ES',
+  serviceType: 'Diseño y fabricación de toppers personalizados para tartas y eventos',
+  offers: { '@type': 'Offer', availability: 'https://schema.org/InStock', priceCurrency: 'EUR' }
+};
 ---
 
-<Layout title="Toppers personalizados para tartas | Valu Kraft" description="Diseñamos toppers personalizados para cumpleaños, bodas y eventos. Elige temática, nombre y colores en Valu Kraft.">
+<Layout title="Toppers personalizados para tartas en Madrid y España | Valu Kraft" description="Toppers personalizados para cumpleaños, bodas y eventos. Diseños con nombre, edad y temática. Valu Kraft en Madrid con envíos a toda España.">
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
+  <script type="application/ld+json" set:html={JSON.stringify(serviceSchema)}></script>
+
   <section class="section section--lg">
     <div class="container page">
       <span class="section__badge">Toppers personalizados</span>
       <h1>Toppers personalizados para tartas y eventos</h1>
-      <p class="lead">Creamos toppers artesanales con nombre, edad, temática y colores a juego con tu celebración.</p>
-      <h2>¿Qué puedes personalizar?</h2>
+      <p class="lead">Diseñamos toppers personalizados con nombre, edad y temática para cumpleaños, bodas y celebraciones especiales. Producción artesanal en Madrid con envíos a toda España.</p>
+
+      <div class="cta-row">
+        <a href="/encargos" class="btn btn--primary">Pedir topper personalizado</a>
+        <a href="/contacto" class="btn btn--secondary">Solicitar presupuesto</a>
+      </div>
+
+      <h2>Qué puedes personalizar en tu topper</h2>
       <ul>
-        <li>Nombre y edad</li>
-        <li>Temática (anime, infantil, elegante, etc.)</li>
+        <li>Nombre, edad o frase especial</li>
+        <li>Temática (anime, infantil, elegante, películas, etc.)</li>
         <li>Colores y acabados</li>
-        <li>Tamaño según tu tarta</li>
+        <li>Tamaño según la tarta</li>
       </ul>
-      <p><a href="/encargos" class="btn btn--primary">Solicitar topper personalizado</a></p>
+
+      <h2>Toppers para cada ocasión</h2>
+      <p>Trabajamos toppers personalizados para cumpleaños infantiles y adultos, bodas, baby shower, bautizos y eventos de empresa.</p>
+
+      <div class="seo-links">
+        <a href="/toppers-personalizados-cumpleanos">Toppers personalizados para cumpleaños</a>
+        <a href="/topper-tarta-personalizado-nombre">Topper tarta personalizado con nombre</a>
+      </div>
+
+      <h2>Preguntas frecuentes</h2>
+      <div class="faq-list">
+        {topperFaqs.map((item) => (
+          <article class="faq-item">
+            <h3>{item.q}</h3>
+            <p>{item.a}</p>
+          </article>
+        ))}
+      </div>
     </div>
   </section>
 </Layout>
 
 <style>
-  .page{max-width:820px}
+  .page{max-width:900px}
   .lead{font-size:1.12rem;color:var(--color-gray-600)}
+  .cta-row{display:flex;gap:.7rem;flex-wrap:wrap;margin:14px 0 10px}
+  .seo-links{display:grid;gap:.6rem;margin:10px 0 12px}
+  .seo-links a{text-decoration:none;background:#fff;border:1px solid #eadfdb;border-radius:12px;padding:.8rem 1rem;color:#2d1c23;font-weight:600}
+  .seo-links a:hover{background:#fff7f4}
+  .faq-list{display:grid;gap:.8rem;margin-top:.6rem}
+  .faq-item{background:#fff;border:1px solid #eadfdb;border-radius:12px;padding:.8rem 1rem}
+  .faq-item h3{margin:.1rem 0 .35rem;font-size:1rem}
+  .faq-item p{margin:0;color:var(--color-gray-600)}
 </style>
