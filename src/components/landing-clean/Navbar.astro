@@ -42,7 +42,10 @@ const navLinks = [
       {navLinks.map((link) => (
         <a href={`/${link.href}`} class="lk-mobile__link">{link.label}</a>
       ))}
-      <a href="/login" class="lk-mobile__login">Iniciar sesión</a>
+      <div class="lk-mobile__auth nav__auth-item">
+        <img id="authAvatarMobile" class="lk-mobile__avatar" alt="Perfil" hidden />
+        <a href="/login" class="lk-mobile__login" id="authMenuLinkMobile" data-auth-menu-mobile>Iniciar sesión</a>
+      </div>
       <a href="#personaliza" class="lk-mobile__cta">Haz tu pedido</a>
     </div>
   </div>
@@ -139,7 +142,10 @@ const navLinks = [
   }
   .lk-mobile__inner { max-width: 1280px; margin: 0 auto; padding: 14px 20px 16px; display: grid; gap: 6px; }
   .lk-mobile__link { display: block; text-decoration: none; color: #6e5a64; font-size: 1rem; font-weight: 500; padding: 8px 0; }
-  .lk-mobile__login { margin-top: 6px; text-decoration: none; width: max-content; border-radius: 999px; border: 1px solid rgba(228,218,213,.9); padding: 10px 14px; font-size: .84rem; font-weight: 600; color: #5f4a54; background: rgba(255,255,255,.7); }
+  .lk-mobile__auth { display:inline-flex; align-items:center; gap:8px; margin-top: 6px; }
+  .lk-mobile__avatar { width: 26px; height: 26px; border-radius: 999px; object-fit: cover; border: 1px solid rgba(228,218,213,.9); }
+  .lk-mobile__avatar[hidden] { display:none !important; }
+  .lk-mobile__login { text-decoration: none; width: max-content; border-radius: 999px; border: 1px solid rgba(228,218,213,.9); padding: 10px 14px; font-size: .84rem; font-weight: 600; color: #5f4a54; background: rgba(255,255,255,.7); }
   .lk-mobile__cta { margin-top: 4px; text-decoration: none; width: max-content; border-radius: 999px; background: hsl(160 30% 45%); color: #fff; padding: 10px 18px; font-size: .88rem; font-weight: 600; }
 
   @media (min-width: 768px) {

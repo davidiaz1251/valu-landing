@@ -3,60 +3,74 @@ import { hasSupabaseConfig, supabase, getUserProfile } from '/scripts/supabase-c
 const authItem = document.querySelector('.nav__auth-item');
 const link = document.querySelector('[data-auth-menu]');
 const avatar = document.getElementById('authAvatar');
+const mobileLink = document.querySelector('[data-auth-menu-mobile]');
+const mobileAvatar = document.getElementById('authAvatarMobile');
 const isMobile = window.matchMedia('(max-width: 900px)').matches;
 
-if (avatar) {
-  avatar.hidden = true;
-  avatar.style.display = 'none';
-}
+const hideAvatar = (el) => {
+  if (!el) return;
+  el.hidden = true;
+  el.style.display = 'none';
+};
+const showAvatar = (el, src) => {
+  if (!el) return;
+  el.src = src;
+  el.hidden = false;
+  el.style.display = 'block';
+};
 
-if (authItem && link && hasSupabaseConfig() && supabase) {
+hideAvatar(avatar);
+hideAvatar(mobileAvatar);
+
+if (hasSupabaseConfig() && supabase && (link || mobileLink)) {
   const apply = async () => {
     const { data } = await supabase.auth.getSession();
     const session = data?.session;
 
+    const desktopMenuOld = authItem?.querySelector('.nav__auth-dropdown');
+    if (desktopMenuOld) desktopMenuOld.remove();
+
     if (!session?.user) {
-      link.textContent = 'Iniciar sesión';
-      link.setAttribute('href', '/login');
-      if (avatar) {
-        avatar.hidden = true;
-        avatar.style.display = 'none';
-      }
-      const old = authItem.querySelector('.nav__auth-dropdown');
-      if (old) old.remove();
+      if (link) { link.textContent = 'Iniciar sesión'; link.setAttribute('href', '/login'); }
+      if (mobileLink) { mobileLink.textContent = 'Iniciar sesión'; mobileLink.setAttribute('href', '/login'); }
+      hideAvatar(avatar); hideAvatar(mobileAvatar);
       return;
     }
 
     const profile = await getUserProfile();
     const isAdmin = profile?.role === 'admin';
-
     const photo = session.user.user_metadata?.avatar_url || session.user.user_metadata?.picture;
     const fallback = 'https://ui-avatars.com/api/?background=E8D7D1&color=5F4A54&name=' + encodeURIComponent((session.user.user_metadata?.full_name || session.user.email || 'VK').slice(0, 24));
-    if (avatar) {
-      avatar.src = photo || fallback;
-      avatar.hidden = false;
-      avatar.style.display = 'block';
-    }
+    const avatarSrc = photo || fallback;
+
+    showAvatar(avatar, avatarSrc);
+    showAvatar(mobileAvatar, avatarSrc);
 
     if (isMobile) {
-      if (isAdmin) {
-        link.textContent = 'Panel admin';
-        link.setAttribute('href', '/admin/panel');
-      } else {
-        link.textContent = 'Cerrar sesión';
-        link.setAttribute('href', '#');
-        link.addEventListener('click', async (e) => {
-          e.preventDefault();
-          await supabase.auth.signOut();
-          window.location.href = '/';
-        });
+      if (mobileLink) {
+        if (isAdmin) {
+          mobileLink.textContent = 'Panel admin';
+          mobileLink.setAttribute('href', '/admin/panel');
+        } else {
+          mobileLink.textContent = 'Cerrar sesión';
+          mobileLink.setAttribute('href', '#');
+          mobileLink.onclick = async (e) => {
+            e.preventDefault();
+            await supabase.auth.signOut();
+            window.location.href = '/';
+          };
+        }
       }
+      if (link) { link.textContent = 'Mi cuenta'; link.setAttribute('href', isAdmin ? '/admin/panel' : '/plantillas'); }
       return;
     }
 
-    // Desktop: dropdown toggle
-    link.textContent = 'Mi cuenta';
-    link.setAttribute('href', '#');
+    if (link) {
+      link.textContent = 'Mi cuenta';
+      link.setAttribute('href', '#');
+    }
+
+    if (!authItem || !link) return;
 
     const menu = document.createElement('div');
     menu.className = 'nav__auth-dropdown';
@@ -69,14 +83,8 @@ if (authItem && link && hasSupabaseConfig() && supabase) {
 
     authItem.appendChild(menu);
 
-    const openMenu = () => {
-      menu.hidden = false;
-      menu.style.display = 'grid';
-    };
-    const closeMenu = () => {
-      menu.hidden = true;
-      menu.style.display = 'none';
-    };
+    const openMenu = () => { menu.hidden = false; menu.style.display = 'grid'; };
+    const closeMenu = () => { menu.hidden = true; menu.style.display = 'none'; };
 
     link.addEventListener('click', (e) => {
       e.preventDefault();
