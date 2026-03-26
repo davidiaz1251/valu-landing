@@ -13,6 +13,9 @@ const {
 
 const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL ?? 'https://wshszoghxaserycscvka.supabase.co';
 const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? 'sb_publishable_JbFfvEa-5l8QISrKp6NUGQ_nfa8OrfQ';
+const siteUrl = (import.meta.env.PUBLIC_SITE_URL ?? 'https://www.valukraft.com').replace(/\/$/, '');
+const canonical = `${siteUrl}${Astro.url.pathname}`;
+const ogImage = `${siteUrl}/images/logo-valu-round.jpg`;
 ---
 
 <!doctype html>
@@ -23,15 +26,24 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? 'sb_publisha
     <meta name="description" content={description} />
     <meta name="keywords" content="papelería creativa, personalización, artesanal, regalos personalizados, invitaciones, cake toppers, decoración eventos" />
     <meta name="author" content="Valu Kraft" />
+    <link rel="canonical" href={canonical} />
     
     <!-- Open Graph -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_ES" />
+    <meta property="og:site_name" content="Valu Kraft" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content="Logo redondo de Valu Kraft" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
     
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/jpeg" href="/images/logo-valu-round.jpg" />
     
     <title>{title}</title>
     <script define:vars={{ supabaseUrl, supabaseAnonKey }}>
@@ -46,7 +58,7 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? 'sb_publisha
       <div class="container">
         <nav class="nav">
           <a href="/" class="nav__logo">
-            <img src="/images/logo-valu-round.jpg" alt="Logo Valu" class="nav__logo-image" />
+            <img src="/images/logo-valu-round.jpg" alt="Logo Valu Kraft" class="nav__logo-image" />
           </a>
           
           <button class="nav__toggle" id="navToggle" aria-label="Toggle menu">
@@ -78,7 +90,7 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? 'sb_publisha
         <div class="footer__content">
           <div class="footer__brand">
             <a href="/" class="footer__logo">
-              <img src="/images/logo-valu-round.jpg" alt="Logo Valu" class="footer__logo-image" />
+              <img src="/images/logo-valu-round.jpg" alt="Logo Valu Kraft" class="footer__logo-image" />
             </a>
             <p class="footer__tagline">Transformamos ideas en recuerdos únicos</p>
             <div class="footer__social">
