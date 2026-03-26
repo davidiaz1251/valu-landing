@@ -39,15 +39,103 @@ import Layout from '../layouts/Layout.astro';
 <script type="module" src="/scripts/login.js"></script>
 
 <style>
-  .auth { padding-top: calc(var(--space-24) + var(--space-6)); }
-  .auth__container { display: flex; justify-content: center; }
-  .auth-card { width: 100%; max-width: 460px; background: #fff; border: 1px solid var(--color-gray-200); border-radius: var(--radius-xl); box-shadow: var(--shadow-md); padding: var(--space-8); }
-  .auth-form { display: grid; gap: var(--space-4); margin-top: var(--space-5); }
-  .auth-form label { display: grid; gap: var(--space-2); font-weight: var(--font-medium); }
-  .auth-form input { border: 1px solid var(--color-gray-300); border-radius: var(--radius-md); padding: var(--space-3); }
+  .auth {
+    position: relative;
+    padding-top: calc(var(--space-24) + var(--space-8));
+    padding-bottom: var(--space-16);
+    overflow: hidden;
+    background: transparent;
+  }
+  .auth::before,
+  .auth::after {
+    content: '';
+    position: absolute;
+    border-radius: 999px;
+    filter: blur(54px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .auth::before {
+    width: 320px;
+    height: 320px;
+    top: -120px;
+    right: -80px;
+    background: hsla(350,40%,90%,.45);
+  }
+  .auth::after {
+    width: 280px;
+    height: 280px;
+    bottom: -100px;
+    left: -70px;
+    background: hsla(160,30%,85%,.35);
+  }
+
+  .auth__container { display: flex; justify-content: center; position: relative; z-index: 1; }
+  .auth-card {
+    width: 100%;
+    max-width: 500px;
+    background: rgba(255,255,255,.86);
+    border: 1px solid rgba(228,218,213,.8);
+    border-radius: 24px;
+    box-shadow: 0 20px 46px rgba(47,31,40,.08);
+    backdrop-filter: blur(8px);
+    padding: var(--space-8);
+  }
+  .auth-card h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: #2f1f28;
+    margin-bottom: 8px;
+  }
+  .auth-card p { color: #6b5963; margin-bottom: 0; }
+
+  .auth-form { display: grid; gap: var(--space-4); margin-top: var(--space-6); }
+  .auth-form label { display: grid; gap: var(--space-2); font-weight: 600; color: #4f3d46; }
+  .auth-form input {
+    border: 1px solid #e5d9d3;
+    border-radius: 12px;
+    padding: 12px 14px;
+    background: rgba(255,255,255,.9);
+    color: #2f1f28;
+    transition: border-color .2s ease, box-shadow .2s ease;
+  }
+  .auth-form input:focus {
+    outline: none;
+    border-color: hsl(160 30% 45%);
+    box-shadow: 0 0 0 3px rgba(50,130,105,.13);
+  }
+
+  .auth-form .btn,
+  .auth-google {
+    border-radius: 999px;
+    padding: 12px 18px;
+    font-weight: 600;
+  }
+  .auth-form .btn.btn--primary {
+    background: hsl(160 30% 45%);
+    color: #fff;
+    box-shadow: 0 12px 24px rgba(50,130,105,.18);
+  }
+  .auth-form .btn.btn--primary:hover { background: hsl(160 30% 42%); }
+
   .auth-google { width: 100%; margin-top: var(--space-3); }
-  .auth-links { display: flex; justify-content: space-between; margin-top: var(--space-5); font-size: var(--text-sm); }
-  .auth-alert { margin-top: var(--space-4); padding: var(--space-3); border-radius: var(--radius-md); background: #fff3f3; color: #9a1c1c; border: 1px solid #f3c5c5; }
+  .auth-google.btn--secondary {
+    border: 1px solid rgba(220,206,198,.95);
+    background: #fff;
+    color: #4f3d46;
+  }
+
+  .auth-links { display: flex; justify-content: space-between; margin-top: var(--space-5); font-size: var(--text-sm); gap: 12px; }
+  .auth-login { display: inline-block; margin-top: var(--space-5); font-size: var(--text-sm); }
+  .auth-links a, .auth-login { color: #5f4a54; font-weight: 500; }
+  .auth-links a:hover, .auth-login:hover { color: hsl(160 30% 40%); }
+
+  .auth-alert { margin-top: var(--space-4); padding: var(--space-3); border-radius: 12px; background: #fff3f3; color: #9a1c1c; border: 1px solid #f3c5c5; }
+  .auth-success { margin-top: var(--space-4); padding: var(--space-3); border-radius: 12px; background: #f3fff4; color: #1f7a2e; border: 1px solid #bde8c4; }
+
+  @media (max-width: 640px) {
+    .auth-card { padding: var(--space-6); border-radius: 18px; }
+    .auth-links { flex-direction: column; }
+  }
 </style>
 
 </Layout>
