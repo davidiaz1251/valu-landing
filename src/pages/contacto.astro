@@ -1,8 +1,21 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+const contactFaqs = [
+  { q: '¿Cuánto tardáis en responder?', a: 'Normalmente respondemos en menos de 24 horas por WhatsApp o email.' },
+  { q: '¿Puedo pedir presupuesto sin compromiso?', a: 'Sí, enviamos presupuesto orientativo sin compromiso tras revisar tu idea.' },
+  { q: '¿Hacéis envíos en España?', a: 'Sí, trabajamos pedidos personalizados con envíos a España.' }
+];
+
+const contactFaqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: contactFaqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } }))
+};
 ---
 
 <Layout title="Contacto y pedidos | Valu Kraft" description="Contacta con Valu Kraft para solicitar presupuestos y pedidos personalizados por WhatsApp, email o formulario.">
+  <script type="application/ld+json" set:html={JSON.stringify(contactFaqSchema)}></script>
   <section class="contact-hero section--lg">
     <div class="container">
       <div class="contact-hero__content">
@@ -122,6 +135,20 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </div>
   </section>
+
+  <section class="section" style="padding-top:0;">
+    <div class="container">
+      <h2>Preguntas frecuentes de contacto y pedidos</h2>
+      <div class="contact-faq">
+        {contactFaqs.map((item) => (
+          <article>
+            <h3>{item.q}</h3>
+            <p>{item.a}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
 </Layout>
 
 <style>
@@ -163,4 +190,9 @@ import Layout from '../layouts/Layout.astro';
 
   @media (max-width: 992px) { .contact-main__wrapper { grid-template-columns: 1fr; } }
   @media (max-width: 768px) { .contact-form { grid-template-columns: 1fr; } .contact-info { grid-template-columns: 1fr; } .contact-form-wrapper { padding: var(--space-6); } }
+
+  .contact-faq { display:grid; gap:.8rem; }
+  .contact-faq article { background:#fff; border:1px solid #eadfdb; border-radius:12px; padding:.8rem 1rem; }
+  .contact-faq h3{ margin:.1rem 0 .35rem; font-size:1rem;}
+  .contact-faq p{ margin:0; color:var(--color-gray-600);}
 </style>

@@ -1,8 +1,21 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+const faqs = [
+  { q: '¿Qué productos personalizados hace Valu Kraft?', a: 'Creamos toppers, papelería creativa, etiquetas, detalles para mesa y decoración personalizada para eventos.' },
+  { q: '¿Cómo hago un pedido personalizado?', a: 'Puedes escribirnos por WhatsApp o desde contacto. Te pedimos idea, fecha, estilo y cantidad para enviarte propuesta.' },
+  { q: '¿Con cuánto tiempo debo encargar?', a: 'Recomendamos pedir con al menos 2 a 4 semanas de antelación, según complejidad y volumen del pedido.' }
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } }))
+};
 ---
 
 <Layout title="Productos personalizados para fiestas | Valu Kraft" description="Descubre toppers, papelería creativa, recuerdos y detalles personalizados de Valu Kraft. Encargos por WhatsApp e Instagram.">
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
   <section class="products-hero section section--sm">
     <div class="container">
       <h1>Productos personalizados para cumpleaños, bodas y eventos</h1>
@@ -30,6 +43,20 @@ import Layout from '../layouts/Layout.astro';
         <a href="/toppers-personalizados">Toppers personalizados para tartas</a>
         <a href="/papeleria-para-cumpleanos">Papelería personalizada para cumpleaños</a>
         <a href="/decoracion-personalizada-bodas">Decoración personalizada para bodas</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;">
+    <div class="container">
+      <h2>Preguntas frecuentes sobre pedidos personalizados</h2>
+      <div class="faq-list">
+        {faqs.map((item) => (
+          <article class="faq-item">
+            <h3>{item.q}</h3>
+            <p>{item.a}</p>
+          </article>
+        ))}
       </div>
     </div>
   </section>
@@ -165,4 +192,9 @@ import Layout from '../layouts/Layout.astro';
   .seo-links__grid { display:grid; gap:.6rem; }
   .seo-links__grid a { text-decoration:none; background:#fff; border:1px solid #eadfdb; border-radius:12px; padding:.8rem 1rem; color:#2d1c23; font-weight:600; }
   .seo-links__grid a:hover { background:#fff7f4; }
+
+  .faq-list { display:grid; gap:.8rem; margin-top:.6rem; }
+  .faq-item { background:#fff; border:1px solid #eadfdb; border-radius:12px; padding:.8rem 1rem; }
+  .faq-item h3 { margin:.1rem 0 .35rem; font-size:1rem; }
+  .faq-item p { margin:0; color:var(--color-gray-600); }
 </style>
