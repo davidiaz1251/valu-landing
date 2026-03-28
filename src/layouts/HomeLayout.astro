@@ -1,0 +1,49 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = 'Valu Kraft: papelería creativa y productos personalizados hechos a mano para celebraciones inolvidables.'
+} = Astro.props;
+
+const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL ?? 'https://wshszoghxaserycscvka.supabase.co';
+const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? 'sb_publishable_JbFfvEa-5l8QISrKp6NUGQ_nfa8OrfQ';
+const siteUrl = (import.meta.env.PUBLIC_SITE_URL ?? 'https://www.valukraft.com').replace(/\/$/, '');
+const canonical = `${siteUrl}${Astro.url.pathname}`;
+const ogImage = `${siteUrl}/images/logo-valu-round.jpg`;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <title>{title}</title>
+
+    <script define:vars={{ supabaseUrl, supabaseAnonKey }}>
+      window.__SUPABASE_URL = supabaseUrl || '';
+      window.__SUPABASE_ANON_KEY = supabaseAnonKey || '';
+    </script>
+    <script type="text/javascript" charset="UTF-8" src="//cdn.cookie-script.com/s/406a37b1ea358f7ea88617ea8bc8c4cd.js"></script>
+  </head>
+  <body>
+    <slot />
+    <script type="module" src="/scripts/auth-menu.js"></script>
+  </body>
+</html>

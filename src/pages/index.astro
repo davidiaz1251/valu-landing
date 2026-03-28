@@ -1,4 +1,5 @@
 ---
+import HomeLayout from '../layouts/HomeLayout.astro';
 import Navbar from '../components/landing-clean/Navbar.astro';
 import Hero from '../components/landing-clean/Hero.astro';
 import Momentos from '../components/landing-clean/Momentos.astro';
@@ -10,40 +11,20 @@ import CTA from '../components/landing-clean/CTA.astro';
 import Footer from '../components/landing-clean/Footer.astro';
 ---
 
-<html lang="es">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/png" href="/favicon-32x32.png" />
-    <link rel="manifest" href="/manifest.json" />
-
-    <title>Valu Kraft | Papelería creativa y personalizados</title>
-    <meta name="description" content="Valu Kraft: papelería creativa y productos personalizados hechos a mano para celebraciones inolvidables." />
-    <link rel="canonical" href="https://www.valukraft.com/" />
-    <meta property="og:title" content="Valu Kraft" />
-    <meta property="og:description" content="Papelería creativa hecha en Madrid con envíos a toda España para celebraciones memorables." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.valukraft.com/" />
-    <meta property="og:image" content="https://www.valukraft.com/images/logo-valu-round.jpg" />
-    <meta name="twitter:card" content="summary_large_image" />
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    <script type="text/javascript" charset="UTF-8" src="//cdn.cookie-script.com/s/406a37b1ea358f7ea88617ea8bc8c4cd.js"></script>
-  </head>
-  <body>
-    <Navbar />
-    <Hero />
-    <Momentos />
-    <Proceso />
-    <Productos />
-    <Personaliza />
-    <Testimonios />
-    <CTA />
-    <Footer />
-  </body>
-</html>
+<HomeLayout
+  title="Valu Kraft | Papelería creativa y personalizados"
+  description="Valu Kraft: papelería creativa y productos personalizados hechos a mano para celebraciones inolvidables."
+>
+  <Navbar />
+  <Hero />
+  <Momentos />
+  <Proceso />
+  <Productos />
+  <Personaliza />
+  <Testimonios />
+  <CTA />
+  <Footer />
+</HomeLayout>
 
 <style is:global>
   :root {
