@@ -68,14 +68,14 @@ const dots = [
     height: 320px;
     top: -120px;
     right: -80px;
-    background: hsla(350,40%,90%,.45);
+    background: hsl(var(--secondary) / .45);
   }
   .auth::after {
     width: 280px;
     height: 280px;
     bottom: -100px;
     left: -70px;
-    background: hsla(160,30%,85%,.35);
+    background: hsl(var(--primary) / .2);
   }
 
   .auth-dots {
@@ -91,7 +91,7 @@ const dots = [
     width: 7px;
     height: 7px;
     border-radius: 999px;
-    background: hsla(42,65%,65%,.58);
+    background: hsl(var(--accent) / .58);
     animation: authDotVanish var(--duration, 3.5s) ease-in-out infinite;
     animation-delay: var(--delay, 0s);
   }
@@ -100,34 +100,34 @@ const dots = [
   .auth-card {
     width: 100%;
     max-width: 500px;
-    background: rgba(255,255,255,.86);
-    border: 1px solid rgba(228,218,213,.8);
+    background: hsl(var(--card) / .86);
+    border: 1px solid hsl(var(--border) / .8);
     border-radius: 24px;
-    box-shadow: 0 20px 46px rgba(47,31,40,.08);
+    box-shadow: 0 20px 46px hsl(var(--foreground) / .08);
     backdrop-filter: blur(8px);
     padding: var(--space-8);
   }
   .auth-card h1 {
     font-family: 'Playfair Display', Georgia, serif;
-    color: #2f1f28;
+    color: hsl(var(--foreground));
     margin-bottom: 8px;
   }
-  .auth-card p { color: #6b5963; margin-bottom: 0; }
+  .auth-card p { color: hsl(var(--muted-foreground)); margin-bottom: 0; }
 
   .auth-form { display: grid; gap: var(--space-4); margin-top: var(--space-6); }
-  .auth-form label { display: grid; gap: var(--space-2); font-weight: 600; color: #4f3d46; }
+  .auth-form label { display: grid; gap: var(--space-2); font-weight: 600; color: hsl(var(--secondary-foreground)); }
   .auth-form input {
-    border: 1px solid #e5d9d3;
+    border: 1px solid hsl(var(--border));
     border-radius: 12px;
     padding: 12px 14px;
-    background: rgba(255,255,255,.9);
-    color: #2f1f28;
+    background: hsl(var(--card) / .9);
+    color: hsl(var(--foreground));
     transition: border-color .2s ease, box-shadow .2s ease;
   }
   .auth-form input:focus {
     outline: none;
-    border-color: hsl(160 30% 45%);
-    box-shadow: 0 0 0 3px rgba(50,130,105,.13);
+    border-color: hsl(var(--primary));
+    box-shadow: 0 0 0 3px hsl(var(--primary) / .13);
   }
 
   .auth-form .btn,
@@ -137,26 +137,26 @@ const dots = [
     font-weight: 600;
   }
   .auth-form .btn.btn--primary {
-    background: hsl(160 30% 45%);
-    color: #fff;
-    box-shadow: 0 12px 24px rgba(50,130,105,.18);
+    background: hsl(var(--primary));
+    color: hsl(var(--card));
+    box-shadow: 0 12px 24px hsl(var(--primary) / .18);
   }
-  .auth-form .btn.btn--primary:hover { background: hsl(160 30% 42%); }
+  .auth-form .btn.btn--primary:hover { background: hsl(var(--primary)); }
 
   .auth-google { width: 100%; margin-top: var(--space-3); }
   .auth-google.btn--secondary {
-    border: 1px solid rgba(220,206,198,.95);
-    background: #fff;
-    color: #4f3d46;
+    border: 1px solid hsl(var(--border));
+    background: hsl(var(--card));
+    color: hsl(var(--secondary-foreground));
   }
 
   .auth-links { display: flex; justify-content: space-between; margin-top: var(--space-5); font-size: var(--text-sm); gap: 12px; }
   .auth-login { display: inline-block; margin-top: var(--space-5); font-size: var(--text-sm); }
-  .auth-links a, .auth-login { color: #5f4a54; font-weight: 500; }
-  .auth-links a:hover, .auth-login:hover { color: hsl(160 30% 40%); }
+  .auth-links a, .auth-login { color: hsl(var(--secondary-foreground)); font-weight: 500; }
+  .auth-links a:hover, .auth-login:hover { color: hsl(var(--primary)); }
 
-  .auth-alert { margin-top: var(--space-4); padding: var(--space-3); border-radius: 12px; background: #fff3f3; color: #9a1c1c; border: 1px solid #f3c5c5; }
-  .auth-success { margin-top: var(--space-4); padding: var(--space-3); border-radius: 12px; background: #f3fff4; color: #1f7a2e; border: 1px solid #bde8c4; }
+  .auth-alert { margin-top: var(--space-4); padding: var(--space-3); border-radius: 12px; background: hsl(var(--card))3f3; color: hsl(var(--destructive)); border: 1px solid hsl(var(--destructive) / .3); }
+  .auth-success { margin-top: var(--space-4); padding: var(--space-3); border-radius: 12px; background: hsl(var(--card)); color: hsl(var(--primary)); border: 1px solid hsl(var(--primary) / .35); }
 
   @keyframes authDotVanish {
     0% { opacity: 0; transform: translate3d(0, 8px, 0) scale(.72); }
