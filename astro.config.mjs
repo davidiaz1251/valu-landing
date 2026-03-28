@@ -1,8 +1,10 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://valukraft.com',
+  site: 'https://www.valukraft.com',
   base: '/',
+  integrations: [sitemap()],
 });
