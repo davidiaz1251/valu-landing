@@ -62,27 +62,21 @@ async function loadTemplateCategories() {
 
   if (error) {
     console.warn('No se pudieron cargar categorías de productos:', error.message);
-    templateCategories = [
-      { id: 'toppers', title: 'Toppers' },
-      { id: 'invitaciones', title: 'Invitaciones' },
-      { id: 'cajas-y-packaging', title: 'Cajas y Packaging' },
-      { id: 'regalos-personalizados', title: 'Regalos Personalizados' },
-    ];
+    templateCategories = [];
   } else {
     templateCategories = (data || [])
       .map((r) => ({ id: String(r.id || '').trim(), title: String(r.title || '').trim() }))
       .filter((r) => r.id && r.title);
     if (!templateCategories.length) {
-      templateCategories = [
-      { id: 'toppers', title: 'Toppers' },
-      { id: 'invitaciones', title: 'Invitaciones' },
-      { id: 'cajas-y-packaging', title: 'Cajas y Packaging' },
-      { id: 'regalos-personalizados', title: 'Regalos Personalizados' },
-    ];
+      templateCategories = [];
     }
   }
 
   renderTemplateCategoryOptions();
+
+  if (!templateCategories.length) {
+    setStatus('No hay categorías activas en Admin > Categorías. Crea o activa al menos una para subir plantillas.');
+  }
 }
 
 
@@ -242,8 +236,11 @@ async function init() {
     const file = fileInput.files?.[0];
     if (!file) return;
 
+    if (!templateCategories.length) return setStatus('No hay categorías activas. Ve a Admin > Categorías.');
+
     const categoria_id = (folderInput.value || '').trim();
     if (!categoria_id) return setStatus('Selecciona categoría.');
+    if (!templateCategories.some((c) => c.id === categoria_id)) return setStatus('Categoría inválida. Recarga la página y vuelve a seleccionar.');
 
     const categoryTitle = templateCategories.find((c) => c.id === categoria_id)?.title || categoria_id;
     const categorySlug = categoryTitle
