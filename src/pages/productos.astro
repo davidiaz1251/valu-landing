@@ -1,202 +1,299 @@
 ---
 import Layout from '../layouts/Layout.astro';
-
-const faqs = [
-  { q: '¿Qué productos personalizados hace Valu Kraft?', a: 'Creamos toppers, papelería creativa, etiquetas, detalles para mesa y decoración personalizada para eventos.' },
-  { q: '¿Cómo hago un pedido personalizado?', a: 'Puedes escribirnos por WhatsApp o desde contacto. Te pedimos idea, fecha, estilo y cantidad para enviarte propuesta.' },
-  { q: '¿Con cuánto tiempo debo encargar?', a: 'Recomendamos pedir con al menos 2 a 4 semanas de antelación, según complejidad y volumen del pedido.' }
-];
-
-const faqSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } }))
-};
 ---
 
-<Layout title="Productos personalizados para fiestas | Valu Kraft" description="Descubre toppers, papelería creativa, recuerdos y detalles personalizados de Valu Kraft. Encargos por WhatsApp e Instagram.">
-  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
-  <section class="products-hero section section--sm">
-    <div class="container">
-      <h1>Productos personalizados para cumpleaños, bodas y eventos</h1>
-      <p class="section__description">
-        Descubre nuestras categorías, mira ejemplos reales y pide tu versión personalizada por WhatsApp o Instagram.
-      </p>
-      <p id="catalog-status" class="catalog-status">Cargando catálogo…</p>
+<Layout
+  title="Nuestros productos | Valu Kraft"
+  description="Descubre el catálogo completo de productos personalizados de Valu Kraft."
+>
+  <section class="catalog section section--sm">
+    <div class="container catalog__container">
+      <header class="catalog__header">
+        <div class="catalog__pill">
+          <span>✨</span>
+          <span>Catálogo completo</span>
+        </div>
+
+        <h1 class="catalog__title">Nuestros productos</h1>
+        <p class="catalog__subtitle" id="catalogSubtitle">
+          Cada pieza es hecha a mano y completamente personalizable. Escríbenos por WhatsApp para comenzar tu pedido.
+        </p>
+        <p id="catalogStatus" class="catalog__status">Cargando catálogo...</p>
+      </header>
+
+      <div id="catalogFilters" class="catalog__filters" hidden></div>
+
+      <div id="catalogGrid" class="catalog__grid" hidden></div>
+
+      <div id="catalogEmpty" class="catalog__empty" hidden></div>
+
+      <section class="catalog-cta" id="catalogCta" hidden>
+        <div class="catalog-cta__icon">✨</div>
+        <h2>¿No encuentras lo que buscas?</h2>
+        <p>
+          Creamos diseños completamente personalizados. Cuéntanos tu idea y lo hacemos realidad.
+        </p>
+        <a href="https://wa.me/34600000000" target="_blank" rel="noopener noreferrer">Hablar con nosotras</a>
+      </section>
     </div>
   </section>
 
-  <section class="products-tabs-wrap section">
-    <div class="container">
-      <div class="products-tabs" id="category-tabs"></div>
-    </div>
-  </section>
-
-  <section class="section" style="padding-top:0;">
-    <div id="catalog-root" class="catalog-root"></div>
-  </section>
-
-  <section class="section seo-links">
-    <div class="container">
-      <h2>Explora por tipo de encargo</h2>
-      <div class="seo-links__grid">
-        <a href="/toppers-personalizados">Toppers personalizados para tartas</a>
-        <a href="/toppers-personalizados-cumpleanos">Toppers personalizados para cumpleaños</a>
-        <a href="/topper-tarta-personalizado-nombre">Topper de tarta personalizado con nombre</a>
-        <a href="/papeleria-para-cumpleanos">Papelería personalizada para cumpleaños</a>
-        <a href="/decoracion-personalizada-bodas">Decoración personalizada para bodas</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" style="padding-top:0;">
-    <div class="container">
-      <h2>Preguntas frecuentes sobre pedidos personalizados</h2>
-      <div class="faq-list">
-        {faqs.map((item) => (
-          <article class="faq-item">
-            <h3>{item.q}</h3>
-            <p>{item.a}</p>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <script type="module" src="/scripts/productos-public.js"></script>
+  <script type="module" src="/scripts/productos-public.js?v=20260328d"></script>
 </Layout>
 
 <style>
-  .products-hero { padding-top: calc(var(--space-24) + var(--space-10)); padding-bottom: var(--space-6); }
-  :global(.products-hero h1) { font-size: clamp(2rem, 4.8vw, 3.2rem); line-height: 1.05; letter-spacing: -0.01em; margin-bottom: .55rem; }
-  .catalog-status { margin-top: .6rem; color: var(--color-gray-600); }
-
-  .products-tabs-wrap { position: sticky; top: 72px; z-index: 20; padding-top: 0; padding-bottom: var(--space-6); }
-  .products-tabs {
-    display: flex;
-    gap: .65rem;
-    overflow-x: auto;
-    padding: .5rem;
-    border: 1px solid #eee;
-    border-radius: 14px;
-    background: rgba(255,255,255,.92);
-    backdrop-filter: blur(8px);
+  .catalog {
+    padding-top: calc(var(--space-24) + var(--space-6));
+    padding-bottom: var(--space-16);
+    font-family: 'DM Sans', system-ui, sans-serif;
   }
 
-  :global(.tab-link) {
-    border: 1px solid #e9e3e1;
-    border-radius: 999px;
-    padding: .5rem .9rem;
-    white-space: nowrap;
-    font-weight: 600;
-    color: var(--color-gray-700);
-    background: #fff;
-  }
+  .catalog__header { margin-bottom: var(--space-8); }
 
-  .catalog-root { display: grid; gap: var(--space-10); }
-
-  :global(.catalog-category) {
-    background: linear-gradient(180deg,#fff 0%,#fffdfa 100%);
-    border: 1px solid #efe7e3;
-    border-radius: 20px;
-    padding: 1rem;
-  }
-
-  :global(.catalog-category__head) {
-    display: flex;
+  .catalog__pill {
+    display: inline-flex;
     align-items: center;
-    gap: .8rem;
-    margin-bottom: .9rem;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(220,206,198,.95);
+    background: rgba(250,243,239,.85);
+    color: #5f4a54;
+    font-size: .8rem;
+    font-weight: 600;
+    letter-spacing: .02em;
+    text-transform: uppercase;
   }
 
-  :global(.catalog-category__emoji) {
-    width: 46px;
-    height: 46px;
-    border-radius: 12px;
-    display: grid;
-    place-items: center;
-    font-size: 22px;
-    background: #fff5f1;
-    border: 1px solid #f2dfd8;
-    flex: 0 0 auto;
+  .catalog__title {
+    margin: 14px 0 6px;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.875rem, 3.2vw, 2.25rem);
+    line-height: 1.15;
+    color: #2f1f28;
   }
 
-  :global(.catalog-category__head h2) { margin: 0; font-size: 1.25rem; }
-  :global(.catalog-category__head p) { margin: 0; color: var(--color-gray-600); }
-
-  :global(.catalog-grid) {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1rem;
+  .catalog__subtitle {
+    margin: 0;
+    max-width: 640px;
+    color: #6b5963;
+    font-size: 1rem;
+    line-height: 1.65;
+    font-family: 'DM Sans', system-ui, sans-serif;
   }
 
-  :global(.product-card) {
-    border: 1px solid #eadfdb;
-    border-radius: 16px;
-    overflow: hidden;
+  .catalog__status { margin-top: 8px; color: #8a7780; font-size: .9rem; }
+
+  .catalog__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  :global(.catalog-filter-btn) {
+    border: 1px solid rgba(228,218,213,.95);
     background: #fff;
+    color: #6f5a64;
+    border-radius: 999px;
+    padding: 7px 14px;
+    font-size: .86rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .18s ease;
+  }
+
+  :global(.catalog-filter-btn.is-active) {
+    background: hsl(160 30% 45%);
+    border-color: hsl(160 30% 45%);
+    color: #fff;
+  }
+
+  :global(.catalog-filter-btn:hover) { border-color: hsla(160,30%,45%,.45); }
+
+  .catalog__grid {
     display: grid;
-    grid-template-rows: auto 1fr;
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
 
-  :global(.product-card__media) {
-    aspect-ratio: 4/3;
-    background: #faf7f5;
+  @media (min-width: 680px) {
+    .catalog__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (min-width: 980px) {
+    .catalog__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (min-width: 1200px) {
+    .catalog__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+
+  :global(.catalog-card) {
+    background: #fff;
+    border: 1px solid rgba(228,218,213,.7);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 8px 22px rgba(53,27,35,.05);
+    transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+    display: flex;
+    flex-direction: column;
+  }
+
+  :global(.catalog-card:hover) {
+    transform: translateY(-2px);
+    border-color: rgba(214,189,178,.9);
+    box-shadow: 0 14px 30px rgba(53,27,35,.1);
+  }
+
+  :global(.catalog-card__media) {
     position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: #f7f2ef;
   }
 
-  :global(.product-card__media img) {
+  :global(.catalog-card__media img) {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
+    transition: transform .45s ease;
   }
 
-  :global(.product-card__placeholder) {
-    height: 100%;
-    display: grid;
-    place-items: center;
-    font-size: 2rem;
+  :global(.catalog-card:hover .catalog-card__media img) { transform: scale(1.05); }
+
+  :global(.catalog-card__tag) {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(228,218,213,.9);
+    background: rgba(255,255,255,.9);
+    padding: 5px 10px;
+    font-size: .72rem;
+    font-weight: 700;
+    color: #5f4a54;
   }
 
-  :global(.product-card__body) { padding: .9rem; display: grid; gap: .6rem; }
-  :global(.product-card__title) { margin: 0; font-size: 1rem; }
-  :global(.product-card__description) { margin: 0; color: var(--color-gray-600); font-size: .95rem; }
+  :global(.catalog-card__cat) {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: .72rem;
+    font-weight: 700;
+  }
 
-  :global(.product-card__actions) {
+  :global(.cat-toppers){ background: hsla(42,65%,65%,.23); color: #7a5a2f; }
+  :global(.cat-invitaciones){ background: hsla(350,40%,90%,.65); color: #754f60; }
+  :global(.cat-cajas){ background: hsla(160,30%,85%,.65); color: #365f56; }
+  :global(.cat-regalos){ background: hsla(160,30%,45%,.13); color: #2f6f59; }
+  :global(.cat-default){ background: #f3ece9; color: #7b6770; }
+
+  :global(.catalog-card__body) {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+  }
+
+  :global(.catalog-card__subtitle) { margin: 0; font-size: .78rem; color: #8a7780; }
+
+  :global(.catalog-card__title) {
+    margin: 0;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.05rem;
+    color: #2f1f28;
+    line-height: 1.25;
+  }
+
+  :global(.catalog-card__desc) {
+    margin: 0;
+    font-size: .85rem;
+    color: #6b5963;
+    line-height: 1.55;
+    min-height: 44px;
+  }
+
+  :global(.catalog-card__meta) {
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid rgba(228,218,213,.65);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: .76rem;
+    color: #8a7780;
+  }
+
+  :global(.catalog-card__rating strong) { color: #2f1f28; }
+
+  :global(.catalog-card__actions) {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: .5rem;
-    margin-top: .2rem;
+    gap: 8px;
+    margin-top: 10px;
   }
 
-  :global(.product-card__actions .btn) {
+  :global(.catalog-card__btn) {
+    border-radius: 999px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
     justify-content: center;
-    padding: .5rem .65rem;
-    font-size: .86rem;
+    gap: 6px;
+    padding: 10px 12px;
+    font-size: .83rem;
+    font-weight: 600;
+    border: 1px solid rgba(228,218,213,.9);
   }
 
-  @media (max-width: 1024px) {
-    :global(.catalog-grid) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  :global(.catalog-card__btn--ghost) { color: #4f3d46; background: #fff; }
+  :global(.catalog-card__btn--ghost:hover) { background: rgba(248,242,238,.85); }
+
+  :global(.catalog-card__btn--primary) {
+    border-color: hsl(160 30% 45%);
+    background: hsl(160 30% 45%);
+    color: #fff;
   }
 
-  @media (max-width: 680px) {
-    .products-hero { padding-top: calc(var(--space-24) + var(--space-6)); }
-    .products-tabs-wrap { top: 64px; }
-    :global(.catalog-category) { padding: .85rem; border-radius: 16px; }
-    :global(.catalog-grid) { grid-template-columns: 1fr; gap: .8rem; }
-    :global(.product-card__actions) { grid-template-columns: 1fr; }
-    :global(.catalog-category__head h2) { font-size: 1.1rem; }
+  :global(.catalog-card__btn--primary:hover) { background: hsl(160 30% 42%); }
+
+  .catalog__empty {
+    text-align: center;
+    border: 1px solid #eadfdb;
+    background: #fff;
+    border-radius: 20px;
+    padding: 44px 18px;
+    max-width: 700px;
+    margin: 0 auto;
   }
 
-  .seo-links { padding-top: 0; }
-  .seo-links h2 { margin: 0 0 .8rem; font-size: clamp(1.35rem, 3vw, 1.8rem); }
-  .seo-links__grid { display:grid; gap:.6rem; }
-  .seo-links__grid a { text-decoration:none; background:#fff; border:1px solid #eadfdb; border-radius:12px; padding:.8rem 1rem; color:#2d1c23; font-weight:600; }
-  .seo-links__grid a:hover { background:#fff7f4; }
+  .catalog-cta {
+    margin-top: 56px;
+    border: 1px solid rgba(228,218,213,.65);
+    border-radius: 26px;
+    padding: 36px 20px;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(212,232,245,.4), rgba(184,224,212,.25));
+  }
 
-  .faq-list { display:grid; gap:.8rem; margin-top:.6rem; }
-  .faq-item { background:#fff; border:1px solid #eadfdb; border-radius:12px; padding:.8rem 1rem; }
-  .faq-item h3 { margin:.1rem 0 .35rem; font-size:1rem; }
-  .faq-item p { margin:0; color:var(--color-gray-600); }
+  .catalog-cta__icon { font-size: 1.8rem; margin-bottom: 8px; }
+  .catalog-cta h2 { margin: 0; font-family: 'Playfair Display', Georgia, serif; color: #2f1f28; }
+  .catalog-cta p { margin: 10px auto 0; max-width: 520px; color: #6b5963; }
+  .catalog-cta a {
+    display: inline-flex;
+    margin-top: 16px;
+    text-decoration: none;
+    border-radius: 999px;
+    padding: 11px 18px;
+    background: hsl(160 30% 45%);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  @media (max-width: 640px) {
+    :global(.catalog-card__actions) { grid-template-columns: 1fr; }
+  }
 </style>
