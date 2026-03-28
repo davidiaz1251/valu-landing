@@ -164,24 +164,25 @@ import Layout from '../layouts/Layout.astro';
     :global(.tpl-card__media) {
       position: relative;
       aspect-ratio: 4 / 3;
-      background: linear-gradient(180deg, #f8f3ef 0%, #f3ece8 100%);
+      background: #f7f2ef;
       display: grid;
       place-items: center;
       overflow: hidden;
-      padding: 8px;
+      padding: 0;
     }
 
     :global(.tpl-card__media img) {
       width: 100%;
       height: 100%;
-      object-fit: contain;
-      object-position: center;
+      object-fit: cover;
+      object-position: center center;
       transition: transform .45s ease;
-      border-radius: 10px;
-      background: #fff;
+      border-radius: 0;
+      background: transparent;
+      display: block;
     }
 
-    :global(.tpl-card:hover .tpl-card__media img) { transform: scale(1.02); }
+    :global(.tpl-card:hover .tpl-card__media img) { transform: scale(1.04); }
 
     :global(.tpl-card__file-icon) {
       font-size: 1.9rem;
@@ -265,7 +266,7 @@ import Layout from '../layouts/Layout.astro';
     .tpl__empty {
       text-align: center;
       border: 1px solid #eadfdb;
-      background: #fff;
+      background: transparent;
       border-radius: 20px;
       padding: 46px 20px;
       max-width: 700px;
