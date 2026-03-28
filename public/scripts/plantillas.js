@@ -81,7 +81,7 @@ function cardHtml(item, enabled, imageUrl) {
 async function loadCatalog() {
   const { data, error } = await supabase
     .from('templates_catalog')
-    .select('id,title,description,format,storage_path,image_path,required_roles,active,sort_order,categoria')
+    .select('*')
     .eq('active', true)
     .order('sort_order', { ascending: true })
     .order('title', { ascending: true });
@@ -100,7 +100,7 @@ async function signedImage(path) {
 function getCategories(items) {
   const set = new Set();
   items.forEach((it) => {
-    const c = it.item.category || it.item.categoria;
+    const c = it.item.categoria;
     if (c) set.add(c);
   });
   return ['Todas', ...Array.from(set)];
@@ -132,7 +132,7 @@ function renderCards() {
 
   const filtered = selectedCategory === 'Todas'
     ? catalogState
-    : catalogState.filter((x) => (x.item.category || x.item.categoria) === selectedCategory);
+    : catalogState.filter((x) => (x.item.categoria) === selectedCategory);
 
   if (!filtered.length) {
     showEmpty('No hay plantillas en esta categoría', 'Prueba cambiando el filtro.');
