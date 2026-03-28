@@ -239,7 +239,7 @@ async function init() {
     const role = profile?.role || 'cliente_final';
 
     sessionBox.hidden = true;
-    heroCopy.textContent = 'Ya puedes descargar tus plantillas.';
+    heroCopy.textContent = 'Aquí encuentras todos los archivos disponibles para descargar.';
 
     await buildCatalog(true, role);
   } catch (e) {
