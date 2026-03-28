@@ -224,7 +224,7 @@ import Layout from '../layouts/Layout.astro';
     margin-top: 1rem;
     padding-top: 1rem;
     min-height: 44px;
-    border-top: 1px solid hsl(var(--border) / .75);
+    border-top: 1px solid hsl(var(--border) / .5);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -232,7 +232,8 @@ import Layout from '../layouts/Layout.astro';
     color: hsl(var(--muted-foreground));
   }
 
-  :global(.catalog-card__rating strong) { color: hsl(var(--foreground)); }
+  :global(.catalog-card__rating) { display: inline-flex; align-items: center; gap: 0.35rem; }
+  :global(.catalog-card__rating strong) { color: hsl(var(--foreground)); font-weight: 500; }
 
   :global(.catalog-card__actions) {
     display: grid;
@@ -247,26 +248,30 @@ import Layout from '../layouts/Layout.astro';
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    padding: .625rem 1rem;
-    font-size: .875rem;
-    font-weight: 600;
+    gap: 0.375rem;
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
     border: 1px solid hsl(var(--border));
     min-height: 42px;
     line-height: 1;
+    transition: all .2s ease;
   }
 
   :global(.catalog-card__btn--ghost) { color: hsl(var(--foreground)); background: hsl(var(--card)); border: 1px solid hsl(var(--border)); }
-  :global(.catalog-card__btn--ghost:hover) { background: hsl(var(--muted) / .85); }
+  :global(.catalog-card__btn--ghost:hover) { background: hsl(var(--secondary) / .5); }
 
   :global(.catalog-card__btn--primary) {
     border-color: hsl(var(--primary));
     background: hsl(var(--primary));
     color: hsl(var(--primary-foreground));
-    box-shadow: 0 6px 16px hsl(var(--primary) / .2);
+    box-shadow: none;
   }
 
-  :global(.catalog-card__btn--primary:hover) { background: hsl(var(--primary)); }
+  :global(.catalog-card__btn--primary:hover) { background: hsl(var(--primary) / .9); }
+
+  :global(.catalog-icon) { width: 14px; height: 14px; flex: 0 0 14px; }
+  :global(.catalog-icon--star) { width: 14px; height: 14px; fill: hsl(var(--accent)); color: hsl(var(--accent)); }
 
   .catalog__empty {
     text-align: center;
