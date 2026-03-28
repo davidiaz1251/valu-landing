@@ -25,6 +25,8 @@ const CAT_CLASS = {
 let catalogState = [];
 let selectedCategory = 'Todas';
 
+const DOWNLOAD_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tpl-btn__icon"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg>`;
+
 const normalize = (s = '') => s.toString().trim().toLowerCase();
 
 const roleAllowed = (requiredRoles, role) => requiredRoles.includes(role) || role === 'admin';
@@ -71,7 +73,7 @@ function cardHtml(item, enabled, imageUrl) {
         <p class="tpl-card__desc">${desc}</p>
 
         <button class="tpl-card__btn" data-download-btn type="button" ${enabled ? '' : 'disabled'}>
-          ${enabled ? '⬇ Descargar plantilla' : '🔒 Inicia sesión para descargar'}
+          ${enabled ? `${DOWNLOAD_ICON}<span>Descargar plantilla</span>` : '<span>🔒 Inicia sesión para descargar</span>'}
         </button>
       </div>
     </article>
