@@ -93,7 +93,7 @@ import Layout from '../layouts/Layout.astro';
 
   :global(.catalog-filter-btn) {
     border: 1px solid rgba(228,218,213,.95);
-    background: #fff;
+    background: hsl(var(--card));
     color: #6f5a64;
     border-radius: 999px;
     padding: 7px 14px;
@@ -128,8 +128,8 @@ import Layout from '../layouts/Layout.astro';
   }
 
   :global(.catalog-card) {
-    background: linear-gradient(180deg, #fffdfa 0%, #fdf7f4 100%);
-    border: 1px solid rgba(226,212,205,.95);
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
     border-radius: 18px;
     overflow: hidden;
     box-shadow: 0 10px 24px rgba(53,27,35,.07);
@@ -148,7 +148,7 @@ import Layout from '../layouts/Layout.astro';
     position: relative;
     aspect-ratio: 4 / 3;
     overflow: hidden;
-    background: #f3ebe7;
+    background: hsl(var(--muted));
   }
 
   :global(.catalog-card__media img) {
@@ -167,7 +167,7 @@ import Layout from '../layouts/Layout.astro';
     left: 10px;
     border-radius: 999px;
     border: 1px solid rgba(228,218,213,.9);
-    background: rgba(255,255,255,.9);
+    background: hsl(var(--card));
     padding: 5px 10px;
     font-size: .72rem;
     font-weight: 700;
@@ -250,7 +250,7 @@ import Layout from '../layouts/Layout.astro';
     border: 1px solid rgba(228,218,213,.9);
   }
 
-  :global(.catalog-card__btn--ghost) { color: #4f3d46; background: #fff; }
+  :global(.catalog-card__btn--ghost) { color: #4f3d46; background: hsl(var(--card)); }
   :global(.catalog-card__btn--ghost:hover) { background: rgba(248,242,238,.85); }
 
   :global(.catalog-card__btn--primary) {
@@ -264,7 +264,7 @@ import Layout from '../layouts/Layout.astro';
   .catalog__empty {
     text-align: center;
     border: 1px solid #eadfdb;
-    background: #fff;
+    background: hsl(var(--card));
     border-radius: 20px;
     padding: 44px 18px;
     max-width: 700px;

@@ -110,7 +110,7 @@ import Layout from '../layouts/Layout.astro';
 
     :global(.tpl-filter-btn) {
       border: 1px solid rgba(228,218,213,.95);
-      background: rgba(255,255,255,.88);
+      background: hsl(var(--card));
       color: #6f5a64;
       border-radius: 999px;
       padding: 8px 14px;
@@ -165,7 +165,7 @@ import Layout from '../layouts/Layout.astro';
     :global(.tpl-card__media) {
       position: relative;
       aspect-ratio: 4 / 3;
-      background: #f7f2ef;
+      background: hsl(var(--muted));
       display: grid;
       overflow: hidden;
       padding: 0;
@@ -200,7 +200,7 @@ import Layout from '../layouts/Layout.astro';
       color: #5f4a54;
       border: 1px solid rgba(228,218,213,.9);
       border-radius: 999px;
-      background: rgba(255,255,255,.9);
+      background: hsl(var(--card));
       padding: 4px 9px;
     }
 
