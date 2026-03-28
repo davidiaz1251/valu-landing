@@ -70,8 +70,8 @@ function productCardHtml(p) {
   const detailsLink = `/producto?id=${encodeURIComponent(p.id)}`;
 
   const categoryClass = categoryStyle(p.category_title);
-  const tag = p.badge || p.tag || '';
-  const subtitle = p.short_label || p.subtitle || p.category_title || '';
+  const tag = p.tag || '';
+  const subtitle = p.subtitle || p.category_title || '';
   const desc = p.description || 'Producto personalizado hecho a mano.';
   const delivery = p.delivery_time || '3–7 días';
   const rating = p.reviews_count ?? p.rating ?? 0;
@@ -130,7 +130,7 @@ async function init() {
 
     const { data, error } = await supabase
       .from('products_catalog')
-      .select('id,name,description,image_path,image_url,category_id,sort_order,is_active,delivery_time,reviews_count,rating,badge,tag,short_label,subtitle,products_categories:category_id(id,title)')
+      .select('id,name,description,image_path,image_url,category_id,sort_order,is_active,products_categories:category_id(id,title)')
       .eq('is_active', true)
       .order('sort_order', { ascending: true });
 
