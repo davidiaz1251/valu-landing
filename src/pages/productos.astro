@@ -167,7 +167,7 @@ import Layout from '../layouts/Layout.astro';
     left: 10px;
     border-radius: 999px;
     border: 1px solid hsl(var(--border));
-    background: hsl(var(--card) / .9);
+    background: hsl(var(--card) / .92);
     backdrop-filter: blur(4px);
     padding: 6px 12px;
     font-size: .75rem;
@@ -221,7 +221,7 @@ import Layout from '../layouts/Layout.astro';
     min-height: 44px;
   }
 
-  :global(.catalog-card__meta) {
+   :global(.catalog-card__meta) {
     margin-top: 1rem;
     padding-top: 1rem;
     min-height: 44px;
@@ -273,6 +273,42 @@ import Layout from '../layouts/Layout.astro';
 
   :global(.catalog-icon) { width: 14px; height: 14px; flex: 0 0 14px; }
   :global(.catalog-icon--star) { width: 14px; height: 14px; fill: hsl(var(--accent)); color: hsl(var(--accent)); }
+
+
+
+  :global(.catalog-card__actions a.catalog-card__btn) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .375rem;
+    padding: .625rem 1rem;
+    min-height: 40px;
+    border-radius: 999px;
+    font-size: .875rem;
+    font-weight: 500;
+    text-decoration: none;
+    line-height: 1;
+  }
+
+  :global(.catalog-card__actions a.catalog-card__btn--ghost) {
+    border: 1px solid hsl(var(--border));
+    background: hsl(var(--card));
+    color: hsl(var(--foreground));
+  }
+
+  :global(.catalog-card__actions a.catalog-card__btn--ghost:hover) {
+    background: hsl(var(--secondary) / .5);
+  }
+
+  :global(.catalog-card__actions a.catalog-card__btn--primary) {
+    border: 1px solid hsl(var(--primary));
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+  }
+
+  :global(.catalog-card__actions a.catalog-card__btn--primary:hover) {
+    background: hsl(var(--primary) / .9);
+  }
 
   .catalog__empty {
     text-align: center;
