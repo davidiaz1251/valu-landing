@@ -151,6 +151,16 @@ import Layout from '../layouts/Layout.astro';
     background: hsl(var(--muted));
   }
 
+   :global(.catalog-card__media.is-image-missing::before) {
+    content: "🖼️";
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: 2rem;
+    color: hsl(var(--muted-foreground));
+  }
+
   :global(.catalog-card__media img) {
     width: 100%;
     height: 100%;

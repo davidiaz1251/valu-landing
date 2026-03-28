@@ -79,7 +79,7 @@ function productCardHtml(p) {
   return `
     <article class="catalog-card">
       <div class="catalog-card__media">
-        ${p.image ? `<img src="${safe(p.image)}" alt="${safe(p.name)}" loading="lazy" />` : ''}
+        ${p.image ? `<img src="${safe(p.image)}" alt="${safe(p.name)}" loading="lazy" onerror="this.style.display='none'; this.closest('.catalog-card__media')?.classList.add('is-image-missing');" />` : ''}
         ${tag ? `<span class="catalog-card__tag">✦ ${safe(tag)}</span>` : ''}
         ${p.category_title ? `<span class="catalog-card__cat ${categoryClass}">${safe(p.category_title)}</span>` : ''}
       </div>
@@ -146,11 +146,26 @@ async function init() {
 
     const hydrated = [];
     for (const row of rows) {
-      const direct = row.image_url || '';
-      const signed = direct ? '' : await signedImage(row.image_path || '');
+      const raw = String(row.image_url || '').trim();
+      const isHttp = /^https?:\/\//i.test(raw);
+
+      let image = '';
+
+      if (isHttp) {
+        image = raw;
+      } else {
+        const signedFromPath = await signedImage(row.image_path || '');
+        if (signedFromPath) {
+          image = signedFromPath;
+        } else if (raw) {
+          const signedFromRaw = await signedImage(raw);
+          image = signedFromRaw || '';
+        }
+      }
+
       hydrated.push({
         ...row,
-        image: direct || signed || '',
+        image,
         category_title: row.products_categories?.title || '',
       });
     }
