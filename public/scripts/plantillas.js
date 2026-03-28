@@ -71,7 +71,7 @@ function cardHtml(item, enabled, imageUrl) {
         <p class="tpl-card__desc">${desc}</p>
 
         <button class="tpl-card__btn" data-download-btn type="button" ${enabled ? '' : 'disabled'}>
-          ${enabled ? 'Descargar plantilla' : 'Inicia sesión para descargar'}
+          ${enabled ? '⬇ Descargar plantilla' : '🔒 Inicia sesión para descargar'}
         </button>
       </div>
     </article>
@@ -97,22 +97,18 @@ async function signedImage(path) {
   return data.signedUrl;
 }
 
-function getCategories(items) {
-  const set = new Set();
-  items.forEach((it) => {
-    const c = it.item.categoria;
-    if (c) set.add(c);
-  });
-  return ['Todas', ...Array.from(set)];
+function getCategories() {
+  return [
+    'Todas',
+    'Toppers',
+    'Invitaciones',
+    'Cajas y Packaging',
+    'Regalos Personalizados',
+  ];
 }
 
 function renderFilters() {
-  const categories = getCategories(catalogState);
-  if (categories.length <= 2) {
-    filtersWrap.hidden = true;
-    return;
-  }
-
+  const categories = getCategories();
   filtersWrap.hidden = false;
   filtersWrap.innerHTML = categories
     .map((cat) => `<button class="tpl-filter-btn ${selectedCategory === cat ? 'is-active' : ''}" data-filter="${cat}">${cat}</button>`)
