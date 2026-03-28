@@ -55,7 +55,7 @@ function renderTemplateCategoryOptions(selected = '') {
 async function loadTemplateCategories() {
   const { data, error } = await supabase
     .from('products_categories')
-    .select('title,is_active,sort_order')
+    .select('id,title,is_active,sort_order')
     .eq('is_active', true)
     .order('sort_order', { ascending: true })
     .order('title', { ascending: true });
