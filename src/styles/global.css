@@ -4,47 +4,47 @@
    =================================== */
 
 /* Google Fonts */
-@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap');
 
 /* CSS Custom Properties - Design Tokens */
 :root {
   /* Primary Colors - Pastel Palette */
-  --color-primary: #e8b4bc; /* Rosa suave principal */
-  --color-primary-light: #f5d5db; /* Rosa claro */
-  --color-primary-dark: #d49aa3; /* Rosa oscuro */
+  --color-primary: hsl(160 30% 45%);
+  --color-primary-light: hsl(160 30% 85%);
+  --color-primary-dark: hsl(160 30% 35%);
 
   /* Secondary Colors */
-  --color-secondary: #b4d4e8; /* Azul pastel */
-  --color-secondary-light: #d5e8f5; /* Azul claro */
-  --color-secondary-dark: #9ac4d9; /* Azul oscuro */
+  --color-secondary: hsl(350 40% 90%);
+  --color-secondary-light: hsl(350 40% 92%);
+  --color-secondary-dark: hsl(350 40% 75%);
 
   /* Accent Colors */
-  --color-accent: #f5e6c8; /* Beige/dorado suave */
-  --color-accent-light: #fff5e6; /* Crema */
-  --color-accent-dark: #e8d4a8; /* Dorado suave */
+  --color-accent: hsl(42 65% 65%);
+  --color-accent-light: hsl(30 33% 96%);
+  --color-accent-dark: hsl(42 50% 50%);
 
   /* Complementary Pastels */
-  --color-mint: #b8e0d4; /* Verde menta */
+  --color-mint: hsl(160 30% 85%);
   --color-lavender: #d4b8e0; /* Lavanda */
   --color-peach: #f5d0c5; /* Melocotón */
   --color-sage: #c8d4b4; /* Sage/verde suave */
 
   /* Neutral Colors */
   --color-white: #ffffff;
-  --color-cream: #fdf9f6;
-  --color-light: #f8f4f1;
+  --color-cream: hsl(30 33% 98%);
+  --color-light: hsl(30 20% 94%);
   --color-gray-100: #f5f0ed;
-  --color-gray-200: #e8e2df;
+  --color-gray-200: hsl(30 20% 88%);
   --color-gray-300: #d4ccc7;
   --color-gray-400: #a89f99;
-  --color-gray-500: #7a7168;
-  --color-gray-600: #5c544d;
-  --color-dark: #3d3630;
-  --color-black: #2a2420;
+  --color-gray-500: hsl(340 10% 45%);
+  --color-gray-600: hsl(340 10% 45%);
+  --color-dark: hsl(340 20% 15%);
+  --color-black: hsl(340 20% 15%);
 
   /* Typography */
-  --font-primary: "Outfit", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-display: "Playfair Display", Georgia, serif;
+  --font-primary: 'DM Sans', system-ui, sans-serif;
+  --font-display: 'Playfair Display', Georgia, serif;
 
   /* Font Sizes */
   --text-xs: 0.75rem;
@@ -102,8 +102,8 @@
   --shadow-xl:
     0 20px 25px -5px rgba(45, 35, 30, 0.1),
     0 8px 10px -6px rgba(45, 35, 30, 0.05);
-  --shadow-soft: 0 8px 32px rgba(232, 180, 188, 0.15);
-  --shadow-glow: 0 0 40px rgba(232, 180, 188, 0.2);
+  --shadow-soft: 0 8px 32px rgba(80,149,129,.16);
+  --shadow-glow: 0 0 40px rgba(80,149,129,.2);
 
   /* Transitions */
   --transition-fast: 150ms ease;
@@ -144,8 +144,8 @@ body {
   font-size: var(--text-base);
   font-weight: var(--font-normal);
   line-height: var(--leading-normal);
-  color: var(--color-dark);
-  background-color: var(--color-cream);
+  color: hsl(340 20% 15%);
+  background-color: hsl(30 33% 98%);
   min-height: 100vh;
   overflow-x: hidden;
 }
