@@ -57,7 +57,7 @@ import Layout from '../layouts/Layout.astro';
       border-radius: 999px;
       background: hsla(350,40%,90%,.6);
       border: 1px solid hsla(350,40%,85%,.8);
-      color: #5f4a54;
+      color: hsl(var(--secondary-foreground));
       font-size: .8rem;
       font-weight: 600;
       letter-spacing: .02em;
@@ -68,13 +68,13 @@ import Layout from '../layouts/Layout.astro';
       font-family: 'Playfair Display', Georgia, serif;
       font-size: clamp(1.875rem, 3.2vw, 2.25rem);
       line-height: 1.1;
-      color: #2f1f28;
+      color: hsl(var(--foreground));
     }
 
     .tpl__subtitle {
       margin: 0;
       font-family: 'DM Sans', system-ui, sans-serif;
-      color: #6b5963;
+      color: hsl(var(--muted-foreground));
       max-width: 680px;
       font-size: 1.02rem;
       line-height: 1.65;
@@ -96,8 +96,8 @@ import Layout from '../layouts/Layout.astro';
       width: 30px;
       height: 30px;
       border-radius: 999px;
-      border: 3px solid rgba(228,218,213,.9);
-      border-top-color: hsl(160 30% 45%);
+      border: 3px solid hsl(var(--border));
+      border-top-color: hsl(var(--primary));
       animation: tplSpin .9s linear infinite;
     }
 
@@ -109,7 +109,7 @@ import Layout from '../layouts/Layout.astro';
     }
 
     :global(.tpl-filter-btn) {
-      border: 1px solid rgba(228,218,213,.95);
+      border: 1px solid hsl(var(--border));
       background: hsl(var(--card));
       color: #6f5a64;
       border-radius: 999px;
@@ -122,9 +122,9 @@ import Layout from '../layouts/Layout.astro';
 
     :global(.tpl-filter-btn:hover) { border-color: hsla(160,30%,45%,.4); }
     :global(.tpl-filter-btn.is-active) {
-      background: hsl(160 30% 45%);
-      border-color: hsl(160 30% 45%);
-      color: #fff;
+      background: hsl(var(--primary));
+      border-color: hsl(var(--primary));
+      color: hsl(var(--card));
     }
 
     .tpl__grid {
@@ -146,7 +146,7 @@ import Layout from '../layouts/Layout.astro';
     }
 
     :global(.tpl-card) {
-      background: linear-gradient(180deg, #fff 0%, #fffdfc 100%);
+      background: linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--card))dfc 100%);
       border: 1px solid #efe3df;
       border-radius: 18px;
       overflow: hidden;
@@ -187,7 +187,7 @@ import Layout from '../layouts/Layout.astro';
     :global(.tpl-card__file-icon) {
       font-size: 1.9rem;
       opacity: .55;
-      color: #8a7780;
+      color: hsl(var(--muted-foreground));
     }
 
     :global(.tpl-card__format) {
@@ -197,8 +197,8 @@ import Layout from '../layouts/Layout.astro';
       font-size: .72rem;
       font-weight: 700;
       letter-spacing: .04em;
-      color: #5f4a54;
-      border: 1px solid rgba(228,218,213,.9);
+      color: hsl(var(--secondary-foreground));
+      border: 1px solid hsl(var(--border));
       border-radius: 999px;
       background: hsl(var(--card));
       padding: 4px 9px;
@@ -230,13 +230,13 @@ import Layout from '../layouts/Layout.astro';
       margin: 0;
       font-family: 'Playfair Display', Georgia, serif;
       font-size: 1.02rem;
-      color: #2f1f28;
+      color: hsl(var(--foreground));
       line-height: 1.25;
     }
 
     :global(.tpl-card__desc) {
       margin: 0;
-      color: #6b5963;
+      color: hsl(var(--muted-foreground));
       font-size: .8rem;
       line-height: 1.5;
       min-height: 38px;
@@ -247,8 +247,8 @@ import Layout from '../layouts/Layout.astro';
       width: 100%;
       border: 0;
       border-radius: 999px;
-      background: hsl(160 30% 45%);
-      color: #fff;
+      background: hsl(var(--primary));
+      color: hsl(var(--card));
       font-weight: 600;
       padding: 10px 14px;
       font-size: .87rem;
@@ -260,7 +260,7 @@ import Layout from '../layouts/Layout.astro';
       gap: 8px;
     }
 
-    :global(.tpl-card__btn:hover) { background: hsl(160 30% 42%); }
+    :global(.tpl-card__btn:hover) { background: hsl(var(--primary)); }
     :global(.tpl-card__btn:disabled) { opacity: .58; cursor: not-allowed; }
 
     :global(.tpl-btn__icon) { width: 14px; height: 14px; flex: 0 0 14px; }
@@ -291,18 +291,18 @@ import Layout from '../layouts/Layout.astro';
       margin: 0;
       font-family: 'Playfair Display', Georgia, serif;
       font-size: 1.5rem;
-      color: #2f1f28;
+      color: hsl(var(--foreground));
     }
 
-    .tpl__empty p { color: #6b5963; margin: 8px auto 0; max-width: 420px; }
+    .tpl__empty p { color: hsl(var(--muted-foreground)); margin: 8px auto 0; max-width: 420px; }
 
     .tpl__empty a {
       margin-top: 16px;
       display: inline-flex;
       text-decoration: none;
       border-radius: 999px;
-      background: hsl(160 30% 45%);
-      color: #fff;
+      background: hsl(var(--primary));
+      color: hsl(var(--card));
       font-weight: 600;
       padding: 10px 16px;
     }
