@@ -1,10 +1,5 @@
 import { hasSupabaseConfig, supabase, getUserProfile } from '/scripts/supabase-client.js';
 
-const LOG_PREFIX = '[auth-menu]';
-const log = (...args) => console.log(LOG_PREFIX, ...args);
-const warn = (...args) => console.warn(LOG_PREFIX, ...args);
-const err = (...args) => console.error(LOG_PREFIX, ...args);
-
 const authItem = document.querySelector('.lk-nav__actions .nav__auth-item');
 const link = document.querySelector('[data-auth-menu]');
 const avatar = document.getElementById('authAvatar');
@@ -31,49 +26,31 @@ const showAvatar = (el, src) => {
 function closeDesktopMenu() {
   if (!desktopMenu) return;
   desktopMenu.classList.remove('is-open');
-  log('desktop dropdown cerrado (click fuera)');
 }
 
 function clearDropdown() {
   const olds = document.querySelectorAll('.nav__auth-dropdown');
-  if (olds.length) {
-    olds.forEach((n) => n.remove());
-    log(`dropdowns anteriores eliminados: ${olds.length}`);
-  }
+  if (olds.length) olds.forEach((n) => n.remove());
   desktopMenu = null;
 }
 
-async function performLogout(source = 'unknown') {
-  if (!supabase) {
-    warn('performLogout sin supabase');
-    return;
-  }
-
-  log(`logout iniciado desde: ${source}`);
+async function performLogout() {
+  if (!supabase) return;
 
   try {
     const { error } = await supabase.auth.signOut();
-    if (error) {
-      err('signOut devolvió error:', error);
-      throw error;
-    }
-
-    log('signOut OK, redirigiendo a /');
+    if (error) throw error;
     window.location.href = '/';
   } catch (e) {
-    err('Excepción en logout:', e);
-    alert(`No se pudo cerrar sesión. Revisa consola.\nDetalle: ${e?.message || 'sin mensaje'}`);
+    console.error('Error al cerrar sesión:', e);
+    alert(`No se pudo cerrar sesión.\nDetalle: ${e?.message || 'sin mensaje'}`);
   }
 }
 
 async function renderAuthMenuInternal() {
-  if (!hasSupabaseConfig() || !supabase) {
-    warn('renderAuthMenu abortado: falta config Supabase');
-    return;
-  }
+  if (!hasSupabaseConfig() || !supabase) return;
 
   const isMobile = window.matchMedia('(max-width: 767px)').matches;
-  log('renderAuthMenu start', { isMobile, hasLink: !!link, hasMobileLink: !!mobileLink, hasAuthItem: !!authItem });
 
   clearDropdown();
   hideAvatar(avatar);
@@ -81,12 +58,11 @@ async function renderAuthMenuInternal() {
 
   const { data, error: sessionError } = await supabase.auth.getSession();
   if (sessionError) {
-    err('getSession error:', sessionError);
+    console.error('getSession error:', sessionError);
     return;
   }
 
   const session = data?.session;
-  log('session detectada:', !!session?.user, session?.user?.email || null);
 
   if (!session?.user) {
     document.getElementById('authLogoutMobile')?.remove();
@@ -99,13 +75,11 @@ async function renderAuthMenuInternal() {
       mobileLink.textContent = 'Iniciar sesión';
       mobileLink.setAttribute('href', '/login');
     }
-    log('modo invitado renderizado');
     return;
   }
 
   const profile = await getUserProfile();
   const isAdmin = profile?.role === 'admin';
-  log('perfil cargado', { role: profile?.role || null, isAdmin });
 
   const photo = session.user.user_metadata?.avatar_url || session.user.user_metadata?.picture;
   const fallback =
@@ -135,11 +109,9 @@ async function renderAuthMenuInternal() {
         b.textContent = 'Cerrar sesión';
         b.style.marginLeft = '6px';
         b.addEventListener('click', async () => {
-          log('click logout mobile');
-          await performLogout('mobile-button');
+          await performLogout();
         });
         mobileLink.parentElement.appendChild(b);
-        log('botón logout mobile creado');
       }
     }
 
@@ -149,14 +121,10 @@ async function renderAuthMenuInternal() {
       link.onclick = null;
     }
 
-    log('render mobile finalizado');
     return;
   }
 
-  if (!authItem || !link) {
-    warn('desktop: falta authItem o link');
-    return;
-  }
+  if (!authItem || !link) return;
 
   link.textContent = 'Mi cuenta';
   link.setAttribute('href', '#');
@@ -168,31 +136,26 @@ async function renderAuthMenuInternal() {
     '<a href="/plantillas" class="nav__auth-dropdown-link">Mis plantillas</a>' +
     '<button type="button" class="nav__auth-dropdown-link" data-action="logout">Cerrar sesión</button>';
 
-  // Delegación dentro del menú para no depender de IDs únicos
   menu.addEventListener('click', async (e) => {
     const target = e.target instanceof Element ? e.target.closest('[data-action="logout"]') : null;
     if (!target) return;
     e.preventDefault();
     e.stopPropagation();
-    log('click logout desktop (delegado)');
-    await performLogout('desktop-dropdown');
+    await performLogout();
   });
 
   authItem.appendChild(menu);
   desktopMenu = menu;
-  log('dropdown desktop creado');
 
   link.onclick = (e) => {
     e.preventDefault();
-    const isOpen = menu.classList.toggle('is-open');
-    log('click mi cuenta desktop, isOpen=', isOpen);
+    menu.classList.toggle('is-open');
   };
 }
 
 async function renderAuthMenu() {
   if (isRendering) {
     renderQueued = true;
-    log('render en curso, se encola nueva ejecución');
     return;
   }
 
@@ -203,30 +166,23 @@ async function renderAuthMenu() {
     isRendering = false;
     if (renderQueued) {
       renderQueued = false;
-      log('ejecutando render encolado');
       await renderAuthMenu();
     }
   }
 }
 
 if (hasSupabaseConfig() && supabase && (link || mobileLink)) {
-  log('init auth-menu OK');
-
   if (!onDocClickBound) {
     document.addEventListener('click', (e) => {
       if (!authItem) return;
       if (!authItem.contains(e.target)) closeDesktopMenu();
     });
     onDocClickBound = true;
-    log('listener document click registrado');
   }
 
   renderAuthMenu();
 
-  supabase.auth.onAuthStateChange((event) => {
-    log('onAuthStateChange:', event);
+  supabase.auth.onAuthStateChange(() => {
     renderAuthMenu();
   });
-} else {
-  warn('auth-menu no inicializado (config/link faltante)');
 }
