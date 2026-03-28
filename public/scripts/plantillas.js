@@ -217,7 +217,7 @@ async function init() {
     setLoading(true);
 
     if (!hasSupabaseConfig()) {
-      sessionBox.innerHTML = 'Inicia sesión para continuar. <a href="/login?next=/plantillas">Entrar</a>';
+      if (sessionBox) sessionBox.hidden = true;
       heroCopy.textContent = 'Inicia sesión para descargar tus plantillas.';
       await buildCatalog(false, 'cliente_final');
       return;
@@ -228,7 +228,7 @@ async function init() {
 
     const session = sessionData?.session;
     if (!session?.user) {
-      sessionBox.innerHTML = 'Inicia sesión para continuar. <a href="/login?next=/plantillas">Entrar</a>';
+      if (sessionBox) sessionBox.hidden = true;
       heroCopy.textContent = 'Inicia sesión para descargar tus plantillas.';
       await buildCatalog(false, 'cliente_final');
       return;
@@ -238,13 +238,12 @@ async function init() {
     const profile = await getUserProfile();
     const role = profile?.role || 'cliente_final';
 
-    sessionBox.hidden = true;
+    if (sessionBox) sessionBox.hidden = true;
     heroCopy.textContent = 'Aquí encuentras todos los archivos disponibles para descargar.';
 
     await buildCatalog(true, role);
   } catch (e) {
     console.error(e);
-    sessionBox.textContent = 'No se pudo cargar tu sesión.';
     showEmpty('Hubo un problema cargando las plantillas', 'Inténtalo de nuevo en unos minutos.');
   } finally {
     setLoading(false);

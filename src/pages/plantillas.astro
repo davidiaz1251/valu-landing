@@ -20,7 +20,6 @@ import Layout from '../layouts/Layout.astro';
           Aquí encuentras todos los archivos disponibles para descargar.
         </p>
 
-        <div id="templatesSession" class="tpl__session">Comprobando sesión...</div>
       </div>
 
       <div id="templatesLoader" class="tpl__loader" aria-live="polite">
@@ -78,26 +77,6 @@ import Layout from '../layouts/Layout.astro';
       max-width: 680px;
       font-size: 1.02rem;
       line-height: 1.65;
-    }
-
-    .tpl__session {
-      margin-top: var(--space-4);
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 14px;
-      border-radius: 999px;
-      border: 1px solid rgba(228,218,213,.9);
-      background: rgba(255,255,255,.85);
-      color: #5f4a54;
-      font-size: .86rem;
-      font-weight: 500;
-    }
-
-    .tpl__session :global(a) {
-      color: hsl(160 30% 40%);
-      font-weight: 600;
-      text-decoration: none;
     }
 
     .tpl__loader {
