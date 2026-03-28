@@ -238,7 +238,7 @@ async function init() {
     const profile = await getUserProfile();
     const role = profile?.role || 'cliente_final';
 
-    sessionBox.textContent = 'Sesión iniciada';
+    sessionBox.hidden = true;
     heroCopy.textContent = 'Ya puedes descargar tus plantillas.';
 
     await buildCatalog(true, role);
