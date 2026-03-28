@@ -251,7 +251,7 @@ import Layout from '../layouts/Layout.astro';
   }
 
   :global(.catalog-card__btn--ghost) { color: hsl(var(--secondary-foreground)); background: hsl(var(--card)); }
-  :global(.catalog-card__btn--ghost:hover) { background: rgba(248,242,238,.85); }
+  :global(.catalog-card__btn--ghost:hover) { background: hsl(var(--muted) / .85); }
 
   :global(.catalog-card__btn--primary) {
     border-color: hsl(var(--primary));
@@ -263,7 +263,7 @@ import Layout from '../layouts/Layout.astro';
 
   .catalog__empty {
     text-align: center;
-    border: 1px solid #eadfdb;
+    border: 1px solid hsl(var(--border));
     background: hsl(var(--card));
     border-radius: 20px;
     padding: 44px 18px;
@@ -277,7 +277,7 @@ import Layout from '../layouts/Layout.astro';
     border-radius: 26px;
     padding: 36px 20px;
     text-align: center;
-    background: linear-gradient(135deg, rgba(212,232,245,.4), rgba(184,224,212,.25));
+    background: linear-gradient(135deg, hsl(var(--secondary) / .5), hsl(var(--primary) / .2));
   }
 
   .catalog-cta__icon { font-size: 1.8rem; margin-bottom: 8px; }
