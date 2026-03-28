@@ -146,10 +146,11 @@ async function init() {
 
     const hydrated = [];
     for (const row of rows) {
-      const signed = await signedImage(row.image_path || '');
+      const direct = row.image_url || '';
+      const signed = direct ? '' : await signedImage(row.image_path || '');
       hydrated.push({
         ...row,
-        image: signed || row.image_url || '',
+        image: direct || signed || '',
         category_title: row.products_categories?.title || '',
       });
     }
