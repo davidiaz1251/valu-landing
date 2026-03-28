@@ -53,7 +53,7 @@ function hideEmpty() {
 function cardHtml(item, enabled, imageUrl) {
   const fmt = (item.format || 'FILE').toUpperCase();
   const icon = FORMAT_SYMBOL[fmt] || '📦';
-  const category = item.category || item.categoria || '';
+  const category = item.categoria || '';
   const catClass = CAT_CLASS[normalize(category)] || 'tpl-cat--default';
   const title = item.title || 'Plantilla';
   const desc = item.description || 'Plantilla lista para descargar.';
@@ -81,7 +81,7 @@ function cardHtml(item, enabled, imageUrl) {
 async function loadCatalog() {
   const { data, error } = await supabase
     .from('templates_catalog')
-    .select('id,title,description,format,storage_path,image_path,required_roles,active,sort_order,category,categoria')
+    .select('id,title,description,format,storage_path,image_path,required_roles,active,sort_order,categoria')
     .eq('active', true)
     .order('sort_order', { ascending: true })
     .order('title', { ascending: true });
