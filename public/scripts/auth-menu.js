@@ -13,6 +13,8 @@ const mobileAvatar = document.getElementById('authAvatarMobile');
 
 let desktopMenu = null;
 let onDocClickBound = false;
+let isRendering = false;
+let renderQueued = false;
 
 const hideAvatar = (el) => {
   if (!el) return;
@@ -33,10 +35,10 @@ function closeDesktopMenu() {
 }
 
 function clearDropdown() {
-  const old = authItem?.querySelector('.nav__auth-dropdown');
-  if (old) {
-    old.remove();
-    log('dropdown anterior eliminado');
+  const olds = document.querySelectorAll('.nav__auth-dropdown');
+  if (olds.length) {
+    olds.forEach((n) => n.remove());
+    log(`dropdowns anteriores eliminados: ${olds.length}`);
   }
   desktopMenu = null;
 }
@@ -64,7 +66,7 @@ async function performLogout(source = 'unknown') {
   }
 }
 
-async function renderAuthMenu() {
+async function renderAuthMenuInternal() {
   if (!hasSupabaseConfig() || !supabase) {
     warn('renderAuthMenu abortado: falta config Supabase');
     return;
@@ -164,7 +166,17 @@ async function renderAuthMenu() {
   menu.innerHTML =
     (isAdmin ? '<a href="/admin/panel" class="nav__auth-dropdown-link">Panel admin</a>' : '') +
     '<a href="/plantillas" class="nav__auth-dropdown-link">Mis plantillas</a>' +
-    '<button type="button" class="nav__auth-dropdown-link" id="authLogoutBtn">Cerrar sesión</button>';
+    '<button type="button" class="nav__auth-dropdown-link" data-action="logout">Cerrar sesión</button>';
+
+  // Delegación dentro del menú para no depender de IDs únicos
+  menu.addEventListener('click', async (e) => {
+    const target = e.target instanceof Element ? e.target.closest('[data-action="logout"]') : null;
+    if (!target) return;
+    e.preventDefault();
+    e.stopPropagation();
+    log('click logout desktop (delegado)');
+    await performLogout('desktop-dropdown');
+  });
 
   authItem.appendChild(menu);
   desktopMenu = menu;
@@ -175,18 +187,25 @@ async function renderAuthMenu() {
     const isOpen = menu.classList.toggle('is-open');
     log('click mi cuenta desktop, isOpen=', isOpen);
   };
+}
 
-  const logoutBtn = document.getElementById('authLogoutBtn');
-  if (!logoutBtn) {
-    warn('no se encontró #authLogoutBtn tras crear dropdown');
-  } else {
-    logoutBtn.addEventListener('click', async (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      log('click logout desktop');
-      await performLogout('desktop-dropdown');
-    });
-    log('listener logout desktop conectado');
+async function renderAuthMenu() {
+  if (isRendering) {
+    renderQueued = true;
+    log('render en curso, se encola nueva ejecución');
+    return;
+  }
+
+  isRendering = true;
+  try {
+    await renderAuthMenuInternal();
+  } finally {
+    isRendering = false;
+    if (renderQueued) {
+      renderQueued = false;
+      log('ejecutando render encolado');
+      await renderAuthMenu();
+    }
   }
 }
 
