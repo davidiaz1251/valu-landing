@@ -40,6 +40,7 @@ import Layout from '../layouts/Layout.astro';
   <style>
     .tpl {
       position: relative;
+      font-family: 'DM Sans', system-ui, sans-serif;
       padding-top: calc(var(--space-24) + var(--space-6));
       padding-bottom: var(--space-16);
       background: transparent;
@@ -66,7 +67,7 @@ import Layout from '../layouts/Layout.astro';
     .tpl__title {
       margin: 14px 0 6px;
       font-family: 'Playfair Display', Georgia, serif;
-      font-size: clamp(2rem, 4vw, 3rem);
+      font-size: clamp(2.1rem, 4vw, 3.25rem);
       line-height: 1.1;
       color: #2f1f28;
     }
@@ -75,7 +76,7 @@ import Layout from '../layouts/Layout.astro';
       margin: 0;
       color: #6b5963;
       max-width: 680px;
-      font-size: 1rem;
+      font-size: 1.02rem;
       line-height: 1.65;
     }
 
@@ -220,7 +221,7 @@ import Layout from '../layouts/Layout.astro';
     }
 
     :global(.tpl-card__body) {
-      padding: 14px 14px 16px;
+      padding: 16px 16px 18px;
       display: flex;
       flex-direction: column;
       gap: 9px;
@@ -244,7 +245,7 @@ import Layout from '../layouts/Layout.astro';
     :global(.tpl-card__title) {
       margin: 0;
       font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1.08rem;
+      font-size: 1.02rem;
       color: #2f1f28;
       line-height: 1.25;
     }
@@ -252,7 +253,7 @@ import Layout from '../layouts/Layout.astro';
     :global(.tpl-card__desc) {
       margin: 0;
       color: #6b5963;
-      font-size: .84rem;
+      font-size: .8rem;
       line-height: 1.5;
       min-height: 38px;
     }

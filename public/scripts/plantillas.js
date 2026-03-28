@@ -238,14 +238,8 @@ async function init() {
     const profile = await getUserProfile();
     const role = profile?.role || 'cliente_final';
 
-    sessionBox.innerHTML = 'Sesión activa · <a href="#" id="logoutLink">Cerrar sesión</a>';
+    sessionBox.textContent = 'Sesión iniciada';
     heroCopy.textContent = 'Ya puedes descargar tus plantillas.';
-
-    document.getElementById('logoutLink')?.addEventListener('click', async (event) => {
-      event.preventDefault();
-      await supabase.auth.signOut();
-      window.location.reload();
-    });
 
     await buildCatalog(true, role);
   } catch (e) {
