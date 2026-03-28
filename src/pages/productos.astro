@@ -56,7 +56,7 @@ import Layout from '../layouts/Layout.astro';
     gap: 8px;
     padding: 6px 14px;
     border-radius: 999px;
-    border: 1px solid hsl(var(--border));
+    border: 1.5px solid hsl(var(--border));
     background: hsl(var(--secondary));
     color: hsl(var(--secondary-foreground));
     font-size: .8rem;
@@ -132,7 +132,7 @@ import Layout from '../layouts/Layout.astro';
     border: 1px solid hsl(var(--border));
     border-radius: 18px;
     overflow: hidden;
-    box-shadow: 0 10px 24px var(--shadow-md);
+    box-shadow: var(--shadow-md);
     transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
     display: flex;
     flex-direction: column;
@@ -141,7 +141,7 @@ import Layout from '../layouts/Layout.astro';
   :global(.catalog-card:hover) {
     transform: translateY(-2px);
     border-color: hsl(var(--border));
-    box-shadow: 0 16px 32px var(--shadow-lg);
+    box-shadow: var(--shadow-lg);
   }
 
   :global(.catalog-card__media) {
@@ -167,7 +167,8 @@ import Layout from '../layouts/Layout.astro';
     left: 10px;
     border-radius: 999px;
     border: 1px solid hsl(var(--border));
-    background: hsl(var(--card));
+    background: hsl(var(--card) / .92);
+    backdrop-filter: blur(4px);
     padding: 5px 10px;
     font-size: .72rem;
     font-weight: 700;
@@ -182,6 +183,8 @@ import Layout from '../layouts/Layout.astro';
     padding: 4px 10px;
     font-size: .72rem;
     font-weight: 700;
+    border: 1px solid hsl(var(--border));
+    backdrop-filter: blur(4px);
   }
 
   :global(.cat-toppers){ background: hsl(var(--accent) / .23); color: hsl(var(--accent-foreground)); }
