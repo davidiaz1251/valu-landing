@@ -7,6 +7,8 @@ const uploadForm = document.getElementById('uploadForm');
 const fileInput = document.getElementById('fileInput');
 const folderInput = document.getElementById('folderInput');
 const imageInput = document.getElementById('imageInput');
+const titleInput = document.getElementById('titleInput');
+const descriptionInput = document.getElementById('descriptionInput');
 const filesList = document.getElementById('filesList');
 const usersList = document.getElementById('usersList');
 
