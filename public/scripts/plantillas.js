@@ -31,6 +31,12 @@ const normalize = (s = '') => s.toString().trim().toLowerCase();
 
 const roleAllowed = (requiredRoles, role) => requiredRoles.includes(role) || role === 'admin';
 
+function getCategoryName(item) {
+  if (item?.products_categories?.title) return item.products_categories.title;
+  if (typeof item?.categoria === 'string' && item.categoria.trim()) return item.categoria.trim();
+  return '';
+}
+
 function setLoading(isLoading) {
   loader.hidden = !isLoading;
 }
@@ -55,7 +61,7 @@ function hideEmpty() {
 function cardHtml(item, enabled, imageUrl) {
   const fmt = (item.format || 'FILE').toUpperCase();
   const icon = FORMAT_SYMBOL[fmt] || '📦';
-  const category = item.categoria || '';
+  const category = getCategoryName(item);
   const catClass = CAT_CLASS[normalize(category)] || 'tpl-cat--default';
   const title = item.title || 'Plantilla';
   const desc = item.description || 'Plantilla lista para descargar.';
@@ -83,7 +89,7 @@ function cardHtml(item, enabled, imageUrl) {
 async function loadCatalog() {
   const { data, error } = await supabase
     .from('templates_catalog')
-    .select('*')
+    .select('id,title,description,format,storage_path,image_path,required_roles,active,sort_order,categoria_id,products_categories:categoria_id(id,title)')
     .eq('active', true)
     .order('sort_order', { ascending: true })
     .order('title', { ascending: true });
@@ -130,7 +136,7 @@ function renderCards() {
 
   const filtered = selectedCategory === 'Todas'
     ? catalogState
-    : catalogState.filter((x) => (x.item.categoria) === selectedCategory);
+    : catalogState.filter((x) => getCategoryName(x.item) === selectedCategory);
 
   if (!filtered.length) {
     showEmpty('No hay plantillas en esta categoría', 'Prueba cambiando el filtro.');

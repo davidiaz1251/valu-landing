@@ -24,7 +24,7 @@ const modalImageFile = document.getElementById('modalImageFile');
 const toastEl = document.getElementById('adminToast');
 
 const ROLES = ['cliente_final', 'profesional_reposteria', 'admin'];
-let templateCategories = [];
+let templateCategories = []; // [{id,title}]
 
 function setStatus(text) { if (statusEl) statusEl.textContent = text; }
 function showToast(msg, type = 'ok') {
@@ -44,11 +44,11 @@ function roleOptions(current) {
 function renderTemplateCategoryOptions(selected = '') {
   const selects = [folderInput, modalCategory].filter(Boolean);
   const options = ['<option value="">Selecciona categoría</option>']
-    .concat(templateCategories.map((c) => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`));
+    .concat(templateCategories.map((c) => `<option value="${escapeHtml(c.id)}">${escapeHtml(c.title)}</option>`));
 
   selects.forEach((sel) => {
     sel.innerHTML = options.join('');
-    if (selected && templateCategories.includes(selected)) sel.value = selected;
+    if (selected && templateCategories.some((c) => c.id === selected)) sel.value = selected;
   });
 }
 
@@ -62,11 +62,23 @@ async function loadTemplateCategories() {
 
   if (error) {
     console.warn('No se pudieron cargar categorías de productos:', error.message);
-    templateCategories = ['Toppers', 'Invitaciones', 'Cajas y Packaging', 'Regalos Personalizados'];
+    templateCategories = [
+      { id: 'toppers', title: 'Toppers' },
+      { id: 'invitaciones', title: 'Invitaciones' },
+      { id: 'cajas-y-packaging', title: 'Cajas y Packaging' },
+      { id: 'regalos-personalizados', title: 'Regalos Personalizados' },
+    ];
   } else {
-    templateCategories = (data || []).map((r) => String(r.title || '').trim()).filter(Boolean);
+    templateCategories = (data || [])
+      .map((r) => ({ id: String(r.id || '').trim(), title: String(r.title || '').trim() }))
+      .filter((r) => r.id && r.title);
     if (!templateCategories.length) {
-      templateCategories = ['Toppers', 'Invitaciones', 'Cajas y Packaging', 'Regalos Personalizados'];
+      templateCategories = [
+      { id: 'toppers', title: 'Toppers' },
+      { id: 'invitaciones', title: 'Invitaciones' },
+      { id: 'cajas-y-packaging', title: 'Cajas y Packaging' },
+      { id: 'regalos-personalizados', title: 'Regalos Personalizados' },
+    ];
     }
   }
 
@@ -89,7 +101,7 @@ async function loadFiles() {
   filesList.textContent = 'Cargando archivos…';
   const { data, error } = await supabase
     .from('templates_catalog')
-    .select('id,title,description,format,storage_path,image_path,required_roles,active,sort_order,categoria')
+    .select('id,title,description,format,storage_path,image_path,required_roles,active,sort_order,categoria_id,products_categories:categoria_id(id,title)')
     .eq('active', true)
     .order('sort_order', { ascending: true })
     .order('title', { ascending: true });
@@ -103,7 +115,7 @@ async function loadFiles() {
   })));
 
   filesList.innerHTML = withPreview.map((f) => `
-    <div class="admin-file" data-id="${escapeHtml(f.id)}" data-path="${escapeHtml(f.storage_path)}" data-image="${escapeHtml(f.image_path || '')}" data-title="${escapeHtml(f.title || '')}" data-description="${escapeHtml(f.description || '')}" data-order="${Number(f.sort_order || 100)}" data-categoria="${escapeHtml(f.categoria || '')}">
+    <div class="admin-file" data-id="${escapeHtml(f.id)}" data-path="${escapeHtml(f.storage_path)}" data-image="${escapeHtml(f.image_path || '')}" data-title="${escapeHtml(f.title || '')}" data-description="${escapeHtml(f.description || '')}" data-order="${Number(f.sort_order || 100)}" data-categoria="${escapeHtml(f.categoria_id || '')}">
       <div style="display:flex; gap:10px; align-items:center;">
         <img src="${escapeHtml(f.previewUrl || '')}" class="admin-file__thumb" ${f.previewUrl ? '' : 'style="display:none"'} alt="preview" />
         <div>
@@ -156,9 +168,9 @@ editForm?.addEventListener('submit', async (e) => {
   const title = modalTitle.value.trim();
   const description = modalDescription.value.trim();
   const sort_order = Number(modalOrder.value || 100);
-  const categoria = (modalCategory?.value || '').trim();
+  const categoria_id = (modalCategory?.value || '').trim();
 
-  const payload = { title, description, categoria, sort_order };
+  const payload = { title, description, categoria_id, sort_order };
 
   if (modalImageFile?.files?.[0]) {
     const img = modalImageFile.files[0];
@@ -230,10 +242,11 @@ async function init() {
     const file = fileInput.files?.[0];
     if (!file) return;
 
-    const categoria = (folderInput.value || '').trim();
-    if (!categoria) return setStatus('Selecciona categoría.');
+    const categoria_id = (folderInput.value || '').trim();
+    if (!categoria_id) return setStatus('Selecciona categoría.');
 
-    const categorySlug = categoria
+    const categoryTitle = templateCategories.find((c) => c.id === categoria_id)?.title || categoria_id;
+    const categorySlug = categoryTitle
       .toLowerCase()
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
@@ -263,7 +276,7 @@ async function init() {
     const { error: insErr } = await supabase.from('templates_catalog').insert({
       title,
       description: 'Plantilla disponible para descarga.',
-      categoria,
+      categoria_id,
       format,
       storage_path: path,
       image_path,
