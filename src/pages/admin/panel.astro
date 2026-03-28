@@ -27,8 +27,14 @@ import Layout from '../../layouts/Layout.astro';
                 <input type="file" id="fileInput" required />
               </label>
               <label>
-                Carpeta (opcional)
-                <input type="text" id="folderInput" placeholder="ej: temporada-mayo" />
+                Categoría
+                <select id="folderInput" required>
+                  <option value="">Selecciona categoría</option>
+                  <option value="Toppers">Toppers</option>
+                  <option value="Invitaciones">Invitaciones</option>
+                  <option value="Cajas y Packaging">Cajas y Packaging</option>
+                  <option value="Regalos Personalizados">Regalos Personalizados</option>
+                </select>
               </label>
               <label>
                 Imagen preview (opcional)
@@ -65,6 +71,17 @@ import Layout from '../../layouts/Layout.astro';
           Descripción corta
           <input id="modalDescription" type="text" />
         </label>
+
+        <label>
+          Categoría
+          <select id="modalCategory" required>
+            <option value="">Selecciona categoría</option>
+            <option value="Toppers">Toppers</option>
+            <option value="Invitaciones">Invitaciones</option>
+            <option value="Cajas y Packaging">Cajas y Packaging</option>
+            <option value="Regalos Personalizados">Regalos Personalizados</option>
+          </select>
+        </label>
         <label>
           Orden
           <input id="modalOrder" type="number" min="1" step="1" value="100" />
@@ -100,7 +117,7 @@ import Layout from '../../layouts/Layout.astro';
   .admin-sub { color:#666; margin-top: 4px; }
   .admin-upload { display:grid; gap:10px; margin: 12px 0 16px; }
   .admin-upload label { display:grid; gap:6px; }
-  .admin-upload input { border:1px solid var(--color-gray-300); border-radius:8px; padding:10px; }
+  .admin-upload input, .admin-upload select { border:1px solid var(--color-gray-300); border-radius:8px; padding:10px; }
   .admin-files, .users-list { display:grid; gap:10px; }
 
   :global(.admin-file) { display:flex; justify-content:space-between; align-items:center; gap:12px; border:1px solid #efe3df; border-radius:12px; padding:12px; background:linear-gradient(180deg,#fff 0%,#fffdfc 100%); box-shadow:0 6px 16px rgba(53,27,35,.05); }

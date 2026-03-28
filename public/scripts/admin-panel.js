@@ -15,6 +15,7 @@ const editForm = document.getElementById('templateEditForm');
 const modalTemplateId = document.getElementById('modalTemplateId');
 const modalTitle = document.getElementById('modalTitle');
 const modalDescription = document.getElementById('modalDescription');
+const modalCategory = document.getElementById('modalCategory');
 const modalOrder = document.getElementById('modalOrder');
 const modalPathLabel = document.getElementById('modalPathLabel');
 const modalImageFile = document.getElementById('modalImageFile');
@@ -52,7 +53,7 @@ async function loadFiles() {
   filesList.textContent = 'Cargando archivos…';
   const { data, error } = await supabase
     .from('templates_catalog')
-    .select('id,title,description,format,storage_path,image_path,required_roles,active,sort_order')
+    .select('id,title,description,format,storage_path,image_path,required_roles,active,sort_order,categoria')
     .eq('active', true)
     .order('sort_order', { ascending: true })
     .order('title', { ascending: true });
@@ -66,7 +67,7 @@ async function loadFiles() {
   })));
 
   filesList.innerHTML = withPreview.map((f) => `
-    <div class="admin-file" data-id="${escapeHtml(f.id)}" data-path="${escapeHtml(f.storage_path)}" data-image="${escapeHtml(f.image_path || '')}" data-title="${escapeHtml(f.title || '')}" data-description="${escapeHtml(f.description || '')}" data-order="${Number(f.sort_order || 100)}">
+    <div class="admin-file" data-id="${escapeHtml(f.id)}" data-path="${escapeHtml(f.storage_path)}" data-image="${escapeHtml(f.image_path || '')}" data-title="${escapeHtml(f.title || '')}" data-description="${escapeHtml(f.description || '')}" data-order="${Number(f.sort_order || 100)}" data-categoria="${escapeHtml(f.categoria || '')}">
       <div style="display:flex; gap:10px; align-items:center;">
         <img src="${escapeHtml(f.previewUrl || '')}" class="admin-file__thumb" ${f.previewUrl ? '' : 'style="display:none"'} alt="preview" />
         <div>
@@ -87,6 +88,7 @@ async function loadFiles() {
       modalTemplateId.value = row.dataset.id;
       modalTitle.value = row.dataset.title || '';
       modalDescription.value = row.dataset.description || '';
+      if (modalCategory) modalCategory.value = row.dataset.categoria || '';
       modalOrder.value = row.dataset.order || 100;
       if (modalImageFile) modalImageFile.value = '';
       modalPathLabel.textContent = `Ruta: ${row.dataset.path}`;
@@ -118,8 +120,9 @@ editForm?.addEventListener('submit', async (e) => {
   const title = modalTitle.value.trim();
   const description = modalDescription.value.trim();
   const sort_order = Number(modalOrder.value || 100);
+  const categoria = (modalCategory?.value || '').trim();
 
-  const payload = { title, description, sort_order };
+  const payload = { title, description, categoria, sort_order };
 
   if (modalImageFile?.files?.[0]) {
     const img = modalImageFile.files[0];
@@ -189,9 +192,18 @@ async function init() {
     const file = fileInput.files?.[0];
     if (!file) return;
 
-    const folder = (folderInput.value || '').trim().replace(/^\/+|\/+$/g, '');
+    const categoria = (folderInput.value || '').trim();
+    if (!categoria) return setStatus('Selecciona categoría.');
+
+    const categorySlug = categoria
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+
     const safeName = file.name.replace(/\s+/g, '-');
-    const path = folder ? `${folder}/${safeName}` : safeName;
+    const path = `${categorySlug}/${safeName}`;
 
     let image_path = '';
     if (imageInput?.files?.[0]) {
@@ -213,6 +225,7 @@ async function init() {
     const { error: insErr } = await supabase.from('templates_catalog').insert({
       title,
       description: 'Plantilla disponible para descarga.',
+      categoria,
       format,
       storage_path: path,
       image_path,
