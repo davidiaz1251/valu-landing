@@ -55,8 +55,8 @@ import Layout from '../layouts/Layout.astro';
       gap: 8px;
       padding: 6px 14px;
       border-radius: 999px;
-      background: hsla(350,40%,90%,.6);
-      border: 1px solid hsla(350,40%,85%,.8);
+      background: hsl(var(--secondary) / .6);
+      border: 1px solid hsl(var(--secondary) / .8);
       color: hsl(var(--secondary-foreground));
       font-size: .8rem;
       font-weight: 600;
@@ -111,7 +111,7 @@ import Layout from '../layouts/Layout.astro';
     :global(.tpl-filter-btn) {
       border: 1px solid hsl(var(--border));
       background: hsl(var(--card));
-      color: #6f5a64;
+      color: hsl(var(--secondary-foreground));
       border-radius: 999px;
       padding: 8px 14px;
       font-size: .86rem;
@@ -120,7 +120,7 @@ import Layout from '../layouts/Layout.astro';
       transition: all .18s ease;
     }
 
-    :global(.tpl-filter-btn:hover) { border-color: hsla(160,30%,45%,.4); }
+    :global(.tpl-filter-btn:hover) { border-color: hsl(var(--ring)); }
     :global(.tpl-filter-btn.is-active) {
       background: hsl(var(--primary));
       border-color: hsl(var(--primary));
@@ -147,10 +147,10 @@ import Layout from '../layouts/Layout.astro';
 
     :global(.tpl-card) {
       background: linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--card))dfc 100%);
-      border: 1px solid #efe3df;
+      border: 1px solid hsl(var(--border));
       border-radius: 18px;
       overflow: hidden;
-      box-shadow: 0 8px 22px rgba(53,27,35,.06);
+      box-shadow: 0 8px 22px var(--shadow-sm);
       transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
       display: flex;
       flex-direction: column;
@@ -158,8 +158,8 @@ import Layout from '../layouts/Layout.astro';
 
     :global(.tpl-card:hover) {
       transform: translateY(-2px);
-      box-shadow: 0 14px 28px rgba(53,27,35,.09);
-      border-color: #e8c7be;
+      box-shadow: 0 14px 28px var(--shadow-md);
+      border-color: hsl(var(--border));
     }
 
     :global(.tpl-card__media) {
@@ -220,11 +220,11 @@ import Layout from '../layouts/Layout.astro';
       font-weight: 700;
     }
 
-    :global(.tpl-cat--toppers){ background: hsla(42,65%,65%,.23); color: #7a5a2f; }
-    :global(.tpl-cat--invitaciones){ background: hsla(350,40%,90%,.65); color: #754f60; }
-    :global(.tpl-cat--cajas){ background: hsla(160,30%,85%,.65); color: #365f56; }
-    :global(.tpl-cat--regalos){ background: hsla(160,30%,45%,.13); color: #2f6f59; }
-    :global(.tpl-cat--default){ background: #f3ece9; color: #7b6770; }
+    :global(.tpl-cat--toppers){ background: hsl(var(--accent) / .23); color: hsl(var(--accent-foreground)); }
+    :global(.tpl-cat--invitaciones){ background: hsl(var(--secondary) / .8); color: hsl(var(--secondary-foreground)); }
+    :global(.tpl-cat--cajas){ background: hsl(var(--primary) / .2); color: hsl(var(--primary)); }
+    :global(.tpl-cat--regalos){ background: hsl(var(--primary) / .13); color: hsl(var(--primary)); }
+    :global(.tpl-cat--default){ background: hsl(var(--muted)); color: hsl(var(--muted-foreground)); }
 
     :global(.tpl-card__title) {
       margin: 0;
@@ -273,7 +273,7 @@ import Layout from '../layouts/Layout.astro';
       padding: 46px 20px;
       max-width: 700px;
       margin: 0 auto;
-      box-shadow: 0 10px 24px rgba(53,27,35,.06);
+      box-shadow: 0 10px 24px var(--shadow-sm);
     }
 
     .tpl__empty-icon {

@@ -56,8 +56,8 @@ import Layout from '../layouts/Layout.astro';
     gap: 8px;
     padding: 6px 14px;
     border-radius: 999px;
-    border: 1px solid rgba(220,206,198,.95);
-    background: rgba(250,243,239,.85);
+    border: 1px solid hsl(var(--border));
+    background: hsl(var(--secondary));
     color: hsl(var(--secondary-foreground));
     font-size: .8rem;
     font-weight: 600;
@@ -94,7 +94,7 @@ import Layout from '../layouts/Layout.astro';
   :global(.catalog-filter-btn) {
     border: 1px solid hsl(var(--border));
     background: hsl(var(--card));
-    color: #6f5a64;
+    color: hsl(var(--secondary-foreground));
     border-radius: 999px;
     padding: 7px 14px;
     font-size: .86rem;
@@ -109,7 +109,7 @@ import Layout from '../layouts/Layout.astro';
     color: hsl(var(--card));
   }
 
-  :global(.catalog-filter-btn:hover) { border-color: hsla(160,30%,45%,.45); }
+  :global(.catalog-filter-btn:hover) { border-color: hsl(var(--ring)); }
 
   .catalog__grid {
     display: grid;
@@ -132,7 +132,7 @@ import Layout from '../layouts/Layout.astro';
     border: 1px solid hsl(var(--border));
     border-radius: 18px;
     overflow: hidden;
-    box-shadow: 0 10px 24px rgba(53,27,35,.07);
+    box-shadow: 0 10px 24px var(--shadow-md);
     transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
     display: flex;
     flex-direction: column;
@@ -140,8 +140,8 @@ import Layout from '../layouts/Layout.astro';
 
   :global(.catalog-card:hover) {
     transform: translateY(-2px);
-    border-color: rgba(210,182,170,.95);
-    box-shadow: 0 16px 32px rgba(53,27,35,.12);
+    border-color: hsl(var(--border));
+    box-shadow: 0 16px 32px var(--shadow-lg);
   }
 
   :global(.catalog-card__media) {
@@ -184,11 +184,11 @@ import Layout from '../layouts/Layout.astro';
     font-weight: 700;
   }
 
-  :global(.cat-toppers){ background: hsla(42,65%,65%,.23); color: #7a5a2f; }
-  :global(.cat-invitaciones){ background: hsla(350,40%,90%,.65); color: #754f60; }
-  :global(.cat-cajas){ background: hsla(160,30%,85%,.65); color: #365f56; }
-  :global(.cat-regalos){ background: hsla(160,30%,45%,.13); color: #2f6f59; }
-  :global(.cat-default){ background: #f3ece9; color: #7b6770; }
+  :global(.cat-toppers){ background: hsl(var(--accent) / .23); color: hsl(var(--accent-foreground)); }
+  :global(.cat-invitaciones){ background: hsl(var(--secondary) / .8); color: hsl(var(--secondary-foreground)); }
+  :global(.cat-cajas){ background: hsl(var(--primary) / .2); color: hsl(var(--primary)); }
+  :global(.cat-regalos){ background: hsl(var(--primary) / .13); color: hsl(var(--primary)); }
+  :global(.cat-default){ background: hsl(var(--muted)); color: hsl(var(--muted-foreground)); }
 
   :global(.catalog-card__body) {
     padding: 16px;
