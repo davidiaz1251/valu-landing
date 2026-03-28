@@ -1,87 +1,309 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { templates } from '../data/templates';
 ---
 
 <Layout
-  title="Plantillas descargables | Valu Kraft"
-  description="Descarga plantillas de diseño listas para personalizar en tus celebraciones."
- noindex={true}>
-  <section class="templates-hero section section--sm">
-    <div class="container">
-      <span class="section__badge">Recursos</span>
-      <h1 class="templates-hero__title">Plantillas descargables</h1>
-      <p class="templates-hero__description">Inicia sesión para descargar tus plantillas.</p>
-      <div id="templatesSession" class="templates-session">Comprobando sesión...</div>
-    </div>
-  </section>
+  title="Mis plantillas | Valu Kraft"
+  description="Tus plantillas personalizadas listas para descargar en Valu Kraft."
+  noindex={true}
+>
+  <section class="tpl section section--sm">
+    <div class="container tpl__container">
+      <div class="tpl__head">
+        <div class="tpl__pill">
+          <span>✨</span>
+          <span>Mis plantillas</span>
+        </div>
 
-  <section class="templates section">
-    <div class="container">
-      {templates.length === 0 ? (
-        <div class="templates-empty">
-          <h2>Estamos preparando las primeras plantillas ✨</h2>
-          <p>Muy pronto verás aquí descargas listas para tus celebraciones.</p>
-        </div>
-      ) : (
-        <div class="templates__grid">
-          {templates.map((item) => (
-            <article
-              class="template-card"
-              data-template-id={item.id}
-              data-storage-path={item.storagePath}
-              data-required-roles={item.requiredRoles.join(',')}
-            >
-              <div class="template-card__meta">
-                <span class="template-card__format">{item.format}</span>
-              </div>
-              <h2 class="template-card__title">{item.title}</h2>
-              <p class="template-card__description">{item.description}</p>
-              <p class="template-card__access" data-role-copy></p>
-              <button class="btn btn--secondary template-card__cta" data-download-btn type="button" disabled>
-                Descargar
-              </button>
-            </article>
-          ))}
-        </div>
-      )}
+        <h1 class="tpl__title">Tus plantillas personalizadas</h1>
+        <p class="tpl__subtitle" id="templatesHeroCopy">
+          Aquí encuentras todos los archivos disponibles para descargar.
+        </p>
+
+        <div id="templatesSession" class="tpl__session">Comprobando sesión...</div>
+      </div>
+
+      <div id="templatesLoader" class="tpl__loader" aria-live="polite">
+        <span class="tpl__spinner" aria-hidden="true"></span>
+      </div>
+
+      <div id="templatesFilters" class="tpl__filters" hidden></div>
+
+      <div id="templatesGrid" class="tpl__grid" hidden></div>
+
+      <div id="templatesEmpty" class="tpl__empty" hidden></div>
     </div>
   </section>
 
   <script type="module" src="/scripts/plantillas.js"></script>
 
   <style>
-    .templates-hero { padding-top: calc(var(--space-24) + var(--space-8)); padding-bottom: var(--space-8); text-align: center; }
-    .templates-session { margin-top: var(--space-4); display: inline-block; padding: var(--space-2) var(--space-4); border-radius: var(--radius-full); background: #fff; border: 1px solid var(--color-gray-200); font-size: var(--text-sm); }
-    .templates-hero__title { margin-top: var(--space-3); margin-bottom: var(--space-4); }
-    .templates-hero__description { max-width: 700px; margin: 0 auto; font-size: var(--text-lg); }
-    :global(.templates-empty) { max-width: 760px; margin: 0 auto; background: var(--color-white); border: 1px solid var(--color-gray-200); box-shadow: var(--shadow-md); border-radius: var(--radius-2xl); padding: var(--space-10); text-align: center; }
-    :global(.templates__grid) { display: grid; gap: var(--space-6); grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-    :global(.template-card) { 
-      background: linear-gradient(180deg, #ffffff 0%, #fffdfc 100%);
-      border: 1px solid #f0e3df;
-      border-radius: 16px;
-      padding: var(--space-6);
-      box-shadow: 0 8px 22px rgba(53, 27, 35, 0.06);
+    .tpl {
+      position: relative;
+      padding-top: calc(var(--space-24) + var(--space-6));
+      padding-bottom: var(--space-16);
+      background: transparent;
+    }
+
+    .tpl__container { max-width: 1280px; }
+
+    .tpl__head { margin-bottom: var(--space-8); }
+
+    .tpl__pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: hsla(350,40%,90%,.6);
+      border: 1px solid hsla(350,40%,85%,.8);
+      color: #5f4a54;
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: .02em;
+    }
+
+    .tpl__title {
+      margin: 14px 0 6px;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.1;
+      color: #2f1f28;
+    }
+
+    .tpl__subtitle {
+      margin: 0;
+      color: #6b5963;
+      max-width: 680px;
+      font-size: 1rem;
+      line-height: 1.65;
+    }
+
+    .tpl__session {
+      margin-top: var(--space-4);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(228,218,213,.9);
+      background: rgba(255,255,255,.85);
+      color: #5f4a54;
+      font-size: .86rem;
+      font-weight: 500;
+    }
+
+    .tpl__session :global(a) {
+      color: hsl(160 30% 40%);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .tpl__loader {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 140px;
+    }
+
+    .tpl__spinner {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      border: 3px solid rgba(228,218,213,.9);
+      border-top-color: hsl(160 30% 45%);
+      animation: tplSpin .9s linear infinite;
+    }
+
+    .tpl__filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 2px 0 24px;
+    }
+
+    :global(.tpl-filter-btn) {
+      border: 1px solid rgba(228,218,213,.95);
+      background: rgba(255,255,255,.88);
+      color: #6f5a64;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: .86rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .18s ease;
+    }
+
+    :global(.tpl-filter-btn:hover) { border-color: hsla(160,30%,45%,.4); }
+    :global(.tpl-filter-btn.is-active) {
+      background: hsl(160 30% 45%);
+      border-color: hsl(160 30% 45%);
+      color: #fff;
+    }
+
+    .tpl__grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 18px;
+    }
+
+    :global(.tpl-card) {
+      background: linear-gradient(180deg, #fff 0%, #fffdfc 100%);
+      border: 1px solid #efe3df;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 8px 22px rgba(53,27,35,.06);
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
       display: flex;
       flex-direction: column;
-      gap: var(--space-4);
-      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
     }
-    :global(.template-card__media) { width:100%; aspect-ratio: 4 / 3; border-radius:12px; overflow:hidden; background:#f6f2f4; }
-    :global(.template-card__media img){ width:100%; height:100%; object-fit:cover; display:block; }
-    :global(.template-card:hover) {
+
+    :global(.tpl-card:hover) {
       transform: translateY(-2px);
-      box-shadow: 0 12px 28px rgba(53, 27, 35, 0.1);
+      box-shadow: 0 14px 28px rgba(53,27,35,.09);
       border-color: #e8c7be;
     }
-    :global(.template-card__meta) { display: flex; justify-content: flex-end; font-size: var(--text-sm); }
-    :global(.template-card__format) { color: #7d6b72; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; font-weight: 700; }
-    :global(.template-card__title) { font-size: var(--text-2xl); margin: 0; }
-    :global(.template-card__description), :global(.template-card__access) { margin: 0; color: #5f4d54; }
-    :global(.template-card__access) { font-size: var(--text-sm); color: var(--color-gray-500); display:none; }
-    :global(.template-card__cta) { margin-top: auto; align-self: flex-start; border-radius: 999px; padding: 10px 18px; }
-    :global(.template-card__cta.is-disabled) { opacity: .6; cursor: not-allowed; }
-    @media (max-width: 768px) { .templates-empty { padding: var(--space-6); } }
+
+    :global(.tpl-card__media) {
+      position: relative;
+      aspect-ratio: 4 / 3;
+      background: #f7f2ef;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    :global(.tpl-card__media img) {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .45s ease;
+    }
+
+    :global(.tpl-card:hover .tpl-card__media img) { transform: scale(1.04); }
+
+    :global(.tpl-card__file-icon) {
+      font-size: 1.9rem;
+      opacity: .55;
+      color: #8a7780;
+    }
+
+    :global(.tpl-card__format) {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+      color: #5f4a54;
+      border: 1px solid rgba(228,218,213,.9);
+      border-radius: 999px;
+      background: rgba(255,255,255,.9);
+      padding: 4px 9px;
+    }
+
+    :global(.tpl-card__body) {
+      padding: 14px 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      min-height: 190px;
+    }
+
+    :global(.tpl-card__cat) {
+      width: fit-content;
+      border-radius: 999px;
+      padding: 3px 9px;
+      font-size: .72rem;
+      font-weight: 700;
+    }
+
+    :global(.tpl-cat--toppers){ background: hsla(42,65%,65%,.23); color: #7a5a2f; }
+    :global(.tpl-cat--invitaciones){ background: hsla(350,40%,90%,.65); color: #754f60; }
+    :global(.tpl-cat--cajas){ background: hsla(160,30%,85%,.65); color: #365f56; }
+    :global(.tpl-cat--regalos){ background: hsla(160,30%,45%,.13); color: #2f6f59; }
+    :global(.tpl-cat--default){ background: #f3ece9; color: #7b6770; }
+
+    :global(.tpl-card__title) {
+      margin: 0;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.08rem;
+      color: #2f1f28;
+      line-height: 1.25;
+    }
+
+    :global(.tpl-card__desc) {
+      margin: 0;
+      color: #6b5963;
+      font-size: .84rem;
+      line-height: 1.5;
+      min-height: 38px;
+    }
+
+    :global(.tpl-card__btn) {
+      margin-top: auto;
+      width: 100%;
+      border: 0;
+      border-radius: 999px;
+      background: hsl(160 30% 45%);
+      color: #fff;
+      font-weight: 600;
+      padding: 10px 14px;
+      font-size: .87rem;
+      cursor: pointer;
+      transition: background .18s ease, opacity .18s ease;
+    }
+
+    :global(.tpl-card__btn:hover) { background: hsl(160 30% 42%); }
+    :global(.tpl-card__btn:disabled) { opacity: .58; cursor: not-allowed; }
+
+    .tpl__empty {
+      text-align: center;
+      border: 1px solid #eadfdb;
+      background: #fff;
+      border-radius: 20px;
+      padding: 46px 20px;
+      max-width: 700px;
+      margin: 0 auto;
+      box-shadow: 0 10px 24px rgba(53,27,35,.06);
+    }
+
+    .tpl__empty-icon {
+      width: 62px;
+      height: 62px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 14px;
+      background: #f4ece9;
+      font-size: 1.45rem;
+    }
+
+    .tpl__empty h3 {
+      margin: 0;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.5rem;
+      color: #2f1f28;
+    }
+
+    .tpl__empty p { color: #6b5963; margin: 8px auto 0; max-width: 420px; }
+
+    .tpl__empty a {
+      margin-top: 16px;
+      display: inline-flex;
+      text-decoration: none;
+      border-radius: 999px;
+      background: hsl(160 30% 45%);
+      color: #fff;
+      font-weight: 600;
+      padding: 10px 16px;
+    }
+
+    @keyframes tplSpin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 640px) {
+      .tpl__title { font-size: 2rem; }
+      .tpl__subtitle { font-size: .94rem; }
+    }
   </style>
 </Layout>
