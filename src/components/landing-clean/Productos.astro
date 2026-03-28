@@ -65,6 +65,13 @@ const products = [
         </article>
       ))}
     </div>
+
+    <div class="lk-productos__cta-wrap" data-reveal style="--delay:.15s;">
+      <a href="/productos" class="lk-productos__cta">
+        Ver catálogo completo
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
   </div>
 </section>
 
@@ -131,6 +138,40 @@ const products = [
     .lk-pr-card h3 { font-size: 1.5rem; }
     .lk-pr-card p { font-size: .9rem; }
     .lk-pr-card__content { padding: 24px; }
+  }
+
+
+
+  .lk-productos__cta-wrap {
+    margin-top: 28px;
+    display: flex;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .lk-productos__cta-wrap.is-visible {
+    animation: lkProductsHeadIn .6s ease-out var(--delay, 0s) forwards;
+  }
+
+  .lk-productos__cta {
+    text-decoration: none;
+    border: 2px solid hsla(160,30%,45%,.55);
+    color: hsl(160 30% 40%);
+    border-radius: 999px;
+    padding: 12px 28px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,.86);
+    transition: all .2s ease;
+  }
+
+  .lk-productos__cta:hover {
+    background: hsla(160,30%,45%,.08);
+    border-color: hsl(160 30% 45%);
+    transform: translateY(-1px);
   }
 
   @keyframes lkProductsHeadIn {
