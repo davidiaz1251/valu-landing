@@ -1,9 +1,26 @@
 ---
 import AuthLayout from '../layouts/AuthLayout.astro';
+
+const dots = [
+  { top: 12, left: 10, delay: '0s', duration: '3.2s' },
+  { top: 24, left: 84, delay: '.4s', duration: '3.8s' },
+  { top: 38, left: 18, delay: '.9s', duration: '3.4s' },
+  { top: 58, left: 90, delay: '1.3s', duration: '4s' },
+  { top: 72, left: 14, delay: '1.8s', duration: '3.6s' },
+  { top: 82, left: 78, delay: '.6s', duration: '3.1s' },
+  { top: 46, left: 64, delay: '1.5s', duration: '3.7s' },
+  { top: 18, left: 56, delay: '2s', duration: '3.3s' },
+];
 ---
 
 <AuthLayout title="Registro | Valu Kraft" description="Crea tu cuenta para acceder a plantillas y recursos de Valu Kraft." noindex={true}>
   <section class="auth section section--sm">
+    <div class="auth-dots" aria-hidden="true">
+      {dots.map((dot) => (
+        <span class="auth-dot" style={`--top:${dot.top}%;--left:${dot.left}%;--delay:${dot.delay};--duration:${dot.duration};`}></span>
+      ))}
+    </div>
+
     <div class="container auth__container">
       <article class="auth-card">
         <h1>Crear cuenta</h1>
@@ -70,6 +87,24 @@ import AuthLayout from '../layouts/AuthLayout.astro';
     background: hsla(160,30%,85%,.35);
   }
 
+  .auth-dots {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .auth-dot {
+    position: absolute;
+    top: var(--top);
+    left: var(--left);
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: hsla(42,65%,65%,.58);
+    animation: authDotVanish var(--duration, 3.5s) ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+  }
+
   .auth__container { display: flex; justify-content: center; position: relative; z-index: 1; }
   .auth-card {
     width: 100%;
@@ -131,6 +166,17 @@ import AuthLayout from '../layouts/AuthLayout.astro';
 
   .auth-alert { margin-top: var(--space-4); padding: var(--space-3); border-radius: 12px; background: #fff3f3; color: #9a1c1c; border: 1px solid #f3c5c5; }
   .auth-success { margin-top: var(--space-4); padding: var(--space-3); border-radius: 12px; background: #f3fff4; color: #1f7a2e; border: 1px solid #bde8c4; }
+
+  @keyframes authDotVanish {
+    0% { opacity: 0; transform: translate3d(0, 8px, 0) scale(.72); }
+    20% { opacity: .8; transform: translate3d(0, 0, 0) scale(1); }
+    60% { opacity: .62; }
+    100% { opacity: 0; transform: translate3d(0, -12px, 0) scale(.78); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .auth-dot { animation: none; opacity: .35; }
+  }
 
   @media (max-width: 640px) {
     .auth-card { padding: var(--space-6); border-radius: 18px; }
