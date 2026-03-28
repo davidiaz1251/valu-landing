@@ -24,6 +24,7 @@ const modalImageFile = document.getElementById('modalImageFile');
 const toastEl = document.getElementById('adminToast');
 
 const ROLES = ['cliente_final', 'profesional_reposteria', 'admin'];
+let templateCategories = [];
 
 function setStatus(text) { if (statusEl) statusEl.textContent = text; }
 function showToast(msg, type = 'ok') {
@@ -39,6 +40,39 @@ function escapeHtml(v) {
 function roleOptions(current) {
   return ROLES.map((r) => `<option value="${r}" ${r===current?'selected':''}>${r}</option>`).join('');
 }
+
+function renderTemplateCategoryOptions(selected = '') {
+  const selects = [folderInput, modalCategory].filter(Boolean);
+  const options = ['<option value="">Selecciona categoría</option>']
+    .concat(templateCategories.map((c) => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`));
+
+  selects.forEach((sel) => {
+    sel.innerHTML = options.join('');
+    if (selected && templateCategories.includes(selected)) sel.value = selected;
+  });
+}
+
+async function loadTemplateCategories() {
+  const { data, error } = await supabase
+    .from('products_categories')
+    .select('title,is_active,sort_order')
+    .eq('is_active', true)
+    .order('sort_order', { ascending: true })
+    .order('title', { ascending: true });
+
+  if (error) {
+    console.warn('No se pudieron cargar categorías de productos:', error.message);
+    templateCategories = ['Toppers', 'Invitaciones', 'Cajas y Packaging', 'Regalos Personalizados'];
+  } else {
+    templateCategories = (data || []).map((r) => String(r.title || '').trim()).filter(Boolean);
+    if (!templateCategories.length) {
+      templateCategories = ['Toppers', 'Invitaciones', 'Cajas y Packaging', 'Regalos Personalizados'];
+    }
+  }
+
+  renderTemplateCategoryOptions();
+}
+
 
 function openModal() { editModal.hidden = false; }
 function closeModal() { editModal.hidden = true; }
@@ -90,7 +124,7 @@ async function loadFiles() {
       modalTemplateId.value = row.dataset.id;
       modalTitle.value = row.dataset.title || '';
       modalDescription.value = row.dataset.description || '';
-      if (modalCategory) modalCategory.value = row.dataset.categoria || '';
+      renderTemplateCategoryOptions(row.dataset.categoria || '');
       modalOrder.value = row.dataset.order || 100;
       if (modalImageFile) modalImageFile.value = '';
       modalPathLabel.textContent = `Ruta: ${row.dataset.path}`;
@@ -184,6 +218,8 @@ async function init() {
   await ensureUserProfile();
   const profile = await getUserProfile();
   if (!profile || profile.role !== 'admin') return setStatus('No tienes permisos para este panel.');
+
+  await loadTemplateCategories();
 
   statusEl.hidden = true;
   appEl.hidden = false;
