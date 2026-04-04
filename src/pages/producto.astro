@@ -220,6 +220,76 @@ import { Heart, Share2, MessageCircle, Palette, Sparkles, Clock3, Layers, Wand2,
         ioEls.forEach((el) => el.classList.add('is-visible'));
       }
     </script>
+
+    <script type="module" data-real-product-hydration>
+      import { hasSupabaseConfig, supabase } from '/scripts/supabase-client.js';
+
+      async function signedImage(path) {
+        if (!path || !hasSupabaseConfig() || !supabase) return '';
+        const { data, error } = await supabase.storage.from('templates').createSignedUrl(path, 3600);
+        if (error || !data?.signedUrl) return '';
+        return data.signedUrl;
+      }
+
+      async function resolveImage(row) {
+        const raw = String(row?.image_url || '').trim();
+        if (/^https?:\/\//i.test(raw)) return raw;
+        const fromPath = await signedImage(row?.image_path || '');
+        if (fromPath) return fromPath;
+        if (raw) {
+          const fromRaw = await signedImage(raw);
+          if (fromRaw) return fromRaw;
+        }
+        return '';
+      }
+
+      async function hydrateRealProduct() {
+        const id = new URLSearchParams(window.location.search).get('id');
+        if (!id || ['toppers','invitaciones','cajas','regalos'].includes(id)) return;
+        if (!hasSupabaseConfig() || !supabase) return;
+
+        const { data: row, error } = await supabase
+          .from('products_catalog')
+          .select('id,name,description,image_path,image_url,is_active,products_categories:category_id(title)')
+          .eq('id', id)
+          .eq('is_active', true)
+          .maybeSingle();
+
+        if (error || !row) return;
+
+        const image = await resolveImage(row);
+        const category = row.products_categories?.title || 'Producto personalizado';
+
+        document.querySelectorAll('[data-product-title]').forEach(function(el){ el.textContent = row.name || 'Producto'; });
+        const tagEl = document.getElementById('pdTag');
+        if (tagEl) tagEl.textContent = '✦ ' + category;
+        const tagline = document.getElementById('pdTagline');
+        if (tagline) tagline.textContent = row.description || 'Producto personalizado hecho a mano.';
+
+        const reviews = document.getElementById('pdReviews');
+        if (reviews) reviews.textContent = '5.0 (0 reseñas)';
+
+        if (image) {
+          const main = document.getElementById('pdMainImage');
+          if (main) { main.src = image; main.alt = row.name || 'Producto'; }
+          const thumbs = document.getElementById('pdThumbs');
+          if (thumbs) thumbs.innerHTML = '<button class="is-active"><img src="' + image + '" alt="Vista 1"></button>';
+          const dots = document.getElementById('pdDots');
+          if (dots) dots.innerHTML = '<button class="is-active"></button>';
+          const prev = document.getElementById('pdPrev');
+          const next = document.getElementById('pdNext');
+          if (prev) prev.style.display = 'none';
+          if (next) next.style.display = 'none';
+        }
+
+        const waText = encodeURIComponent('Hola, quiero pedir ' + row.name + '. ¿Me puedes indicar opciones de personalización y tiempo de entrega?');
+        document.querySelectorAll('.pd-cta a').forEach(function(a){
+          a.href = 'https://wa.me/34600000000?text=' + waText;
+        });
+      }
+
+      hydrateRealProduct();
+    </script>
   </body>
 </html>
 
