@@ -115,6 +115,24 @@
   --container-max: 1280px;
   --container-padding: var(--space-6);
 
+
+  /* Semantic tokens (channel values for hsl(var(--token))) */
+  --background: 30 33% 98%;
+  --foreground: 340 20% 15%;
+  --card: 0 0% 100%;
+  --card-foreground: 340 20% 15%;
+  --primary: 160 30% 45%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 350 40% 90%;
+  --secondary-foreground: 340 20% 15%;
+  --muted: 30 20% 94%;
+  --muted-foreground: 340 10% 45%;
+  --accent: 42 65% 65%;
+  --accent-foreground: 340 20% 15%;
+  --border: 30 20% 88%;
+  --ring: 160 30% 45%;
+  --destructive: 0 72% 51%;
+
   /* Z-index */
   --z-dropdown: 100;
   --z-sticky: 200;
