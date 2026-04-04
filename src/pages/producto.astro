@@ -250,15 +250,19 @@ import { Heart, Share2, MessageCircle, Palette, Sparkles, Clock3, Layers, Wand2,
 
         const { data: row, error } = await supabase
           .from('products_catalog')
-          .select('id,name,description,image_path,image_url,is_active,products_categories:category_id(title)')
+          .select('id,name,description,image_path,image_url,is_active,category_id')
           .eq('id', id)
           .eq('is_active', true)
           .maybeSingle();
 
-        if (error || !row) return;
+        if (error || !row) { console.warn('detalle producto: no se encontro', { id, error }); return; }
 
         const image = await resolveImage(row);
-        const category = row.products_categories?.title || 'Producto personalizado';
+        let category = 'Producto personalizado';
+        if (row.category_id) {
+          const { data: cat } = await supabase.from('products_categories').select('title').eq('id', row.category_id).maybeSingle();
+          category = cat?.title || category;
+        }
 
         document.querySelectorAll('[data-product-title]').forEach(function(el){ el.textContent = row.name || 'Producto'; });
         const tagEl = document.getElementById('pdTag');
