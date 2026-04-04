@@ -109,13 +109,16 @@ function slugify(value = '') {
   return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').replace(/-{2,}/g, '-');
 }
 
+const PRODUCT_IMAGES_BUCKET = 'products';
+const LEGACY_IMAGES_BUCKET = 'templates';
+
 async function signedImage(path) {
   if (!path) return '';
 
-  const fromProducts = await supabase.storage.from('products').createSignedUrl(path, 3600);
+  const fromProducts = await supabase.storage.from(PRODUCT_IMAGES_BUCKET).createSignedUrl(path, 3600);
   if (!fromProducts.error && fromProducts.data?.signedUrl) return fromProducts.data.signedUrl;
 
-  const fromTemplates = await supabase.storage.from('templates').createSignedUrl(path, 3600);
+  const fromTemplates = await supabase.storage.from(LEGACY_IMAGES_BUCKET).createSignedUrl(path, 3600);
   if (!fromTemplates.error && fromTemplates.data?.signedUrl) return fromTemplates.data.signedUrl;
 
   return '';
@@ -124,10 +127,19 @@ async function signedImage(path) {
 async function uploadProductImage(file) {
   const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
   const path = `products/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-  const { error } = await supabase.storage.from('products').upload(path, file, { upsert: true });
-  if (error) throw new Error(`No se pudo subir imagen: ${error.message}`);
-  return path;
+
+  const primary = await supabase.storage.from(PRODUCT_IMAGES_BUCKET).upload(path, file, { upsert: true });
+  if (!primary.error) return path;
+
+  if (/Bucket not found/i.test(primary.error?.message || '')) {
+    const legacy = await supabase.storage.from(LEGACY_IMAGES_BUCKET).upload(path, file, { upsert: true });
+    if (!legacy.error) return path;
+    throw new Error(`No se pudo subir imagen (fallback): ${legacy.error.message}`);
+  }
+
+  throw new Error(`No se pudo subir imagen: ${primary.error.message}`);
 }
+
 
 function renderCategoryOptions() {
   if (!productCategorySelect) return;
