@@ -34,14 +34,9 @@ function categoryStyle(title = '') {
 
 async function signedImage(path) {
   if (!path) return '';
-
-  const fromProducts = await supabase.storage.from('products').createSignedUrl(path, 3600);
-  if (!fromProducts.error && fromProducts.data?.signedUrl) return fromProducts.data.signedUrl;
-
-  const fromTemplates = await supabase.storage.from('templates').createSignedUrl(path, 3600);
-  if (!fromTemplates.error && fromTemplates.data?.signedUrl) return fromTemplates.data.signedUrl;
-
-  return '';
+  const { data, error } = await supabase.storage.from('templates').createSignedUrl(path, 3600);
+  if (error || !data?.signedUrl) return '';
+  return data.signedUrl;
 }
 
 function getCategories(products) {
